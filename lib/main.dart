@@ -1,23 +1,12 @@
 import 'package:flutter/material.dart';
-import 'screens/main_screen.dart';
+import 'package:media_kit/media_kit.dart';
+import 'app/app.dart';
+import 'features/extension/data/extension_manager.dart';
 
-void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Miru',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-      ),
-      home: const MainScreen(),
-    );
-  }
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  MediaKit.ensureInitialized();
+  // 提前初始化已安装扩展的 JS 运行时
+  await ExtensionManager.instance.initialize();
+  runApp(const MiruApp());
 }

@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import 'home_screen.dart';
-import 'search_screen.dart';
-import 'extension_screen.dart';
-import 'settings_screen.dart';
+import '../../home/presentation/home_screen.dart';
+import '../../search/presentation/search_screen.dart';
+import '../../extension/presentation/extension_screen.dart';
+import '../../settings/presentation/settings_screen.dart';
 
-class MainScreen extends StatefulWidget {
-  const MainScreen({super.key});
+class MainNavigationScreen extends StatefulWidget {
+  const MainNavigationScreen({super.key});
 
   @override
-  State<MainScreen> createState() => _MainScreenState();
+  State<MainNavigationScreen> createState() => _MainNavigationScreenState();
 }
 
-class _MainScreenState extends State<MainScreen> {
+class _MainNavigationScreenState extends State<MainNavigationScreen> {
   int _currentIndex = 0;
 
   final List<Widget> _pages = const [
