@@ -145,3 +145,5 @@ integration_test/              # 端到端集成测试
 本项目基于上游 [miru-app](https://github.com/miru-project/miru-app) 二次开发，遵循 **GNU General Public License v3.0 (GPL-3.0)** 发布，完整协议见 [LICENSE](LICENSE)。
 
 根据 GPL-3.0 的 copyleft 要求，任何基于本项目的衍生作品也须以 GPL-3.0 开源发布，并保留原始版权声明。
+
+> 注：配套的扩展仓库 [miru-2-0/repo](https://github.com/miru-2-0/repo)（扩展脚本与 `index.json`）采用 **MIT** 协议，与主应用相互独立。

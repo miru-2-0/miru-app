@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 扩展脚本 / 站点请求
+    url: https://github.com/miru-2-0/repo/issues
+    about: 扩展脚本相关的反馈与新站点请求，请到扩展仓库提交。
+  - name: 讨论交流
+    url: https://github.com/miru-2-0/miru-app/discussions
+    about: 使用交流、想法讨论请前往 Discussions。

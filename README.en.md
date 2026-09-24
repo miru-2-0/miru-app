@@ -145,3 +145,5 @@ integration_test/              # End-to-end integration tests
 This project is a derivative work based on the upstream [miru-app](https://github.com/miru-project/miru-app) and is released under the **GNU General Public License v3.0 (GPL-3.0)**. See [LICENSE](LICENSE) for the full text.
 
 Under the copyleft terms of GPL-3.0, any derivative work must also be released under GPL-3.0 with the original copyright notices preserved.
+
+> Note: the companion extension repository [miru-2-0/repo](https://github.com/miru-2-0/repo) (extension scripts and `index.json`) is licensed under **MIT**, independent of the main app.
