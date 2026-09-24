@@ -1,0 +1,6 @@
+# 统一换行符策略：仓库内一律以 LF 存储
+* text=auto
+
+# 这些文件在任何平台上都强制使用 LF，避免因各人 core.autocrlf 不同产生假 diff
+LICENSE text eol=lf
+*.md text eol=lf
