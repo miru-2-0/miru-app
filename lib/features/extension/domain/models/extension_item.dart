@@ -1,3 +1,28 @@
+/// 比较版本号，返回 -1 / 0 / 1。忽略前导 v 与非数字后缀（如 -beta）。
+int compareVersions(String a, String b) {
+  List<int> parse(String v) {
+    final core = v
+        .trim()
+        .replaceFirst(RegExp(r'^[vV]'), '')
+        .split(RegExp(r'[-+]'))
+        .first;
+    return core.split('.').map((s) {
+      final m = RegExp(r'\d+').firstMatch(s);
+      return m == null ? 0 : (int.tryParse(m.group(0)!) ?? 0);
+    }).toList();
+  }
+
+  final pa = parse(a);
+  final pb = parse(b);
+  final len = pa.length > pb.length ? pa.length : pb.length;
+  for (var i = 0; i < len; i++) {
+    final x = i < pa.length ? pa[i] : 0;
+    final y = i < pb.length ? pb[i] : 0;
+    if (x != y) return x > y ? 1 : -1;
+  }
+  return 0;
+}
+
 class ExtensionItem {
   final String name;
   final String version;

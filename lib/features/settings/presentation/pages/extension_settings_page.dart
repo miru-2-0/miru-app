@@ -11,7 +11,6 @@ class ExtensionSettingsPage extends StatefulWidget {
 
 class _ExtensionSettingsPageState extends State<ExtensionSettingsPage> {
   final _service = ExtensionRepoService.instance;
-  bool _autoUpdate = true;
 
   @override
   void initState() {
@@ -108,11 +107,9 @@ class _ExtensionSettingsPageState extends State<ExtensionSettingsPage> {
                 leading: const Icon(Icons.system_update_alt_outlined),
                 title: const Text('自动更新扩展'),
                 description: const Text('后台自动检测并更新已安装的扩展'),
-                initialValue: _autoUpdate,
+                initialValue: _service.autoUpdate,
                 onToggle: (value) {
-                  setState(() {
-                    _autoUpdate = value ?? !_autoUpdate;
-                  });
+                  _service.setAutoUpdate(value ?? false);
                 },
               ),
               SettingsTile.switchTile(

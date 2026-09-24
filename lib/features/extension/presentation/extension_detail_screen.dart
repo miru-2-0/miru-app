@@ -18,6 +18,7 @@ class ExtensionDetailScreen extends StatefulWidget {
 
 class _ExtensionDetailScreenState extends State<ExtensionDetailScreen> {
   final _service = ExtensionRepoService.instance;
+  bool _checkingUpdate = false;
 
   @override
   void initState() {
@@ -37,6 +38,41 @@ class _ExtensionDetailScreenState extends State<ExtensionDetailScreen> {
     }
   }
 
+  Future<void> _checkUpdate() async {
+    if (_checkingUpdate) return;
+    setState(() {
+      _checkingUpdate = true;
+    });
+    final messenger = ScaffoldMessenger.of(context);
+    try {
+      final installed =
+          _service.installedForStorageKey(widget.item.storageKey) ??
+              widget.item;
+      final hasNewer = await _service.checkUpdateFor(installed);
+      if (!mounted) return;
+      messenger
+        ..hideCurrentSnackBar()
+        ..showSnackBar(
+          SnackBar(
+            content: Text(hasNewer
+                ? '发现新版本 ${_service.availableUpdate(widget.item.storageKey)?.version ?? ''}'
+                : '当前已是最新版本'),
+          ),
+        );
+    } catch (e) {
+      if (!mounted) return;
+      messenger
+        ..hideCurrentSnackBar()
+        ..showSnackBar(SnackBar(content: Text('检查更新失败：$e')));
+    } finally {
+      if (mounted) {
+        setState(() {
+          _checkingUpdate = false;
+        });
+      }
+    }
+  }
+
   Widget _buildIcon(BuildContext context, String? iconUrl) {
     return ExtensionIcon(
       iconUrl: iconUrl,
@@ -51,11 +87,26 @@ class _ExtensionDetailScreenState extends State<ExtensionDetailScreen> {
     final item = widget.item;
     final isInstalled = _service.isInstalledWithSource(item);
     final isPending = _service.isPackagePending(item.storageKey);
+    final hasUpdate = _service.hasUpdate(item.storageKey);
     final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('扩展详情'),
+        actions: [
+          if (isInstalled && !item.isFromLocal)
+            IconButton(
+              icon: _checkingUpdate
+                  ? const SizedBox(
+                      width: 18,
+                      height: 18,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                  : const Icon(Icons.refresh),
+              tooltip: '检查更新',
+              onPressed: _checkingUpdate ? null : _checkUpdate,
+            ),
+        ],
       ),
       body: ListView(
         padding: const EdgeInsets.all(20.0),
@@ -188,6 +239,52 @@ class _ExtensionDetailScreenState extends State<ExtensionDetailScreen> {
                     label: Text(isPending ? '安装中...' : '安装扩展'),
                   ),
           ),
+
+          // 检测到新版本时，在卸载按钮下方显示更新按钮
+          if (isInstalled && hasUpdate) ...[
+            const SizedBox(height: 12),
+            SizedBox(
+              width: double.infinity,
+              height: 48,
+              child: FilledButton.icon(
+                onPressed: isPending
+                    ? null
+                    : () async {
+                        try {
+                          await _service.updatePackage(item.storageKey);
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context)
+                              ..hideCurrentSnackBar()
+                              ..showSnackBar(
+                                SnackBar(
+                                    content: Text('已更新 ${item.name}')),
+                              );
+                          }
+                        } catch (e) {
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context)
+                              ..hideCurrentSnackBar()
+                              ..showSnackBar(
+                                SnackBar(content: Text('更新失败：$e')),
+                              );
+                          }
+                        }
+                      },
+                icon: isPending
+                    ? const SizedBox(
+                        width: 18,
+                        height: 18,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      )
+                    : const Icon(Icons.system_update_alt),
+                label: Text(
+                  isPending
+                      ? '更新中...'
+                      : '更新到 ${_service.availableUpdate(item.storageKey)?.version ?? ''}',
+                ),
+              ),
+            ),
+          ],
 
           const SizedBox(height: 24),
           const Divider(),
