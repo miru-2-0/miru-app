@@ -142,7 +142,10 @@ jobs:
             echo "## 更新内容"
             echo ""
             if [ -z "${PREV_TAG}" ]; then
-              echo "初始发布 v${TAG#v}。"
+              echo "首次发布，以下为全部提交："
+              echo ""
+              git log --no-merges --pretty=format:"- %s (%h)" "${TAG}"
+              echo ""
             else
               git log --no-merges --pretty=format:"- %s (%h)" "${PREV_TAG}..${TAG}"
               echo ""
