@@ -27,12 +27,18 @@ class ExtensionRepoService extends ChangeNotifier {
   ];
 
   final Map<String, ExtensionItem> _installedExtensionsMap = {};
+  final Set<String> _pendingPackages = {};
   bool _isInitialized = false;
 
   List<ExtensionRepo> get repos => List.unmodifiable(_repos);
 
   List<ExtensionItem> get installedExtensions =>
       List.unmodifiable(_installedExtensionsMap.values);
+
+  /// 正在安装/卸载中的包，供各界面展示加载状态。
+  Set<String> get pendingPackages => Set.unmodifiable(_pendingPackages);
+
+  bool isPackagePending(String package) => _pendingPackages.contains(package);
 
   Future<void> _initPersistence() async {
     if (_isInitialized) return;
@@ -83,18 +89,23 @@ class ExtensionRepoService extends ChangeNotifier {
     }
   }
 
-  Future<void> _saveInstalledExtensions() async {
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      final List<String> jsonList = _installedExtensionsMap.values.map((item) {
-        final map = item.toJson();
-        map['repoName'] = item.repoName;
-        return jsonEncode(map);
-      }).toList();
-      await prefs.setStringList(_keyInstalledExtensions, jsonList);
-    } catch (e) {
-      debugPrint('保存已安装扩展失败: $e');
-    }
+  Future<void> _lastSave = Future.value();
+
+  Future<void> _saveInstalledExtensions() {
+    _lastSave = _lastSave.then((_) async {
+      try {
+        final prefs = await SharedPreferences.getInstance();
+        final List<String> jsonList = _installedExtensionsMap.values.map((item) {
+          final map = item.toJson();
+          map['repoName'] = item.repoName;
+          return jsonEncode(map);
+        }).toList();
+        await prefs.setStringList(_keyInstalledExtensions, jsonList);
+      } catch (e) {
+        debugPrint('保存已安装扩展失败: $e');
+      }
+    });
+    return _lastSave;
   }
 
   Future<void> _saveCustomRepos() async {
@@ -138,22 +149,32 @@ class ExtensionRepoService extends ChangeNotifier {
 
   /// 真正安装扩展：根据扩展所在仓库推导脚本地址 → 下载 .js → 初始化 JS runtime。
   Future<ExtensionItem> installExtensionItem(ExtensionItem item) async {
-    final scriptUrl = _buildScriptUrl(item);
-    final installed = await ExtensionManager.instance.installFromUrl(
-      scriptUrl,
-      repoName: item.repoName,
-      fallback: item,
-    );
-
-    _installedExtensionsMap[installed.package] = installed;
-    await _saveInstalledExtensions();
+    if (_pendingPackages.contains(item.package)) {
+      throw StateError('${item.package} 正在处理中');
+    }
+    _pendingPackages.add(item.package);
     notifyListeners();
+    try {
+      final scriptUrl = _buildScriptUrl(item);
+      final installed = await ExtensionManager.instance.installFromUrl(
+        scriptUrl,
+        repoName: item.repoName,
+        fallback: item,
+      );
 
-    // 变更后触发后台预加载
-    MediaSearchService.instance.preloadLatestMedia(
-      installedExtensions: installedExtensions,
-    );
-    return installed;
+      _installedExtensionsMap[installed.package] = installed;
+      await _saveInstalledExtensions();
+      notifyListeners();
+
+      // 变更后触发后台预加载
+      MediaSearchService.instance.preloadLatestMedia(
+        installedExtensions: installedExtensions,
+      );
+      return installed;
+    } finally {
+      _pendingPackages.remove(item.package);
+      notifyListeners();
+    }
   }
 
   /// 从仓库 url 推导扩展脚本的绝对地址
@@ -182,17 +203,27 @@ class ExtensionRepoService extends ChangeNotifier {
   }
 
   Future<void> uninstallPackage(String package) async {
-    // 释放 JS 运行时并删除脚本文件
-    await ExtensionManager.instance.uninstall(package);
-
-    _installedExtensionsMap.remove(package);
-    await _saveInstalledExtensions();
+    if (_pendingPackages.contains(package)) {
+      throw StateError('$package 正在处理中');
+    }
+    _pendingPackages.add(package);
     notifyListeners();
+    try {
+      // 释放 JS 运行时并删除脚本文件
+      await ExtensionManager.instance.uninstall(package);
 
-    // 变更后触发后台预加载
-    MediaSearchService.instance.preloadLatestMedia(
-      installedExtensions: installedExtensions,
-    );
+      _installedExtensionsMap.remove(package);
+      await _saveInstalledExtensions();
+      notifyListeners();
+
+      // 变更后触发后台预加载
+      MediaSearchService.instance.preloadLatestMedia(
+        installedExtensions: installedExtensions,
+      );
+    } finally {
+      _pendingPackages.remove(package);
+      notifyListeners();
+    }
   }
 
   Future<List<ExtensionItem>> fetchExtensionsForRepo(ExtensionRepo repo) async {

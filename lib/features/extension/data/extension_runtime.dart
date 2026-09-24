@@ -28,6 +28,9 @@ class ExtensionRuntime {
   late final JavascriptRuntime runtime;
   late String className;
   bool _isInitialized = false;
+  bool _disposeRequested = false;
+  bool _engineReleased = false;
+  int _activeCalls = 0;
   String _currentRequestUrl = '';
 
   static const String _defaultUa =
@@ -359,11 +362,17 @@ class ExtensionRuntime {
       };
 
   Future<T> _runExtension<T>(Future<T> Function() fun) async {
+    _activeCalls++;
     try {
       return await fun();
     } catch (e) {
       debugPrint('扩展 [${extension.name}] 执行异常: $e');
       rethrow;
+    } finally {
+      _activeCalls--;
+      if (_disposeRequested && _activeCalls == 0 && !_engineReleased) {
+        _releaseEngine();
+      }
     }
   }
 
@@ -459,8 +468,23 @@ class ExtensionRuntime {
   }
 
   void dispose() {
-    runtime.dispose();
+    // 若有在途 JS 调用（如后台 preload 请求尚未返回），
+    // 立即关引擎会导致 flutter_js 的异步回调抛 "JSValue released"。
+    // 延迟到活跃调用归零后再真正释放引擎。
+    _disposeRequested = true;
     _isInitialized = false;
+    if (_activeCalls == 0 && !_engineReleased) {
+      _releaseEngine();
+    }
+  }
+
+  void _releaseEngine() {
+    _engineReleased = true;
+    try {
+      runtime.dispose();
+    } catch (e) {
+      debugPrint('扩展 [${extension.name}] 释放 JS 运行时异常: $e');
+    }
   }
 
   // ---------- 桥接实现 ----------

@@ -36,7 +36,7 @@ class _InstallExtensionScreenState extends State<InstallExtensionScreen> {
 
   void _onServiceChanged() {
     if (mounted) {
-      _loadExtensions();
+      setState(() {});
     }
   }
 
@@ -146,6 +146,8 @@ class _InstallExtensionScreenState extends State<InstallExtensionScreen> {
                     final item = filteredExtensions[index];
                     final isInstalled =
                         _service.isPackageInstalled(item.package);
+                    final isPending =
+                        _service.isPackagePending(item.package);
 
                     return Card(
                       elevation: 0,
@@ -233,23 +235,51 @@ class _InstallExtensionScreenState extends State<InstallExtensionScreen> {
                                 ),
                               ),
                               const SizedBox(width: 8),
-                              isInstalled
+                              isInstalled || isPending
                                   ? OutlinedButton(
-                                      onPressed: () {
-                                        _service
-                                            .uninstallPackage(item.package);
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          SnackBar(
-                                            content:
-                                                Text('已卸载 ${item.name}'),
-                                          ),
-                                        );
-                                      },
+                                      onPressed: isPending
+                                          ? null
+                                          : () async {
+                                              try {
+                                                await _service
+                                                    .uninstallPackage(item
+                                                        .package);
+                                                if (context.mounted) {
+                                                  ScaffoldMessenger.of(context)
+                                                    ..hideCurrentSnackBar()
+                                                    ..showSnackBar(
+                                                      SnackBar(
+                                                        content: Text(
+                                                            '已卸载 ${item.name}'),
+                                                      ),
+                                                    );
+                                                }
+                                              } catch (e) {
+                                                if (context.mounted) {
+                                                  ScaffoldMessenger.of(context)
+                                                    ..hideCurrentSnackBar()
+                                                    ..showSnackBar(
+                                                      SnackBar(
+                                                        content: Text(
+                                                            '卸载失败：$e'),
+                                                      ),
+                                                    );
+                                                }
+                                              }
+                                            },
                                       style: OutlinedButton.styleFrom(
                                         foregroundColor: Colors.red,
                                       ),
-                                      child: const Text('卸载'),
+                                      child: isPending
+                                          ? const SizedBox(
+                                              width: 18,
+                                              height: 18,
+                                              child:
+                                                  CircularProgressIndicator(
+                                                strokeWidth: 2,
+                                              ),
+                                            )
+                                          : const Text('卸载'),
                                     )
                                   : FilledButton(
                                       onPressed: () async {
@@ -258,21 +288,23 @@ class _InstallExtensionScreenState extends State<InstallExtensionScreen> {
                                               .installExtensionItem(item);
                                           if (context.mounted) {
                                             ScaffoldMessenger.of(context)
-                                                .showSnackBar(
-                                              SnackBar(
-                                                content: Text(
-                                                    '成功安装 ${item.name}'),
-                                              ),
-                                            );
+                                              ..hideCurrentSnackBar()
+                                              ..showSnackBar(
+                                                SnackBar(
+                                                  content: Text(
+                                                      '成功安装 ${item.name}'),
+                                                ),
+                                              );
                                           }
                                         } catch (e) {
                                           if (context.mounted) {
                                             ScaffoldMessenger.of(context)
-                                                .showSnackBar(
-                                              SnackBar(
-                                                content: Text('安装失败：$e'),
-                                              ),
-                                            );
+                                              ..hideCurrentSnackBar()
+                                              ..showSnackBar(
+                                                SnackBar(
+                                                  content: Text('安装失败：$e'),
+                                                ),
+                                              );
                                           }
                                         }
                                       },

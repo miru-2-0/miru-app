@@ -50,6 +50,7 @@ class _ExtensionDetailScreenState extends State<ExtensionDetailScreen> {
   Widget build(BuildContext context) {
     final item = widget.item;
     final isInstalled = _service.isPackageInstalled(item.package);
+    final isPending = _service.isPackagePending(item.package);
     final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
@@ -99,12 +100,29 @@ class _ExtensionDetailScreenState extends State<ExtensionDetailScreen> {
             height: 48,
             child: isInstalled
                 ? OutlinedButton.icon(
-                    onPressed: () {
-                      _service.uninstallPackage(item.package);
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('已卸载 ${item.name}')),
-                      );
-                    },
+                    onPressed: isPending
+                        ? null
+                        : () async {
+                            try {
+                              await _service.uninstallPackage(item.package);
+                              if (context.mounted) {
+                                ScaffoldMessenger.of(context)
+                                  ..hideCurrentSnackBar()
+                                  ..showSnackBar(
+                                    SnackBar(
+                                        content: Text('已卸载 ${item.name}')),
+                                  );
+                              }
+                            } catch (e) {
+                              if (context.mounted) {
+                                ScaffoldMessenger.of(context)
+                                  ..hideCurrentSnackBar()
+                                  ..showSnackBar(
+                                    SnackBar(content: Text('卸载失败：$e')),
+                                  );
+                              }
+                            }
+                          },
                     style: OutlinedButton.styleFrom(
                       foregroundColor: colorScheme.error,
                       side: BorderSide(
@@ -114,24 +132,39 @@ class _ExtensionDetailScreenState extends State<ExtensionDetailScreen> {
                     label: const Text('卸载扩展'),
                   )
                 : FilledButton.icon(
-                    onPressed: () async {
-                      try {
-                        await _service.installExtensionItem(item);
-                        if (context.mounted) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('成功安装 ${item.name}')),
-                          );
-                        }
-                      } catch (e) {
-                        if (context.mounted) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('安装失败：$e')),
-                          );
-                        }
-                      }
-                    },
-                    icon: const Icon(Icons.download),
-                    label: const Text('安装扩展'),
+                    onPressed: isPending
+                        ? null
+                        : () async {
+                            try {
+                              await _service.installExtensionItem(item);
+                              if (context.mounted) {
+                                ScaffoldMessenger.of(context)
+                                  ..hideCurrentSnackBar()
+                                  ..showSnackBar(
+                                    SnackBar(
+                                        content: Text('成功安装 ${item.name}')),
+                                  );
+                              }
+                            } catch (e) {
+                              if (context.mounted) {
+                                ScaffoldMessenger.of(context)
+                                  ..hideCurrentSnackBar()
+                                  ..showSnackBar(
+                                    SnackBar(content: Text('安装失败：$e')),
+                                  );
+                              }
+                            }
+                          },
+                    icon: isPending
+                        ? const SizedBox(
+                            width: 18,
+                            height: 18,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                            ),
+                          )
+                        : const Icon(Icons.download),
+                    label: Text(isPending ? '安装中...' : '安装扩展'),
                   ),
           ),
 
