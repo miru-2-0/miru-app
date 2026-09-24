@@ -49,5 +49,7 @@ app.*.map.json
 .widget_preview/
 
 # test
-/integration_test/fixtures/
+# 保留 fixtures 目录本身（.gitkeep），忽略其中的本地扩展脚本
+/integration_test/fixtures/*
+!/integration_test/fixtures/.gitkeep
 /devtools_options.yaml
