@@ -139,3 +139,9 @@ integration_test/              # 端到端集成测试
 - **图片不显示**：多为本地代理未关闭；另外扩展图床常为明文 HTTP（带端口），Android 9+ 默认禁止明文流量，需在 `AndroidManifest.xml` 的 `application` 上开启 `android:usesCleartextTraffic="true"`。
 - **Android 构建报 Kotlin target 校验错误**：`android/gradle.properties` 需保留 `kotlin.jvm.target.validation.mode=warning`。
 - **iOS 包无法直接安装**：CI 产出为未签名 `.ipa` 对应的源码包，正式分发请接入签名证书。
+
+## 开源协议
+
+本项目基于上游 [miru-app](https://github.com/miru-project/miru-app) 二次开发，遵循 **GNU General Public License v3.0 (GPL-3.0)** 发布，完整协议见 [LICENSE](LICENSE)。
+
+根据 GPL-3.0 的 copyleft 要求，任何基于本项目的衍生作品也须以 GPL-3.0 开源发布，并保留原始版权声明。

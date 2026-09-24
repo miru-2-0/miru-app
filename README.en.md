@@ -139,3 +139,9 @@ integration_test/              # End-to-end integration tests
 - **Images not loading**: usually your local proxy is still on; also, extension image hosts are often plain HTTP with a custom port — Android 9+ blocks cleartext traffic by default, so set `android:usesCleartextTraffic="true"` on the `application` element in `AndroidManifest.xml`.
 - **Android build fails with Kotlin target validation error**: keep `kotlin.jvm.target.validation.mode=warning` in `android/gradle.properties`.
 - **iOS package cannot be installed directly**: the CI output is an unsigned source package; wire up signing certificates for official distribution.
+
+## License
+
+This project is a derivative work based on the upstream [miru-app](https://github.com/miru-project/miru-app) and is released under the **GNU General Public License v3.0 (GPL-3.0)**. See [LICENSE](LICENSE) for the full text.
+
+Under the copyleft terms of GPL-3.0, any derivative work must also be released under GPL-3.0 with the original copyright notices preserved.
