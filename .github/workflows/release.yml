@@ -32,25 +32,14 @@ jobs:
             package: ''
             upload_path: miru-android-*.apk
             zip: false
-          - platform: macos-arm64
+          - platform: macos
             os: macos-latest
-            artifact: miru-macos-arm64.zip
+            artifact: miru-macos.zip
             upload_name: miru
-            name: macOS arm64
+            name: macOS (universal)
             asset: build/macos/Build/Products/Release
             package: miru.app
-            upload_path: miru-macos-arm64.zip
-            target_arch: arm64
-            zip: true
-          - platform: macos-x64
-            os: macos-13
-            artifact: miru-macos-x64.zip
-            upload_name: miru
-            name: macOS x64
-            asset: build/macos/Build/Products/Release
-            package: miru.app
-            upload_path: miru-macos-x64.zip
-            target_arch: x86_64
+            upload_path: miru-macos.zip
             zip: true
           - platform: linux
             os: ubuntu-latest
@@ -100,7 +89,7 @@ jobs:
         run: flutter build apk --release --split-per-abi
 
       - name: Build macOS
-        if: startsWith(matrix.platform, 'macos-')
+        if: matrix.platform == 'macos'
         run: flutter build macos --release
 
       - name: Build Linux
@@ -129,30 +118,8 @@ jobs:
           done
           ls -la miru-android-*.apk
 
-      - name: Strip macOS fat binaries
-        if: matrix.target_arch != ''
-        shell: bash
-        run: |
-          APP="${{ matrix.asset }}/${{ matrix.package }}"
-          ARCH="${{ matrix.target_arch }}"
-          for f in $(find "$APP" -type f); do
-            if ! file "$f" 2>/dev/null | grep -q "Mach-O"; then
-              continue
-            fi
-            out=$(lipo -info "$f" 2>/dev/null) || continue
-            case "$out" in
-              *"$ARCH"*) ;;
-              *) continue ;;
-            esac
-            case "$out" in
-              *"Non-fat"*) continue ;;
-            esac
-            lipo -extract "$ARCH" "$f" -output "$f.tmp" && mv "$f.tmp" "$f"
-            echo "stripped: $f"
-          done
-
       - name: Package macOS
-        if: matrix.package != '' && startsWith(matrix.platform, 'macos-')
+        if: matrix.package != ''
         shell: bash
         run: (cd '${{ matrix.asset }}' && zip -r -q "$GITHUB_WORKSPACE/${{ matrix.artifact }}" '${{ matrix.package }}')
 
