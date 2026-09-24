@@ -87,23 +87,30 @@ Future<Uint8List?> _loadIcon(String url, double size) async {
   if (cached != null) {
     return cached;
   }
-  try {
-    final uri = Uri.parse(url);
-    final resp = await http.get(uri).timeout(const Duration(seconds: 15));
-    final raw = resp.bodyBytes;
-    if (resp.statusCode != 200) {
+  // 原始字节按 url 缓存：不同尺寸的容器复用同一次下载，
+  // 进入详情页时无需重新请求。
+  var raw = _rawCache[url];
+  if (raw == null) {
+    try {
+      final uri = Uri.parse(url);
+      final resp = await http.get(uri).timeout(const Duration(seconds: 15));
+      if (resp.statusCode != 200) {
+        return null;
+      }
+      raw = resp.bodyBytes;
+      _rawCache[url] = raw;
+    } catch (_) {
       return null;
     }
-    final bytes = _decode(raw, size);
-    if (bytes != null) {
-      _iconCache[key] = bytes;
-    }
-    return bytes;
-  } catch (_) {
-    return null;
   }
+  final bytes = _decode(raw, size);
+  if (bytes != null) {
+    _iconCache[key] = bytes;
+  }
+  return bytes;
 }
 
+final Map<String, Uint8List> _rawCache = {};
 final Map<String, Uint8List> _iconCache = {};
 
 /// ICO 内部通常内嵌一张 PNG（或 BMP）图像，抽取出来交给 Flutter 解码。
