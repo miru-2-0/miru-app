@@ -540,6 +540,12 @@ class ExtensionRuntime {
 
   // ---------- 扩展设置持久化 ----------
 
+  /// 清空所有扩展已保存的设置缓存（仅测试与排查用）。
+  static Future<void> clearAllSettings() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(_keySettings);
+  }
+
   static Future<Map<String, dynamic>> _settingsOf(String package) async {
     final prefs = await SharedPreferences.getInstance();
     final raw = prefs.getString(_keySettings);

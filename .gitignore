@@ -49,5 +49,5 @@ app.*.map.json
 .widget_preview/
 
 # test
-/integration_test
+/integration_test/fixtures/
 /devtools_options.yaml

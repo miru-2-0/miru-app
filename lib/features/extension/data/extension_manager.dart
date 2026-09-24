@@ -119,6 +119,29 @@ class ExtensionManager {
     }
   }
 
+  /// 清空扩展缓存：释放全部运行时、删除扩展目录下的所有脚本与设置。
+  Future<void> clearCache() async {
+    for (final package in _runtimes.keys.toList()) {
+      _runtimes.remove(package)?.dispose();
+    }
+    final dir = _extensionsDir ?? await extensionsDir;
+    if (await dir.exists()) {
+      await dir.delete(recursive: true);
+    }
+    await dir.create(recursive: true);
+    _initialized = false;
+    await ExtensionRuntime.clearAllSettings();
+  }
+
+  /// 仅解析脚本头部（==MiruExtension== 注释块）的元数据，不落盘、不初始化运行时。
+  ExtensionItem? parseScriptItem(
+    String script, {
+    required String repoName,
+    ExtensionItem? fallback,
+  }) {
+    return _parseScriptItem(script, repoName: repoName, fallback: fallback);
+  }
+
   /// 从脚本头部元数据（==MiruExtension== 注释块）解析扩展信息。
   ExtensionItem? _parseScriptItem(
     String script, {

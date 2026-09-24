@@ -46,6 +46,7 @@ dependencies:
   path: ^1.9.1
   html: ^0.15.4
   xpath_selector_html_parser: ^3.0.1
+  package_info_plus: ^10.2.1
 
 dev_dependencies:
   flutter_test:

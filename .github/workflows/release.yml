@@ -10,8 +10,6 @@ jobs:
   build:
     name: build-${{ matrix.platform }}
     runs-on: ${{ matrix.os }}
-    permissions:
-      contents: write
     strategy:
       fail-fast: false
       matrix:
@@ -21,28 +19,36 @@ jobs:
             artifact: miru-windows-x64.zip
             name: Windows x64
             asset: build/windows/x64/runner/Release
+            package: ''
+            zip: false
           - platform: android
             os: ubuntu-latest
             artifact: miru-android.apk
             name: Android APK
             asset: build/app/outputs/flutter-apk/app-release.apk
+            package: ''
+            zip: false
           - platform: macos
             os: macos-latest
             artifact: miru-macos.zip
             name: macOS
             asset: build/macos/Build/Products/Release
-            package: Runner.app
+            package: miru.app
+            zip: true
           - platform: linux
             os: ubuntu-latest
             artifact: miru-linux-x64.tar.gz
             name: Linux x64
             asset: build/linux/x64/release/bundle
+            package: ''
+            zip: false
           - platform: ios
             os: macos-latest
             artifact: miru-ios.zip
             name: iOS (no-codesign)
             asset: build/ios/iphoneos
             package: Runner.app
+            zip: true
 
     steps:
       - uses: actions/checkout@v4
@@ -54,6 +60,12 @@ jobs:
 
       - name: Enable desktop
         run: flutter config --enable-windows-desktop --enable-macos-desktop --enable-linux-desktop
+
+      - name: Install Linux dependencies
+        if: matrix.platform == 'linux'
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y ninja-build libgtk-3-dev
 
       - name: Install dependencies
         run: flutter pub get
@@ -84,7 +96,7 @@ jobs:
         run: Compress-Archive -Path '${{ matrix.asset }}' -DestinationPath '${{ matrix.artifact }}' -Force
 
       - name: Package macOS
-        if: matrix.platform == 'macos'
+        if: matrix.package != ''
         shell: bash
         run: (cd '${{ matrix.asset }}' && zip -r -q "$GITHUB_WORKSPACE/${{ matrix.artifact }}" '${{ matrix.package }}')
 
@@ -93,14 +105,49 @@ jobs:
         shell: bash
         run: tar -C '${{ matrix.asset }}' -czf "$GITHUB_WORKSPACE/${{ matrix.artifact }}" .
 
-      - name: Package iOS
-        if: matrix.platform == 'ios'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact }}
+          path: ${{ matrix.artifact }}
+          if-no-files-found: error
+
+  release:
+    name: release
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Generate release notes
         shell: bash
-        run: (cd '${{ matrix.asset }}' && zip -r -q "$GITHUB_WORKSPACE/${{ matrix.artifact }}" '${{ matrix.package }}')
+        run: |
+          TAG="${GITHUB_REF_NAME}"
+          PREV_TAG=$(git describe --tags --abbrev=0 "${TAG}^" 2>/dev/null || true)
+          {
+            echo "## 更新内容"
+            echo ""
+            if [ -z "${PREV_TAG}" ]; then
+              echo "初始发布 v${TAG#v}。"
+            else
+              git log --no-merges --pretty=format:"- %s (%h)" "${PREV_TAG}..${TAG}"
+              echo ""
+            fi
+          } > RELEASE_NOTES.md
+          echo "release-notes-file=RELEASE_NOTES.md" >> "${GITHUB_OUTPUT}"
+        id: notes
+
+      - uses: actions/download-artifact@v4
+        with:
+          path: artifacts
 
       - uses: softprops/action-gh-release@v2
         with:
-          files: ${{ matrix.artifact }}
+          files: artifacts/*/*
           tag_name: ${{ github.ref_name }}
           name: miru ${{ github.ref_name }}
-          generate_release_notes: true
+          body_path: ${{ steps.notes.outputs.release-notes-file }}
+          draft: false

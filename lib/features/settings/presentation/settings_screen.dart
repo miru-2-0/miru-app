@@ -1,9 +1,32 @@
-import 'package:flutter/material.dart';
 import 'package:card_settings_ui/card_settings_ui.dart';
+import 'package:flutter/material.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+
 import 'pages/extension_settings_page.dart';
 
-class SettingsScreen extends StatelessWidget {
+class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
+
+  @override
+  State<SettingsScreen> createState() => _SettingsScreenState();
+}
+
+class _SettingsScreenState extends State<SettingsScreen> {
+  String _appVersion = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _loadVersion();
+  }
+
+  Future<void> _loadVersion() async {
+    final info = await PackageInfo.fromPlatform();
+    if (!mounted) return;
+    setState(() {
+      _appVersion = 'v${info.version}';
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +76,7 @@ class SettingsScreen extends StatelessWidget {
               SettingsTile.navigation(
                 leading: const Icon(Icons.info_outline),
                 title: const Text('关于应用'),
-                value: const Text('v1.0.0'),
+                value: Text(_appVersion.isEmpty ? 'v1.0.0' : _appVersion),
                 onPressed: (context) {},
               ),
             ],
