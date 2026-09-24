@@ -1,0 +1,106 @@
+name: build
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: build-${{ matrix.platform }}
+    runs-on: ${{ matrix.os }}
+    permissions:
+      contents: write
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: windows
+            os: windows-latest
+            artifact: miru-windows-x64.zip
+            name: Windows x64
+            asset: build/windows/x64/runner/Release
+          - platform: android
+            os: ubuntu-latest
+            artifact: miru-android.apk
+            name: Android APK
+            asset: build/app/outputs/flutter-apk/app-release.apk
+          - platform: macos
+            os: macos-latest
+            artifact: miru-macos.zip
+            name: macOS
+            asset: build/macos/Build/Products/Release
+            package: Runner.app
+          - platform: linux
+            os: ubuntu-latest
+            artifact: miru-linux-x64.tar.gz
+            name: Linux x64
+            asset: build/linux/x64/release/bundle
+          - platform: ios
+            os: macos-latest
+            artifact: miru-ios.zip
+            name: iOS (no-codesign)
+            asset: build/ios/iphoneos
+            package: Runner.app
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Enable desktop
+        run: flutter config --enable-windows-desktop --enable-macos-desktop --enable-linux-desktop
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build Windows
+        if: matrix.platform == 'windows'
+        run: flutter build windows --release
+
+      - name: Build Android
+        if: matrix.platform == 'android'
+        run: flutter build apk --release
+
+      - name: Build macOS
+        if: matrix.platform == 'macos'
+        run: flutter build macos --release
+
+      - name: Build Linux
+        if: matrix.platform == 'linux'
+        run: flutter build linux --release
+
+      - name: Build iOS (no codesign)
+        if: matrix.platform == 'ios'
+        run: flutter build ios --release --no-codesign
+
+      - name: Package Windows
+        if: matrix.platform == 'windows'
+        shell: pwsh
+        run: Compress-Archive -Path '${{ matrix.asset }}' -DestinationPath '${{ matrix.artifact }}' -Force
+
+      - name: Package macOS
+        if: matrix.platform == 'macos'
+        shell: bash
+        run: (cd '${{ matrix.asset }}' && zip -r -q "$GITHUB_WORKSPACE/${{ matrix.artifact }}" '${{ matrix.package }}')
+
+      - name: Package Linux
+        if: matrix.platform == 'linux'
+        shell: bash
+        run: tar -C '${{ matrix.asset }}' -czf "$GITHUB_WORKSPACE/${{ matrix.artifact }}" .
+
+      - name: Package iOS
+        if: matrix.platform == 'ios'
+        shell: bash
+        run: (cd '${{ matrix.asset }}' && zip -r -q "$GITHUB_WORKSPACE/${{ matrix.artifact }}" '${{ matrix.package }}')
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ matrix.artifact }}
+          tag_name: ${{ github.ref_name }}
+          name: miru ${{ github.ref_name }}
+          generate_release_notes: true
