@@ -2,6 +2,7 @@ import 'package:card_settings_ui/card_settings_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
+import 'pages/about_app_page.dart';
 import 'pages/extension_settings_page.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -77,7 +78,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 leading: const Icon(Icons.info_outline),
                 title: const Text('关于应用'),
                 value: Text(_appVersion.isEmpty ? 'v1.0.0' : _appVersion),
-                onPressed: (context) {},
+                onPressed: (context) {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const AboutAppPage(),
+                    ),
+                  );
+                },
               ),
             ],
           ),
