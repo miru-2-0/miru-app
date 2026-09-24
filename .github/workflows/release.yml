@@ -17,7 +17,7 @@ jobs:
           - platform: windows
             os: windows-latest
             artifact: miru-windows-x64.zip
-            upload_name: miru
+            upload_name: miru-windows
             name: Windows x64
             asset: build/windows/x64/runner/Release
             package: ''
@@ -26,7 +26,7 @@ jobs:
           - platform: android
             os: ubuntu-latest
             artifact: android
-            upload_name: android-apks
+            upload_name: miru-android
             name: Android (3 ABIs)
             asset: build/app/outputs/flutter-apk
             package: ''
@@ -35,7 +35,7 @@ jobs:
           - platform: macos
             os: macos-latest
             artifact: miru-macos.zip
-            upload_name: miru
+            upload_name: miru-macos
             name: macOS (universal)
             asset: build/macos/Build/Products/Release
             package: miru.app
@@ -44,7 +44,7 @@ jobs:
           - platform: linux
             os: ubuntu-latest
             artifact: miru-linux-x64.tar.gz
-            upload_name: miru
+            upload_name: miru-linux
             name: Linux x64
             asset: build/linux/x64/release/bundle
             package: ''
@@ -53,7 +53,7 @@ jobs:
           - platform: ios
             os: macos-latest
             artifact: miru-ios.zip
-            upload_name: miru
+            upload_name: miru-ios
             name: iOS (no-codesign)
             asset: build/ios/iphoneos
             package: Runner.app
