@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../data/extension_repo_service.dart';
 import '../domain/models/extension_item.dart';
+import 'widgets/extension_icon.dart';
 
 class ExtensionDetailScreen extends StatefulWidget {
   final ExtensionItem item;
@@ -37,50 +38,11 @@ class _ExtensionDetailScreenState extends State<ExtensionDetailScreen> {
   }
 
   Widget _buildIcon(BuildContext context, String? iconUrl) {
-    final colorScheme = Theme.of(context).colorScheme;
-
-    if (iconUrl == null ||
-        iconUrl.isEmpty ||
-        iconUrl.toLowerCase().endsWith('.ico')) {
-      return Container(
-        width: 72,
-        height: 72,
-        decoration: BoxDecoration(
-          color: colorScheme.primaryContainer,
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Icon(
-          Icons.movie_outlined,
-          size: 36,
-          color: colorScheme.onPrimaryContainer,
-        ),
-      );
-    }
-
-    return Container(
-      width: 72,
-      height: 72,
-      decoration: BoxDecoration(
-        color: colorScheme.surfaceContainerHigh,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      clipBehavior: Clip.antiAlias,
-      child: Image.network(
-        iconUrl,
-        width: 72,
-        height: 72,
-        fit: BoxFit.contain, // 强制防形变与缩小充满显示
-        errorBuilder: (context, error, stackTrace) {
-          return Container(
-            color: colorScheme.primaryContainer,
-            child: Icon(
-              Icons.movie_outlined,
-              size: 36,
-              color: colorScheme.onPrimaryContainer,
-            ),
-          );
-        },
-      ),
+    return ExtensionIcon(
+      iconUrl: iconUrl,
+      size: 72,
+      borderRadius: 16,
+      iconSize: 36,
     );
   }
 
