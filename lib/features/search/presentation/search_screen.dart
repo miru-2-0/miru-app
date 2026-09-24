@@ -255,7 +255,7 @@ class _SearchScreenState extends State<SearchScreen> {
                             itemBuilder: (context, index) {
                               final item = items[index];
                               final heroTag =
-                                  'search_poster_${ext.package}_${item.url}_$index';
+                                  'search_poster_${ext.storageKey}_${item.url}_$index';
 
                               return Container(
                                 width: cardWidth,

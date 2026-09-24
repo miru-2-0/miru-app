@@ -192,7 +192,7 @@ class _HomeScreenState extends State<HomeScreen> {
             itemBuilder: (context, index) {
               final item = favorites[index];
               final heroTag =
-                  'home_fav_${item.package}_${item.url}_${item.title}';
+                  'home_fav_${item.extensionKey ?? item.package}_${item.url}_${item.title}';
 
               return Card(
                 clipBehavior: Clip.antiAlias,

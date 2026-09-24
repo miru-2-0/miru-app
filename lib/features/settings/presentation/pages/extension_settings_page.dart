@@ -12,7 +12,6 @@ class ExtensionSettingsPage extends StatefulWidget {
 class _ExtensionSettingsPageState extends State<ExtensionSettingsPage> {
   final _service = ExtensionRepoService.instance;
   bool _autoUpdate = true;
-  bool _allowThirdParty = false;
 
   @override
   void initState() {
@@ -119,12 +118,10 @@ class _ExtensionSettingsPageState extends State<ExtensionSettingsPage> {
               SettingsTile.switchTile(
                 leading: const Icon(Icons.security_outlined),
                 title: const Text('允许第三方扩展'),
-                description: const Text('允许安装未经签名的第三方扩展'),
-                initialValue: _allowThirdParty,
+                description: const Text('允许安装从本地导入的扩展，默认关闭'),
+                initialValue: _service.allowThirdParty,
                 onToggle: (value) {
-                  setState(() {
-                    _allowThirdParty = value ?? !_allowThirdParty;
-                  });
+                  _service.setAllowThirdParty(value ?? false);
                 },
               ),
             ],

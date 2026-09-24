@@ -287,7 +287,7 @@ class _MediaSearchScreenState extends State<MediaSearchScreen> {
                               SliverChildBuilderDelegate((context, index) {
                             final item = _searchResults[index];
                             final heroTag =
-                                'search_poster_${item.package}_${item.url}_$index';
+                                'search_poster_${item.extensionKey ?? item.package}_${item.url}_$index';
 
                         return Card(
                           clipBehavior: Clip.antiAlias,

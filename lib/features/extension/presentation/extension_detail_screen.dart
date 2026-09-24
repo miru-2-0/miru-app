@@ -49,8 +49,8 @@ class _ExtensionDetailScreenState extends State<ExtensionDetailScreen> {
   @override
   Widget build(BuildContext context) {
     final item = widget.item;
-    final isInstalled = _service.isPackageInstalled(item.package);
-    final isPending = _service.isPackagePending(item.package);
+    final isInstalled = _service.isInstalledWithSource(item);
+    final isPending = _service.isPackagePending(item.storageKey);
     final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
@@ -78,6 +78,27 @@ class _ExtensionDetailScreenState extends State<ExtensionDetailScreen> {
                         color: colorScheme.onSurface,
                       ),
                     ),
+                    if (item.isFromLocal) ...[
+                      const SizedBox(height: 4),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 2,
+                        ),
+                        decoration: BoxDecoration(
+                          color: colorScheme.tertiaryContainer,
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: Text(
+                          '本地导入',
+                          style: TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w600,
+                            color: colorScheme.onTertiaryContainer,
+                          ),
+                        ),
+                      ),
+                    ],
                     const SizedBox(height: 4),
                     Text(
                       item.package,
@@ -104,7 +125,7 @@ class _ExtensionDetailScreenState extends State<ExtensionDetailScreen> {
                         ? null
                         : () async {
                             try {
-                              await _service.uninstallPackage(item.package);
+                              await _service.uninstallPackage(item.storageKey);
                               if (context.mounted) {
                                 ScaffoldMessenger.of(context)
                                   ..hideCurrentSnackBar()
@@ -204,7 +225,11 @@ class _ExtensionDetailScreenState extends State<ExtensionDetailScreen> {
                 ListTile(
                   leading: const Icon(Icons.source_outlined),
                   title: const Text('扩展来源'),
-                  subtitle: Text(item.repoName),
+                  subtitle: Text(
+                    item.isFromLocal
+                        ? ExtensionItem.localRepoName
+                        : item.repoName,
+                  ),
                 ),
                 if (item.lang != null && item.lang!.isNotEmpty)
                   ListTile(

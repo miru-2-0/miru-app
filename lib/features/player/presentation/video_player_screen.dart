@@ -183,13 +183,16 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
 
     try {
       // 严格走 JS 扩展的 watch() 解出真实播放地址与请求头，不做任何直连兜底
-      final runtime =
-          ExtensionManager.instance.runtimeFor(widget.mediaItem.package);
-      if (runtime == null) {
+      final manager = ExtensionManager.instance;
+      final runtime = widget.mediaItem.extensionKey != null
+          ? manager.runtimeForStorageKey(widget.mediaItem.extensionKey!)
+          : null;
+      final resolved = runtime ?? manager.runtimeForPackage(widget.mediaItem.package);
+      if (resolved == null) {
         throw StateError('未找到扩展 [${widget.mediaItem.package}]，无法解析播放地址');
       }
 
-      final watch = await runtime.watch(epUrl);
+      final watch = await resolved.watch(epUrl);
       if (watch == null || watch.url.trim().isEmpty) {
         throw StateError('扩展未返回有效的播放地址');
       }

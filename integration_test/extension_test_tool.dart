@@ -108,7 +108,7 @@ Future<ExtensionTestReport> runExtensionPipeline({
     }
 
     final service = MediaDetailService.instance;
-    final runtime2 = manager.runtimeFor(installed.package);
+    final runtime2 = manager.runtimeForStorageKey(installed.storageKey);
     if (runtime2 == null) {
       report.fail('安装后未找到扩展运行时');
     } else {
@@ -156,7 +156,7 @@ Future<ExtensionTestReport> runExtensionPipeline({
     }
 
     await Future<void>.delayed(const Duration(milliseconds: 2500));
-    await manager.uninstall(installed.package);
+    await manager.uninstall(installed.storageKey);
   } catch (e, s) {
     report.fail('manager/契约转换阶段异常', '$e\n$s');
   } finally {

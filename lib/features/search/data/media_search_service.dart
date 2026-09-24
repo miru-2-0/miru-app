@@ -111,7 +111,8 @@ class MediaSearchService extends ChangeNotifier {
     ExtensionItem ext, {
     int page = 1,
   }) async {
-    final runtime = ExtensionManager.instance.runtimeFor(ext.package);
+    final runtime =
+        ExtensionManager.instance.runtimeForStorageKey(ext.storageKey);
     if (runtime == null) {
       debugPrint('扩展 [${ext.name}] 无 JS 运行时，跳过 latest()');
       return [];
@@ -123,6 +124,7 @@ class MediaSearchService extends ChangeNotifier {
                 e,
                 extensionName: ext.name,
                 package: ext.package,
+                extensionKey: ext.storageKey,
               ))
           .toList();
     } catch (e) {
@@ -137,7 +139,8 @@ class MediaSearchService extends ChangeNotifier {
     String keyword, {
     int page = 1,
   }) async {
-    final runtime = ExtensionManager.instance.runtimeFor(ext.package);
+    final runtime =
+        ExtensionManager.instance.runtimeForStorageKey(ext.storageKey);
     if (runtime == null) {
       debugPrint('扩展 [${ext.name}] 无 JS 运行时，跳过 search()');
       return [];
@@ -149,6 +152,7 @@ class MediaSearchService extends ChangeNotifier {
                 e,
                 extensionName: ext.name,
                 package: ext.package,
+                extensionKey: ext.storageKey,
               ))
           .toList();
     } catch (e) {

@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import '../data/extension_repo_service.dart';
 import '../domain/models/extension_item.dart';
@@ -85,6 +88,59 @@ class _InstallExtensionScreenState extends State<InstallExtensionScreen> {
     return ExtensionIcon(iconUrl: iconUrl, size: 48);
   }
 
+  Future<void> _importLocalExtension() async {
+    PlatformFile? picked;
+    try {
+      picked = await FilePicker.pickFile(
+        type: FileType.custom,
+        allowedExtensions: ['js'],
+        dialogTitle: '选择本地扩展脚本 (.js)',
+      );
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(SnackBar(content: Text('无法打开文件选择器：$e')));
+      }
+      return;
+    }
+    if (picked == null) return;
+
+    String script;
+    try {
+      if (picked.path != null) {
+        script = await File(picked.path!).readAsString();
+      } else {
+        final bytes = await picked.readAsBytes();
+        script = String.fromCharCodes(bytes);
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(SnackBar(content: Text('读取文件失败：$e')));
+      }
+      return;
+    }
+
+    try {
+      await _service.installExtensionFromScript(script);
+      if (mounted) {
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(
+            const SnackBar(content: Text('本地扩展导入成功')),
+          );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(SnackBar(content: Text('导入失败：$e')));
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final filteredExtensions = _getFilteredExtensions();
@@ -123,6 +179,12 @@ class _InstallExtensionScreenState extends State<InstallExtensionScreen> {
                 },
               ),
           ] else ...[
+            if (_service.allowThirdParty)
+              IconButton(
+                icon: const Icon(Icons.upload_file_outlined),
+                tooltip: '导入本地扩展',
+                onPressed: _importLocalExtension,
+              ),
             IconButton(
               icon: const Icon(Icons.search),
               tooltip: '搜索扩展',
@@ -145,9 +207,9 @@ class _InstallExtensionScreenState extends State<InstallExtensionScreen> {
                   itemBuilder: (context, index) {
                     final item = filteredExtensions[index];
                     final isInstalled =
-                        _service.isPackageInstalled(item.package);
+                        _service.isInstalledWithSource(item);
                     final isPending =
-                        _service.isPackagePending(item.package);
+                        _service.isPackagePending(item.storageKey);
 
                     return Card(
                       elevation: 0,
@@ -243,7 +305,7 @@ class _InstallExtensionScreenState extends State<InstallExtensionScreen> {
                                               try {
                                                 await _service
                                                     .uninstallPackage(item
-                                                        .package);
+                                                        .storageKey);
                                                 if (context.mounted) {
                                                   ScaffoldMessenger.of(context)
                                                     ..hideCurrentSnackBar()

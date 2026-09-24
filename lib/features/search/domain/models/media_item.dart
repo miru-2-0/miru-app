@@ -9,6 +9,10 @@ class MediaItem {
   final String package;
   final Map<String, String>? headers;
 
+  /// 扩展的内部唯一标识（来源:包名）。用于精确追溯到具体来源的运行时；
+  /// 旧数据可能为空，此时回退按 [package] 查找。
+  final String? extensionKey;
+
   const MediaItem({
     required this.title,
     required this.cover,
@@ -17,6 +21,7 @@ class MediaItem {
     required this.extensionName,
     required this.package,
     this.headers,
+    this.extensionKey,
   });
 
   factory MediaItem.fromJson(Map<String, dynamic> json) {
@@ -30,6 +35,7 @@ class MediaItem {
       headers: (json['headers'] as Map?)?.map(
         (key, value) => MapEntry(key.toString(), value.toString()),
       ),
+      extensionKey: json['extensionKey'] as String?,
     );
   }
 
@@ -42,6 +48,7 @@ class MediaItem {
       'extensionName': extensionName,
       'package': package,
       'headers': headers,
+      'extensionKey': extensionKey,
     };
   }
 
@@ -50,6 +57,7 @@ class MediaItem {
     ExtensionListItem item, {
     required String extensionName,
     required String package,
+    String? extensionKey,
   }) {
     return MediaItem(
       title: item.title,
@@ -59,6 +67,7 @@ class MediaItem {
       extensionName: extensionName,
       package: package,
       headers: item.headers,
+      extensionKey: extensionKey,
     );
   }
 }

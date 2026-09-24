@@ -164,25 +164,73 @@ class _ExtensionScreenState extends State<ExtensionScreen> {
                                   ],
                                 ),
                                 const SizedBox(height: 4),
-                                Text(
-                                  item.package,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: colorScheme.onSurfaceVariant,
-                                  ),
+                                Row(
+                                  children: [
+                                    Flexible(
+                                      child: Text(
+                                        item.package,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          color:
+                                              colorScheme.onSurfaceVariant,
+                                        ),
+                                      ),
+                                    ),
+                                    if (item.isFromLocal) ...[
+                                      const SizedBox(width: 8),
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 6,
+                                          vertical: 2,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color:
+                                              colorScheme.tertiaryContainer,
+                                          borderRadius:
+                                              BorderRadius.circular(6),
+                                        ),
+                                        child: Text(
+                                          '本地',
+                                          style: TextStyle(
+                                            fontSize: 10,
+                                            fontWeight: FontWeight.w600,
+                                            color: colorScheme
+                                                .onTertiaryContainer,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ],
                                 ),
                               ],
                             ),
                           ),
                           const SizedBox(width: 8),
                           OutlinedButton(
-                            onPressed: () {
-                              _service.uninstallPackage(item.package);
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text('已卸载 ${item.name}')),
-                              );
+                            onPressed: () async {
+                              try {
+                                await _service
+                                    .uninstallPackage(item.storageKey);
+                                if (context.mounted) {
+                                  ScaffoldMessenger.of(context)
+                                    ..hideCurrentSnackBar()
+                                    ..showSnackBar(
+                                      SnackBar(
+                                          content: Text('已卸载 ${item.name}')),
+                                    );
+                                }
+                              } catch (e) {
+                                if (context.mounted) {
+                                  ScaffoldMessenger.of(context)
+                                    ..hideCurrentSnackBar()
+                                    ..showSnackBar(
+                                      SnackBar(
+                                          content: Text('卸载失败：$e')),
+                                    );
+                                }
+                              }
                             },
                             style: OutlinedButton.styleFrom(
                               foregroundColor: colorScheme.error,

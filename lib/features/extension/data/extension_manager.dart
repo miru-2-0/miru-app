@@ -28,9 +28,23 @@ class ExtensionManager {
     return dir;
   }
 
-  bool hasRuntime(String package) => _runtimes.containsKey(package);
+  /// 按来源精确查找运行时；同包名不同来源时可明确区分。
+  ExtensionRuntime? runtimeForStorageKey(String storageKey) =>
+      _runtimes[storageKey];
 
-  ExtensionRuntime? runtimeFor(String package) => _runtimes[package];
+  /// 按包名查找：同包名存在多个来源时，优先仓库来源，其次返回第一个。
+  ExtensionRuntime? runtimeForPackage(String package) {
+    final bySource = _runtimes.entries
+        .where((e) => e.key.endsWith(':$package'))
+        .toList();
+    if (bySource.isEmpty) return null;
+    for (final e in bySource) {
+      if (e.key.startsWith('${ExtensionItem.sourceRepo}:')) {
+        return e.value;
+      }
+    }
+    return bySource.first.value;
+  }
 
   List<String> get loadedPackages => _runtimes.keys.toList();
 
@@ -39,24 +53,39 @@ class ExtensionManager {
     if (_initialized) return;
     final dir = await extensionsDir;
     if (await dir.exists()) {
-      for (final file in dir.listSync()) {
-        if (p.extension(file.path) == '.js') {
-          await _loadFromFile(file.path);
+      // 脚本按来源存放于 {source}/{package}.js；兼容旧版平铺 {package}.js（视为 repo）
+      for (final entry in dir.listSync()) {
+        if (entry is File &&
+            p.extension(entry.path) == '.js' &&
+            entry.path.endsWith('.js')) {
+          await _loadFromFile(entry.path, ExtensionItem.sourceRepo);
+        } else if (entry is Directory) {
+          final source = p.basename(entry.path);
+          if (source != ExtensionItem.sourceRepo &&
+              source != ExtensionItem.sourceLocal) {
+            continue;
+          }
+          for (final file in entry.listSync()) {
+            if (file is File && p.extension(file.path) == '.js') {
+              await _loadFromFile(file.path, source);
+            }
+          }
         }
       }
     }
     _initialized = true;
   }
 
-  Future<void> _loadFromFile(String path) async {
+  Future<void> _loadFromFile(String path, String source) async {
     try {
       final script = await File(path).readAsString();
-      final item = _parseScriptItem(script, repoName: '扩展');
+      final item =
+          _parseScriptItem(script, repoName: '扩展', source: source);
       if (item == null || item.package.isEmpty) return;
       final runtime = ExtensionRuntime(item);
       await runtime.init(script);
-      _runtimes[item.package] = runtime;
-      debugPrint('已加载扩展: ${item.name} (${item.package})');
+      _runtimes[item.storageKey] = runtime;
+      debugPrint('已加载扩展: ${item.name} (${item.storageKey})');
     } catch (e) {
       debugPrint('加载扩展失败 [$path]: $e');
     }
@@ -67,6 +96,7 @@ class ExtensionManager {
   Future<ExtensionItem> installFromUrl(
     String scriptUrl, {
     required String repoName,
+    String source = ExtensionItem.sourceRepo,
     ExtensionItem? fallback,
   }) async {
     final response = await http
@@ -79,6 +109,7 @@ class ExtensionManager {
     return installFromSource(
       response.body,
       repoName: repoName,
+      source: source,
       fallback: fallback,
     );
   }
@@ -88,32 +119,40 @@ class ExtensionManager {
   Future<ExtensionItem> installFromSource(
     String script, {
     required String repoName,
+    String source = ExtensionItem.sourceRepo,
     ExtensionItem? fallback,
   }) async {
     final item = _parseScriptItem(script,
-        repoName: repoName, fallback: fallback);
+        repoName: repoName, source: source, fallback: fallback);
     if (item == null || item.package.isEmpty) {
       throw Exception('无法解析扩展脚本元数据');
     }
 
     final dir = await extensionsDir;
-    final savePath = p.join(dir.path, '${item.package}.js');
+    final saveDir = Directory(p.join(dir.path, source));
+    await saveDir.create(recursive: true);
+    final savePath = p.join(saveDir.path, '${item.package}.js');
     await File(savePath).writeAsString(script, flush: true);
 
     final runtime = ExtensionRuntime(item);
     await runtime.init(script);
-    final old = _runtimes.remove(item.package);
+    final old = _runtimes.remove(item.storageKey);
     old?.dispose();
-    _runtimes[item.package] = runtime;
+    _runtimes[item.storageKey] = runtime;
     return item;
   }
 
   /// 卸载扩展：释放运行时并删除脚本文件。
-  Future<void> uninstall(String package) async {
-    final runtime = _runtimes.remove(package);
+  /// [storageKey] 为 来源:包名 组合键。
+  Future<void> uninstall(String storageKey) async {
+    final runtime = _runtimes.remove(storageKey);
     runtime?.dispose();
+    final parts = storageKey.split(':');
+    if (parts.length < 2) return;
+    final source = parts[0];
+    final package = parts.sublist(1).join(':');
     final dir = await extensionsDir;
-    final file = File(p.join(dir.path, '$package.js'));
+    final file = File(p.join(dir.path, source, '$package.js'));
     if (await file.exists()) {
       await file.delete();
     }
@@ -137,15 +176,18 @@ class ExtensionManager {
   ExtensionItem? parseScriptItem(
     String script, {
     required String repoName,
+    String source = ExtensionItem.sourceRepo,
     ExtensionItem? fallback,
   }) {
-    return _parseScriptItem(script, repoName: repoName, fallback: fallback);
+    return _parseScriptItem(script,
+        repoName: repoName, source: source, fallback: fallback);
   }
 
   /// 从脚本头部元数据（==MiruExtension== 注释块）解析扩展信息。
   ExtensionItem? _parseScriptItem(
     String script, {
     required String repoName,
+    String source = ExtensionItem.sourceRepo,
     ExtensionItem? fallback,
   }) {
     final meta = <String, dynamic>{};
@@ -186,6 +228,6 @@ class ExtensionManager {
       meta,
       repoName: repoName,
       isInstalled: true,
-    );
+    ).copyWith(source: source);
   }
 }

@@ -222,7 +222,7 @@ class _ExtensionMediaListScreenState extends State<ExtensionMediaListScreen> {
                         delegate: SliverChildBuilderDelegate((context, index) {
                           final item = _mediaList[index];
                           final heroTag =
-                              'list_poster_${item.package}_${item.url}_$index';
+                              'list_poster_${item.extensionKey ?? item.package}_${item.url}_$index';
 
                     return Card(
                       clipBehavior: Clip.antiAlias,

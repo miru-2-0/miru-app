@@ -13,6 +13,17 @@ class ExtensionItem {
   final bool nsfw;
   final String repoName;
   final bool isInstalled;
+  final String source;
+
+  static const String localRepoName = '本地导入';
+  static const String sourceRepo = 'repo';
+  static const String sourceLocal = 'local';
+
+  /// 是否通过"本地导入"方式安装的扩展。
+  bool get isFromLocal => source == sourceLocal;
+
+  /// 内部唯一存储标识（来源 + 包名），用于区分同名扩展的不同来源。
+  String get storageKey => '$source:$package';
 
   const ExtensionItem({
     required this.name,
@@ -29,6 +40,7 @@ class ExtensionItem {
     this.nsfw = false,
     required this.repoName,
     this.isInstalled = false,
+    this.source = sourceRepo,
   });
 
   factory ExtensionItem.fromJson(
@@ -42,6 +54,15 @@ class ExtensionItem {
       isNsfw = nsfwVal;
     } else if (nsfwVal is String) {
       isNsfw = nsfwVal.toLowerCase() == 'true';
+    }
+
+    // 来源：优先读持久化的 source；旧数据无 source 时按 repoName 推断
+    final String source;
+    final String? savedSource = json['source'] as String?;
+    if (savedSource != null && savedSource.isNotEmpty) {
+      source = savedSource;
+    } else {
+      source = repoName == localRepoName ? sourceLocal : sourceRepo;
     }
 
     return ExtensionItem(
@@ -59,6 +80,7 @@ class ExtensionItem {
       nsfw: isNsfw,
       repoName: repoName,
       isInstalled: isInstalled,
+      source: source,
     );
   }
 
@@ -76,11 +98,13 @@ class ExtensionItem {
       'url': url,
       'webSite': webSite,
       'nsfw': nsfw,
+      'source': source,
     };
   }
 
   ExtensionItem copyWith({
     bool? isInstalled,
+    String? source,
   }) {
     return ExtensionItem(
       name: name,
@@ -97,6 +121,7 @@ class ExtensionItem {
       nsfw: nsfw,
       repoName: repoName,
       isInstalled: isInstalled ?? this.isInstalled,
+      source: source ?? this.source,
     );
   }
 }

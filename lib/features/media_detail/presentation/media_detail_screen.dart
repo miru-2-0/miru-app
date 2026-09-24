@@ -78,6 +78,7 @@ class _MediaDetailScreenState extends State<MediaDetailScreen> {
         vodId: widget.mediaItem.url,
         fallbackTitle: widget.mediaItem.title,
         fallbackCover: widget.mediaItem.cover,
+        extensionKey: widget.mediaItem.extensionKey,
       );
 
       if (mounted) {

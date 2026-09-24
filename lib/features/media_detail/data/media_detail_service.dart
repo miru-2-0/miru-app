@@ -13,13 +13,18 @@ class MediaDetailService {
     required String vodId,
     required String fallbackTitle,
     required String fallbackCover,
+    String? extensionKey,
   }) async {
-    final runtime = ExtensionManager.instance.runtimeFor(package);
-    if (runtime == null) {
+    final manager = ExtensionManager.instance;
+    final runtime = extensionKey != null
+        ? manager.runtimeForStorageKey(extensionKey)
+        : null;
+    final resolved = runtime ?? manager.runtimeForPackage(package);
+    if (resolved == null) {
       throw StateError('未找到扩展 [$package]，请先安装对应扩展');
     }
 
-    final detail = await runtime.detail(vodId);
+    final detail = await resolved.detail(vodId);
     return _convertExtensionDetail(detail, fallbackTitle, fallbackCover);
   }
 
