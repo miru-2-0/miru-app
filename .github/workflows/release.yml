@@ -17,37 +17,58 @@ jobs:
           - platform: windows
             os: windows-latest
             artifact: miru-windows-x64.zip
+            upload_name: miru
             name: Windows x64
             asset: build/windows/x64/runner/Release
             package: ''
+            upload_path: miru-windows-x64.zip
             zip: false
           - platform: android
             os: ubuntu-latest
-            artifact: miru-android.apk
-            name: Android APK
-            asset: build/app/outputs/flutter-apk/app-release.apk
+            artifact: android
+            upload_name: android-apks
+            name: Android (3 ABIs)
+            asset: build/app/outputs/flutter-apk
             package: ''
+            upload_path: miru-android-*.apk
             zip: false
-          - platform: macos
+          - platform: macos-arm64
             os: macos-latest
-            artifact: miru-macos.zip
-            name: macOS
+            artifact: miru-macos-arm64.zip
+            upload_name: miru
+            name: macOS arm64
             asset: build/macos/Build/Products/Release
             package: miru.app
+            upload_path: miru-macos-arm64.zip
+            target_arch: arm64
+            zip: true
+          - platform: macos-x64
+            os: macos-13
+            artifact: miru-macos-x64.zip
+            upload_name: miru
+            name: macOS x64
+            asset: build/macos/Build/Products/Release
+            package: miru.app
+            upload_path: miru-macos-x64.zip
+            target_arch: x86_64
             zip: true
           - platform: linux
             os: ubuntu-latest
             artifact: miru-linux-x64.tar.gz
+            upload_name: miru
             name: Linux x64
             asset: build/linux/x64/release/bundle
             package: ''
+            upload_path: miru-linux-x64.tar.gz
             zip: false
           - platform: ios
             os: macos-latest
             artifact: miru-ios.zip
+            upload_name: miru
             name: iOS (no-codesign)
             asset: build/ios/iphoneos
             package: Runner.app
+            upload_path: miru-ios.zip
             zip: true
 
     steps:
@@ -76,10 +97,10 @@ jobs:
 
       - name: Build Android
         if: matrix.platform == 'android'
-        run: flutter build apk --release
+        run: flutter build apk --release --split-per-abi
 
       - name: Build macOS
-        if: matrix.platform == 'macos'
+        if: startsWith(matrix.platform, 'macos-')
         run: flutter build macos --release
 
       - name: Build Linux
@@ -99,15 +120,39 @@ jobs:
         if: matrix.platform == 'android'
         shell: bash
         run: |
-          apk=$(find build/app/outputs/flutter-apk -name '*.apk' -type f | head -n 1)
-          if [ -z "$apk" ]; then
-            echo "未找到 APK 产物" >&2
-            exit 1
-          fi
-          cp "$apk" "${{ matrix.artifact }}"
+          shopt -s nullglob
+          for f in "${{ matrix.asset }}"/app-*-release.apk; do
+            abi=$(basename "$f" | sed -E 's/app-(.+-)release\.apk/\1/')
+            abi=${abi%-}
+            cp "$f" "miru-android-${abi}.apk"
+            echo "==> miru-android-${abi}.apk"
+          done
+          ls -la miru-android-*.apk
+
+      - name: Strip macOS fat binaries
+        if: matrix.target_arch != ''
+        shell: bash
+        run: |
+          APP="${{ matrix.asset }}/${{ matrix.package }}"
+          ARCH="${{ matrix.target_arch }}"
+          for f in $(find "$APP" -type f); do
+            if ! file "$f" 2>/dev/null | grep -q "Mach-O"; then
+              continue
+            fi
+            out=$(lipo -info "$f" 2>/dev/null) || continue
+            case "$out" in
+              *"$ARCH"*) ;;
+              *) continue ;;
+            esac
+            case "$out" in
+              *"Non-fat"*) continue ;;
+            esac
+            lipo -extract "$ARCH" "$f" -output "$f.tmp" && mv "$f.tmp" "$f"
+            echo "stripped: $f"
+          done
 
       - name: Package macOS
-        if: matrix.package != ''
+        if: matrix.package != '' && startsWith(matrix.platform, 'macos-')
         shell: bash
         run: (cd '${{ matrix.asset }}' && zip -r -q "$GITHUB_WORKSPACE/${{ matrix.artifact }}" '${{ matrix.package }}')
 
@@ -116,10 +161,15 @@ jobs:
         shell: bash
         run: tar -C '${{ matrix.asset }}' -czf "$GITHUB_WORKSPACE/${{ matrix.artifact }}" .
 
+      - name: Package iOS
+        if: matrix.platform == 'ios'
+        shell: bash
+        run: (cd '${{ matrix.asset }}' && zip -r -q "$GITHUB_WORKSPACE/${{ matrix.artifact }}" '${{ matrix.package }}')
+
       - uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.artifact }}
-          path: ${{ matrix.artifact }}
+          name: ${{ matrix.upload_name }}
+          path: ${{ matrix.upload_path }}
           if-no-files-found: error
 
   release:
