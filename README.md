@@ -94,6 +94,13 @@ flutter test integration_test -d windows
 
 > 提示：测试需要联网抓取真实扩展数据；若走了代理或扩展站点不可达会导致失败，通常不是脚本本身问题（图床/站点图片不显示多为代理未关，见下文 FAQ）。
 
+#### 调试构建：自动注入 fixtures 扩展
+
+调试模式（`flutter run`）启动时，应用会**清空已有的全部扩展**，然后直接使用随包打包的 `integration_test/fixtures/` 下的 `.js` 扩展，「扩展 → 已安装」列表即等于该目录下的扩展，无需手动从仓库安装：
+
+- 添加 / 修改 / 删除该目录下的 `.js` 后，需**完整重新构建**（`flutter run` 冷启动）才会生效——热重载不会刷新打进应用里的 asset 清单；
+- 发布（release）构建不受影响，仍按正常方式管理扩展，不会清空或注入。
+
 ## 扩展开发契约
 
 扩展是一个可在 QuickJS 中执行的 JavaScript 脚本（示例：`assets/js/` 或 `integration_test/fixtures/360zy.com.js`）。脚本导出标准的列表 / 搜索 / 详情 / 播放接口，核心契约如下：

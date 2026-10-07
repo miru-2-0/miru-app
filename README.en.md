@@ -94,6 +94,13 @@ The underlying tooling lives in `integration_test/extension_test_tool.dart`:
 
 > Note: the tests fetch live extension data and require network access; failures can be caused by a local proxy or the site being unreachable rather than by the script itself (image hosts not loading is usually a leftover proxy — see the FAQ below).
 
+#### Debug builds: auto-injecting fixtures extensions
+
+On startup in **debug mode** (`flutter run`), the app **clears all existing extensions** and directly uses the `.js` extensions under the bundled `integration_test/fixtures/`. The "Extensions → Installed" list thus equals exactly that directory, with no need to install from the repository manually:
+
+- After adding / modifying / deleting a `.js` file there, **rebuild from scratch** (cold-start `flutter run`) for it to take effect — hot reload does not refresh the asset manifest bundled into the app;
+- **Release builds are unaffected**: extensions are managed normally, with no clearing or injection.
+
 ## Extension Contract
 
 An extension is a JavaScript script executed inside QuickJS (see `assets/js/` or `integration_test/fixtures/360zy.com.js`). The script exposes standard list / search / detail / playback functions, with the following core contract:

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
@@ -48,10 +49,18 @@ class ExtensionManager {
 
   List<String> get loadedPackages => _runtimes.keys.toList();
 
+  /// 已加载运行时所对应的完整扩展条目。
+  List<ExtensionItem> get loadedItems =>
+      _runtimes.values.map((r) => r.extension).toList();
+
   /// 应用启动时扫描扩展目录并初始化所有已安装扩展的运行时。
   Future<void> initialize() async {
     if (_initialized) return;
     final dir = await extensionsDir;
+    // 调试构建：清空全部扩展，仅保留集成测试 fixtures 目录里的扩展
+    if (kDebugMode) {
+      await resetAndSeedFixtures(dir);
+    }
     if (await dir.exists()) {
       // 脚本按来源存放于 {source}/{package}.js；兼容旧版平铺 {package}.js（视为 repo）
       for (final entry in dir.listSync()) {
@@ -76,11 +85,54 @@ class ExtensionManager {
     _initialized = true;
   }
 
+  /// 调试构建专用：清空应用内全部扩展（释放运行时、删除整个扩展目录），
+  /// 然后按打包进应用的 asset（integration_test/fixtures/*.js）重新导入。
+  Future<void> resetAndSeedFixtures(Directory dir) async {
+    for (final key in _runtimes.keys.toList()) {
+      _runtimes.remove(key)?.dispose();
+    }
+    if (await dir.exists()) {
+      await dir.delete(recursive: true);
+    }
+    await dir.create(recursive: true);
+
+    final manifest = await AssetManifest.loadFromAssetBundle(rootBundle);
+    final fixtureKeys = manifest.listAssets().where(
+          (key) => key.startsWith('integration_test/fixtures/') &&
+              key.endsWith('.js'),
+        );
+    debugPrint('fixtures asset 清单: ${fixtureKeys.toList()}');
+    for (final key in fixtureKeys) {
+      try {
+        final script = await rootBundle.loadString(key);
+        final item = _parseScriptItem(
+          script,
+          repoName: ExtensionItem.localRepoName,
+          source: ExtensionItem.sourceLocal,
+        );
+        if (item == null || item.package.isEmpty) {
+          debugPrint('跳过无法解析的 fixtures 扩展 [$key]');
+          continue;
+        }
+        final saveDir = Directory(p.join(dir.path, ExtensionItem.sourceLocal));
+        await saveDir.create(recursive: true);
+        await File(p.join(saveDir.path, '${item.package}.js'))
+            .writeAsString(script, flush: true);
+        debugPrint('已导入 fixtures 扩展: ${item.name} (${item.storageKey})');
+      } catch (e) {
+        debugPrint('导入 fixtures 扩展失败 [$key]: $e');
+      }
+    }
+  }
+
   Future<void> _loadFromFile(String path, String source) async {
     try {
       final script = await File(path).readAsString();
+      final repoName = source == ExtensionItem.sourceLocal
+          ? ExtensionItem.localRepoName
+          : '扩展';
       final item =
-          _parseScriptItem(script, repoName: '扩展', source: source);
+          _parseScriptItem(script, repoName: repoName, source: source);
       if (item == null || item.package.isEmpty) return;
       final runtime = ExtensionRuntime(item);
       await runtime.init(script);

@@ -88,3 +88,4 @@ flutter:
   assets:
     - assets/js/
     - assets/icon/
+    - integration_test/fixtures/

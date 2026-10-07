@@ -161,6 +161,12 @@ class ExtensionRepoService extends ChangeNotifier {
       // 确保扩展 .js 运行时已就绪
       await ExtensionManager.instance.initialize();
 
+      // 调试构建：已安装清单与（清空后重新导入的）fixtures 保持一致，
+      // 覆盖上一次运行残留的持久化记录
+      if (kDebugMode) {
+        await _syncInstalledWithLoadedFixtures();
+      }
+
       // 应用启动预加载：即便用户尚未打开搜索界面，也在后台立刻开始自动加载推荐内容
       MediaSearchService.instance.preloadLatestMedia(
         installedExtensions: installedExtensions,
@@ -172,6 +178,28 @@ class ExtensionRepoService extends ChangeNotifier {
       }
     } catch (e) {
       debugPrint('初始化持久化数据失败: $e');
+    }
+  }
+
+  /// 调试构建：已安装清单以当前加载的 fixtures 为准。
+  Future<void> _syncInstalledWithLoadedFixtures() async {
+    try {
+      final next = <String, ExtensionItem>{
+        for (final item in ExtensionManager.instance.loadedItems)
+          item.storageKey: item,
+      };
+      final changed = _installedExtensionsMap.keys
+              .any((k) => !next.containsKey(k)) ||
+          next.keys.any((k) => !_installedExtensionsMap.containsKey(k));
+      _installedExtensionsMap
+        ..clear()
+        ..addAll(next);
+      if (changed) {
+        await _saveInstalledExtensions();
+      }
+      notifyListeners();
+    } catch (e) {
+      debugPrint('同步调试 fixtures 至已安装清单失败: $e');
     }
   }
 
