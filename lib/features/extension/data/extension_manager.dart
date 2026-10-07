@@ -243,7 +243,8 @@ class ExtensionManager {
     ExtensionItem? fallback,
   }) {
     final meta = <String, dynamic>{};
-    final exp = RegExp(r'@(\w+)\s+(.*)');
+    // 空白不能跨行（\s 会匹配换行，导致空值行吞掉下一行，如 "@author\n// @lang..."）
+    final exp = RegExp(r'@(\w+)[ \t]+(.*)');
     for (final match in exp.allMatches(script)) {
       final key = match.group(1);
       final value = match.group(2);
@@ -266,12 +267,17 @@ class ExtensionManager {
     }
     if (meta['author'] == null ||
         meta['author'].toString().trim().isEmpty) {
-      meta['author'] = fallback?.author ?? '匿名';
+      meta['author'] = fallback?.author ?? '未知';
     }
     meta['webSite'] ??= fallback?.webSite;
     meta['icon'] ??= fallback?.icon;
     meta['lang'] ??= fallback?.lang;
-    meta['license'] ??= fallback?.license;
+    final license = (meta['license']?.toString() ?? '').trim();
+    meta['license'] = license.isNotEmpty
+        ? license
+        : (fallback?.license?.isNotEmpty ?? false
+            ? fallback!.license
+            : '未知');
     meta['description'] ??= fallback?.description;
     meta['nsfw'] = meta['nsfw']?.toString() == 'true';
     meta['type'] = 'bangumi';

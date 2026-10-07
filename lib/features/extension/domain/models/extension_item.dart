@@ -93,7 +93,7 @@ class ExtensionItem {
     return ExtensionItem(
       name: json['name'] as String? ?? '未命名扩展',
       version: json['version'] as String? ?? 'v0.0.1',
-      author: json['author'] as String? ?? '匿名',
+      author: json['author'] as String? ?? '未知',
       description: json['description'] as String?,
       icon: json['icon'] as String?,
       lang: json['lang'] as String?,

@@ -317,7 +317,7 @@ class _ExtensionDetailScreenState extends State<ExtensionDetailScreen> {
                 ListTile(
                   leading: const Icon(Icons.person_outline),
                   title: const Text('作者'),
-                  subtitle: Text(item.author),
+                  subtitle: Text(item.author.isEmpty ? '未知' : item.author),
                 ),
                 ListTile(
                   leading: const Icon(Icons.source_outlined),
@@ -334,12 +334,15 @@ class _ExtensionDetailScreenState extends State<ExtensionDetailScreen> {
                     title: const Text('支持语言'),
                     subtitle: Text(item.lang!),
                   ),
-                if (item.license != null && item.license!.isNotEmpty)
-                  ListTile(
-                    leading: const Icon(Icons.verified_user_outlined),
-                    title: const Text('开源协议'),
-                    subtitle: Text(item.license!),
+                ListTile(
+                  leading: const Icon(Icons.verified_user_outlined),
+                  title: const Text('开源协议'),
+                  subtitle: Text(
+                    (item.license == null || item.license!.isEmpty)
+                        ? '未知'
+                        : item.license!,
                   ),
+                ),
                 if (item.webSite != null && item.webSite!.isNotEmpty)
                   ListTile(
                     leading: const Icon(Icons.public_outlined),
