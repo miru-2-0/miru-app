@@ -48,6 +48,10 @@ app.*.map.json
 # Widget Preview related
 .widget_preview/
 
+# Android 发布签名（勿提交：keystore 与密钥口令）
+/android/key.properties
+/android/app/upload-keystore.jks
+
 # test
 # 保留 fixtures 目录本身（.gitkeep），忽略其中的本地扩展脚本
 /integration_test/fixtures/*

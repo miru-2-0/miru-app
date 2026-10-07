@@ -84,6 +84,26 @@ jobs:
         if: matrix.platform == 'windows'
         run: flutter build windows --release
 
+      - name: Configure Android release signing
+        if: matrix.platform == 'android'
+        shell: bash
+        env:
+          KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          KEYSTORE_PASS: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          KEY_PASS: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          if [ -n "$KEYSTORE_BASE64" ]; then
+            echo "$KEYSTORE_BASE64" | base64 -d > android/app/upload-keystore.jks
+            cat > android/key.properties <<EOF
+          storePassword=$KEYSTORE_PASS
+          keyPassword=$KEY_PASS
+          keyAlias=${KEY_ALIAS:-upload}
+          storeFile=upload-keystore.jks
+          EOF
+          fi
+          ls -l android/app/upload-keystore.jks
+
       - name: Build Android
         if: matrix.platform == 'android'
         run: flutter build apk --release --split-per-abi
