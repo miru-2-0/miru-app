@@ -392,14 +392,8 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
   void _toggleLock() {
     setState(() {
       _lockPanel = !_lockPanel;
-      if (_lockPanel) {
-        _showControls = false;
-      } else {
-        _showControls = true;
-      }
     });
-    _hideTimer?.cancel();
-    if (_lockPanel) return;
+    // 锁定/解锁后控制栏照常 4s 自动隐藏（锁定按钮随之隐藏）
     _updateTimer();
   }
 
@@ -520,7 +514,11 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
         child: GestureDetector(
           behavior: HitTestBehavior.opaque,
           onTap: () {
-            if (_lockPanel) return;
+            if (_lockPanel) {
+              // 锁定状态下点按仅临时呼出锁定按钮（随后自动隐藏）
+              _updateTimer();
+              return;
+            }
             _toggleVideoController();
           },
           onDoubleTap: () {
@@ -701,9 +699,9 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                 onBack: () => Navigator.of(context).pop(),
               ),
 
-              // 9. 右侧锁定
+              // 9. 右侧锁定（随控制栏自动隐藏；锁定时点按屏幕可临时呼出）
               PlayerRightControls(
-                visible: _lockPanel || (!compact && _showControls),
+                visible: _showControls && (!_lockPanel || !compact),
                 locked: _lockPanel,
                 onToggleLock: _toggleLock,
               ),

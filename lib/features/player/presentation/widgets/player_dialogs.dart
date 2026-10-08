@@ -115,7 +115,6 @@ class _InfoRow extends StatelessWidget {
   final bool mono;
   final bool copyable;
   final VoidCallback? onCopied;
-
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
@@ -124,53 +123,48 @@ class _InfoRow extends StatelessWidget {
       onCopied?.call();
     }
 
-    // 整行可点复制，但高亮只画在图标上（InkWell 不可见）
-    return InkWell(
-      onTap: copyable ? copy : null,
-      highlightColor: Colors.transparent,
-      splashColor: Colors.transparent,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            SizedBox(
-              width: 70,
-              child: Text(
-                label,
-                style: const TextStyle(color: Colors.white54, fontSize: 12),
+    // 仅复制按钮可点，整行不响应、不高亮
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          SizedBox(
+            width: 70,
+            child: Text(
+              label,
+              style: const TextStyle(color: Colors.white54, fontSize: 12),
+            ),
+          ),
+          Expanded(
+            child: Text(
+              value.isEmpty ? '（无）' : value,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 13,
+                height: 1.4,
+                fontFamily: mono ? 'monospace' : null,
+                fontFamilyFallback: mono
+                    ? const ['Consolas', 'Menlo', 'Roboto Mono']
+                    : null,
               ),
             ),
-            Expanded(
-              child: Text(
-                value.isEmpty ? '（无）' : value,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 13,
-                  height: 1.4,
-                  fontFamily: mono ? 'monospace' : null,
-                  fontFamilyFallback: mono
-                      ? const ['Consolas', 'Menlo', 'Roboto Mono']
-                      : null,
-                ),
+          ),
+          if (copyable)
+            IconButton(
+              tooltip: '复制',
+              onPressed: copy,
+              padding: EdgeInsets.zero,
+              constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
+              icon: Icon(
+                Icons.content_copy_rounded,
+                size: 16,
+                color: scheme.outline,
               ),
             ),
-            if (copyable)
-              IconButton(
-                tooltip: '复制',
-                onPressed: copy,
-                padding: EdgeInsets.zero,
-                constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
-                icon: Icon(
-                  Icons.content_copy_rounded,
-                  size: 16,
-                  color: scheme.outline,
-                ),
-              ),
-          ],
-        ),
+        ],
       ),
     );
   }
