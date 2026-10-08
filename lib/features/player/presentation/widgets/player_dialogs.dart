@@ -119,17 +119,20 @@ class _InfoRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
+    void copy() {
+      Clipboard.setData(ClipboardData(text: value));
+      onCopied?.call();
+    }
+
+    // 整行可点复制，但高亮只画在图标上（InkWell 不可见）
     return InkWell(
-      onTap: copyable
-          ? () {
-              Clipboard.setData(ClipboardData(text: value));
-              onCopied?.call();
-            }
-          : null,
+      onTap: copyable ? copy : null,
+      highlightColor: Colors.transparent,
+      splashColor: Colors.transparent,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SizedBox(
               width: 70,
@@ -155,9 +158,12 @@ class _InfoRow extends StatelessWidget {
               ),
             ),
             if (copyable)
-              Padding(
-                padding: const EdgeInsets.only(left: 8, top: 2),
-                child: Icon(
+              IconButton(
+                tooltip: '复制',
+                onPressed: copy,
+                padding: EdgeInsets.zero,
+                constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
+                icon: Icon(
                   Icons.content_copy_rounded,
                   size: 16,
                   color: scheme.outline,
