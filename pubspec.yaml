@@ -50,6 +50,8 @@ dependencies:
   image: ^4.10.1
   file_picker: ^13.1.0
   url_launcher: ^6.3.2
+  screen_brightness: ^2.1.11
+  flutter_volume_controller: ^2.0.1
   flutter_localizations:
     sdk: flutter
 

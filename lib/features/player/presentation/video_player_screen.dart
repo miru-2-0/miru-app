@@ -1,10 +1,13 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_volume_controller/flutter_volume_controller.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:media_kit_video/media_kit_video.dart';
+import 'package:screen_brightness/screen_brightness.dart';
 
 import '../../extension/data/extension_manager.dart';
 import '../../extension/domain/models/extension_models.dart';
@@ -74,18 +77,26 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
   String _currentMediaUrl = '';
 
   // 手势
-  Duration _dragSeekStart = Duration.zero;
   Duration _previewPosition = Duration.zero;
   bool _showSeekHud = false;
   bool _showSpeedHud = false;
   bool _showVolumeHud = false;
   bool _showBrightnessHud = false;
   bool _adjustingBrightness = false;
+  bool _verticalAdjusting = false;
   double _preciseVolume = -1;
   double _lastSpeedBeforeLongPress = 1.0;
-  double _currentBrightness = 0.8;
+  double _currentBrightness = 1.0;
   double _currentVolume = 0.8;
+  double? _systemVolumeBeforePlayback;
+  DateTime? _lastVolumeWrite;
   Timer? _hudTimer;
+
+  /// 桌面端走 media_kit 内部音量，移动端控制系统音量（退出后还原）。
+  bool get _isDesktop =>
+      defaultTargetPlatform == TargetPlatform.windows ||
+      defaultTargetPlatform == TargetPlatform.macOS ||
+      defaultTargetPlatform == TargetPlatform.linux;
 
   // 消息胶囊
   bool _showPillToast = false;
@@ -130,9 +141,98 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
     ]);
 
     _listenPlayerStreams();
-    _player.setVolume(_currentVolume * 100);
+    _initVolume();
+    _syncBrightnessFromSystem();
     _playEpisode(_currentEpisodeIndex);
     _updateTimer();
+  }
+
+  /// 读取当前系统/应用亮度作为手势调节的起始值（不支持时静默忽略）。
+  Future<void> _syncBrightnessFromSystem() async {
+    try {
+      final value = await ScreenBrightness().application;
+      if (mounted) {
+        setState(() {
+          _currentBrightness = value.clamp(0.0, 1.0);
+        });
+      }
+    } catch (_) {
+      // 平台不支持屏幕亮度控制时忽略，回退到默认值。
+    }
+  }
+
+  /// 应用亮度（0.0 ~ 1.0），平台不支持时静默忽略。
+  Future<void> _applyBrightness(double value) async {
+    try {
+      await ScreenBrightness().setApplicationScreenBrightness(
+        value.clamp(0.0, 1.0),
+      );
+    } catch (_) {
+      // 忽略不支持亮度的平台（如 Linux）。
+    }
+  }
+
+  /// 初始化音量：桌面端使用播放器内部音量；移动端接管系统音量。
+  void _initVolume() {
+    if (_isDesktop) {
+      _player.setVolume(_currentVolume * 100);
+      return;
+    }
+    _initSystemVolume();
+  }
+
+  Future<void> _initSystemVolume() async {
+    try {
+      final value = await FlutterVolumeController.getVolume();
+      if (value != null) {
+        // 记住进入播放器前的系统音量，退出时还原。
+        _systemVolumeBeforePlayback = value.clamp(0.0, 1.0);
+        if (mounted) {
+          setState(() {
+            _currentVolume = _systemVolumeBeforePlayback!;
+          });
+        }
+      }
+    } catch (_) {
+      // 平台不支持系统音量时忽略。
+    }
+    try {
+      // 用播放器内 HUD 代替系统音量面板。
+      await FlutterVolumeController.updateShowSystemUI(false);
+      FlutterVolumeController.addListener(
+        _onSystemVolumeChanged,
+        category: AudioSessionCategory.playback,
+        emitOnStart: false,
+      );
+    } catch (_) {}
+  }
+
+  /// 系统音量被外部（系统按键）改变时同步到手势基准值并提示。
+  void _onSystemVolumeChanged(double volume) {
+    if (!mounted || _verticalAdjusting) return;
+    // 忽略自己写入系统音量后回调的量化值，避免手势松手时回弹。
+    final last = _lastVolumeWrite;
+    if (last != null &&
+        DateTime.now().difference(last) < const Duration(milliseconds: 600)) {
+      return;
+    }
+    setState(() {
+      _currentVolume = volume.clamp(0.0, 1.0);
+      _showVolumeHud = true;
+      _showBrightnessHud = false;
+    });
+    _endAdjustment();
+  }
+
+  /// 应用音量（0.0 ~ 1.0）：桌面端写播放器，移动端写系统音量。
+  void _applyVolume(double value) {
+    final v = value.clamp(0.0, 1.0);
+    if (_isDesktop) {
+      _player.setVolume(v * 100);
+    } else {
+      _lastVolumeWrite = DateTime.now();
+      FlutterVolumeController.setVolume(v).catchError((_) {});
+    }
   }
 
   void _listenPlayerStreams() {
@@ -199,6 +299,21 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
     _hudTimer?.cancel();
     _episodeScrollController.dispose();
     _player.dispose();
+
+    // 恢复系统亮度，避免退出播放器后仍停留在调节值。
+    ScreenBrightness().resetApplicationScreenBrightness().catchError((_) {});
+
+    // 移动端解除系统音量监听、还原进入前的系统音量并恢复系统音量面板。
+    if (!_isDesktop) {
+      try {
+        FlutterVolumeController.removeListener();
+        final original = _systemVolumeBeforePlayback;
+        if (original != null) {
+          FlutterVolumeController.setVolume(original).catchError((_) {});
+        }
+        FlutterVolumeController.updateShowSystemUI(true);
+      } catch (_) {}
+    }
 
     SystemChrome.setEnabledSystemUIMode(
       SystemUiMode.edgeToEdge,
@@ -476,6 +591,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
 
   void _endAdjustment() {
     _hudTimer?.cancel();
+    _verticalAdjusting = false;
     _hudTimer = Timer(const Duration(milliseconds: 650), () {
       if (mounted) {
         setState(() {
@@ -508,7 +624,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
             _showVolumeHud = true;
             _showBrightnessHud = false;
           });
-          _player.setVolume(_currentVolume * 100);
+          _applyVolume(_currentVolume);
           _endAdjustment();
         },
         child: GestureDetector(
@@ -538,7 +654,6 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
           onHorizontalDragStart: (_) {
             if (_lockPanel) return;
             setState(() {
-              _dragSeekStart = _position;
               _previewPosition = _position;
               _showSeekHud = true;
             });
@@ -546,8 +661,9 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
           onHorizontalDragUpdate: (details) {
             if (_lockPanel) return;
             final scale = 180000 / screenWidth;
+            // 在上一帧预览值上累加，避免只用单帧 delta 导致回弹。
             final target =
-                _dragSeekStart +
+                _previewPosition +
                 Duration(milliseconds: (details.delta.dx * scale).round());
             final targetMs = _duration.inMilliseconds > 0
                 ? target.inMilliseconds.clamp(0, _duration.inMilliseconds)
@@ -575,6 +691,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
             _preciseVolume = _currentVolume;
             setState(() {
               _adjustingBrightness = details.localPosition.dx < screenWidth / 2;
+              _verticalAdjusting = true;
               _showVolumeHud = !_adjustingBrightness;
               _showBrightnessHud = _adjustingBrightness;
             });
@@ -583,18 +700,23 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
             if (_lockPanel) return;
             final delta = details.delta.dy;
             if (_adjustingBrightness) {
+              // 与 Kazumi 一致：整屏高度约对应 50% 亮度变化。
               final level = screenHeight * 2;
-              setState(() {
-                _currentBrightness = (_currentBrightness - delta / level).clamp(
-                  0.0,
-                  1.0,
-                );
-              });
+              final brightness = (_currentBrightness - delta / level).clamp(
+                0.0,
+                1.0,
+              );
+              _currentBrightness = brightness;
+              _applyBrightness(brightness);
+              setState(() {});
             } else {
-              final level = screenHeight * 0.03;
-              final volume = (_preciseVolume - delta / level).clamp(0.0, 1.0);
-              _currentVolume = volume;
-              _player.setVolume(volume * 100);
+              // 与 Kazumi 一致：累加写入 _preciseVolume，避免只用单帧 delta
+              // 计算导致松手/回拉时数值回弹。level = 高度 * 3 等价于
+              // Kazumi 的 0~100 刻度（整屏高度约 33%）。
+              final level = screenHeight * 3;
+              _preciseVolume = (_preciseVolume - delta / level).clamp(0.0, 1.0);
+              _currentVolume = _preciseVolume;
+              _applyVolume(_preciseVolume);
               setState(() {});
             }
           },
@@ -617,8 +739,11 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
       previewPosition: _previewPosition,
       duration: _duration,
       displaySpeed: _displaySpeed,
-      isBrightness: _showBrightnessHud,
+      adjustmentType: _showBrightnessHud
+          ? PlayerAdjustmentHudType.brightness
+          : PlayerAdjustmentHudType.volume,
       value: _showBrightnessHud ? _currentBrightness : _currentVolume,
+      adjustmentDisableAnimations: _verticalAdjusting,
     );
   }
 
@@ -645,23 +770,13 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                 fit: PlayerAspectRatio.values[_aspectRatioIndex].fit,
               ),
 
-              // 2. 视觉亮度遮罩（左半边上下滑动）
-              if (_currentBrightness < 0.995)
-                IgnorePointer(
-                  child: ColoredBox(
-                    color: Colors.black.withValues(
-                      alpha: (1 - _currentBrightness) * 0.85,
-                    ),
-                  ),
-                ),
-
-              // 3. 顶部居中 HUD
+              // 2. 顶部居中 HUD
               _buildHudLayer(),
 
-              // 4. 手势层
+              // 3. 手势层
               _buildGestureLayer(),
 
-              // 5. 中间状态
+              // 4. 中间状态
               PlayerCenterOverlay(
                 hasError: _hasError,
                 errorMessage: _errorMessage,
@@ -669,10 +784,10 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                 onRetry: _retryCurrentEpisode,
               ),
 
-              // 6. 左下角消息胶囊
+              // 5. 左下角消息胶囊
               if (_showPillToast) PlayerPillToast(text: _pillToastText),
 
-              // 7. 底栏
+              // 6. 底栏
               PlayerBottomControls(
                 visible: _showControls && !_lockPanel,
                 compact: compact,
@@ -689,7 +804,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                 onPanelRelease: _releasePanelHold,
               ),
 
-              // 8. 顶栏
+              // 7. 顶栏
               PlayerTopControls(
                 visible: _showControls && !_lockPanel,
                 compact: compact,
@@ -699,17 +814,17 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                 onBack: () => Navigator.of(context).pop(),
               ),
 
-              // 9. 右侧锁定（随控制栏自动隐藏；锁定时点按屏幕可临时呼出）
+              // 8. 右侧锁定（随控制栏自动隐藏；锁定时点按屏幕可临时呼出）
               PlayerRightControls(
                 visible: _showControls && (!_lockPanel || !compact),
                 locked: _lockPanel,
                 onToggleLock: _toggleLock,
               ),
 
-              // 10. 选集面板遮罩
+              // 9. 选集面板遮罩
               if (_sidebarOpen) PlayerSidebarOverlay(onDismiss: _closeSidebar),
 
-              // 11. 选集面板
+              // 10. 选集面板
               PlayerSidebar(
                 open: _sidebarOpen,
                 episodes: widget.episodes,
