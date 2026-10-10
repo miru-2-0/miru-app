@@ -143,8 +143,22 @@ Future<ExtensionTestReport> runExtensionPipeline({
             'actors(演员)');
         _expectAny(details, details.any((d) => d.writer?.isNotEmpty ?? false),
             report, 'writer(编剧)');
+        _expectAny(details, details.any((d) => d.author?.isNotEmpty ?? false),
+            report, 'author(原作)');
         _expectAny(details, details.any((d) => d.pubdate?.isNotEmpty ?? false),
             report, 'pubdate(上映日期)');
+        _expectAny(details, details.any((d) => d.kind?.isNotEmpty ?? false),
+            report, 'kind(种类)');
+        _expectAny(
+            details, details.any((d) => d.originalName?.isNotEmpty ?? false),
+            report, 'original_name(原版名称)');
+        _expectAny(
+            details, details.any((d) => d.otherName?.isNotEmpty ?? false),
+            report, 'other_name(其他名称)');
+        _expectAny(details, details.any((d) => d.company?.isNotEmpty ?? false),
+            report, 'company(制作公司)');
+        _expectAny(details, details.any((d) => d.tags?.isNotEmpty ?? false),
+            report, 'tags(标签)');
         for (final d in details) {
           for (final actor in d.actors) {
             if (actor.name.isEmpty) {

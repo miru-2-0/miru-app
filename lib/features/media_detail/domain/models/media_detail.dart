@@ -41,11 +41,26 @@ class MediaDetail {
   /// 类型，如：国产动漫 / 动作 / 剧情
   final String? type;
 
+  /// 种类，如：TV / OVA / 剧场版（动画种类）
+  final String? kind;
+
+  /// 原版名称，如：進撃の巨人
+  final String? originalName;
+
+  /// 其他名称/别名，如：自由之翼 / Attack on Titan
+  final String? otherName;
+
   /// 导演
   final String? director;
 
   /// 编剧
   final String? writer;
+
+  /// 原作（原创作者/漫画原作，如：諫山創）
+  final String? author;
+
+  /// 制作公司
+  final String? company;
 
   /// 发行地区，如：中国大陆
   final String? area;
@@ -68,6 +83,9 @@ class MediaDetail {
   /// 评分
   final String? score;
 
+  /// 标签，如：热血 战斗 奇幻（空格分隔）
+  final String? tags;
+
   /// 演员列表
   final List<ActorItem> actors;
 
@@ -79,8 +97,13 @@ class MediaDetail {
     required this.cover,
     required this.desc,
     this.type,
+    this.kind,
+    this.originalName,
+    this.otherName,
     this.director,
     this.writer,
+    this.author,
+    this.company,
     this.area,
     this.lang,
     this.year,
@@ -88,6 +111,7 @@ class MediaDetail {
     this.remarks,
     this.total,
     this.score,
+    this.tags,
     required this.actors,
     required this.episodes,
   });
@@ -99,8 +123,13 @@ abstract final class DetailField {
   static const cover = 'cover';
   static const desc = 'desc';
   static const type = 'type';
+  static const kind = 'kind';
+  static const originalName = 'original_name';
+  static const otherName = 'other_name';
   static const director = 'director';
   static const writer = 'writer';
+  static const author = 'author';
+  static const company = 'company';
   static const area = 'area';
   static const lang = 'lang';
   static const year = 'year';
@@ -108,6 +137,7 @@ abstract final class DetailField {
   static const remarks = 'remarks';
   static const total = 'total';
   static const score = 'score';
+  static const tags = 'tags';
   static const actor = 'actor';
   static const actors = 'actors';
   static const episodes = 'episodes';

@@ -61,8 +61,13 @@ class MediaDetailService {
       cover: cover,
       desc: detail.desc ?? '',
       type: _optStr(raw[DetailField.type]),
+      kind: _optStr(raw[DetailField.kind]),
+      originalName: _optStr(raw[DetailField.originalName]),
+      otherName: _optStr(raw[DetailField.otherName]),
       director: _optStr(raw[DetailField.director]),
       writer: _optStr(raw[DetailField.writer]),
+      author: _optStr(raw[DetailField.author]),
+      company: _optStr(raw[DetailField.company]),
       area: _optStr(raw[DetailField.area]),
       lang: _optStr(raw[DetailField.lang]),
       year: _optStr(raw[DetailField.year]),
@@ -70,9 +75,21 @@ class MediaDetailService {
       remarks: _optStr(raw[DetailField.remarks]),
       total: _optStr(raw[DetailField.total]),
       score: _optStr(raw[DetailField.score]),
+      tags: _parseTags(raw[DetailField.tags]),
       actors: _parseActors(raw[DetailField.actors] ?? raw[DetailField.actor]),
       episodes: groups,
     );
+  }
+
+  String? _parseTags(dynamic rawTags) {
+    if (rawTags is List) {
+      final joined = rawTags
+          .map((e) => _strVal(e))
+          .where((e) => e.isNotEmpty)
+          .join(' ');
+      return joined.isEmpty ? null : joined;
+    }
+    return _optStr(rawTags);
   }
 
   String _strVal(dynamic value) =>
