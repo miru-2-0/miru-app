@@ -99,6 +99,12 @@ class _MediaDetailScreenState extends State<MediaDetailScreen> {
     }
   }
 
+  /// 是否存在可播放的剧集（未开播/无剧集时为 false）
+  bool get _hasPlayableEpisodes {
+    final groups = _detail?.episodes ?? const <EpisodeGroup>[];
+    return groups.any((g) => g.urls.isNotEmpty);
+  }
+
   /// 自定义下滑退出/上滑进入的 PageRoute 路由动画
   void _openVideoPlayer({int episodeIndex = 0}) {
     final epGroups = _detail?.episodes ?? [];
@@ -361,9 +367,11 @@ class _MediaDetailScreenState extends State<MediaDetailScreen> {
                                       children: [
                                         Expanded(
                                           child: FilledButton.icon(
-                                            onPressed: () => _openVideoPlayer(
-                                              episodeIndex: 0,
-                                            ),
+                                            onPressed: _hasPlayableEpisodes
+                                                ? () => _openVideoPlayer(
+                                                    episodeIndex: 0,
+                                                  )
+                                                : null,
                                             icon: const Icon(
                                               Icons.play_arrow_rounded,
                                               size: 20,

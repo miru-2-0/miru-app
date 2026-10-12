@@ -51,10 +51,6 @@ class MediaDetailService {
         groups.add(EpisodeGroup(title: group.title, urls: urls));
       }
     }
-    if (groups.isEmpty) {
-      throw StateError('扩展未返回有效的剧集列表');
-    }
-
     final raw = detail.raw;
     return MediaDetail(
       title: title,
