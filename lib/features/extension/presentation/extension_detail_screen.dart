@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
 import '../data/extension_repo_service.dart';
 import '../domain/models/extension_item.dart';
 import 'widgets/extension_icon.dart';
@@ -7,10 +8,7 @@ import 'widgets/extension_icon.dart';
 class ExtensionDetailScreen extends StatefulWidget {
   final ExtensionItem item;
 
-  const ExtensionDetailScreen({
-    super.key,
-    required this.item,
-  });
+  const ExtensionDetailScreen({super.key, required this.item});
 
   @override
   State<ExtensionDetailScreen> createState() => _ExtensionDetailScreenState();
@@ -47,16 +45,18 @@ class _ExtensionDetailScreenState extends State<ExtensionDetailScreen> {
     try {
       final installed =
           _service.installedForStorageKey(widget.item.storageKey) ??
-              widget.item;
+          widget.item;
       final hasNewer = await _service.checkUpdateFor(installed);
       if (!mounted) return;
       messenger
         ..hideCurrentSnackBar()
         ..showSnackBar(
           SnackBar(
-            content: Text(hasNewer
-                ? '发现新版本 ${_service.availableUpdate(widget.item.storageKey)?.version ?? ''}'
-                : '当前已是最新版本'),
+            content: Text(
+              hasNewer
+                  ? '发现新版本 ${_service.availableUpdate(widget.item.storageKey)?.version ?? ''}'
+                  : '当前已是最新版本',
+            ),
           ),
         );
     } catch (e) {
@@ -181,8 +181,7 @@ class _ExtensionDetailScreenState extends State<ExtensionDetailScreen> {
                                 ScaffoldMessenger.of(context)
                                   ..hideCurrentSnackBar()
                                   ..showSnackBar(
-                                    SnackBar(
-                                        content: Text('已卸载 ${item.name}')),
+                                    SnackBar(content: Text('已卸载 ${item.name}')),
                                   );
                               }
                             } catch (e) {
@@ -198,7 +197,8 @@ class _ExtensionDetailScreenState extends State<ExtensionDetailScreen> {
                     style: OutlinedButton.styleFrom(
                       foregroundColor: colorScheme.error,
                       side: BorderSide(
-                          color: colorScheme.error.withValues(alpha: 0.5)),
+                        color: colorScheme.error.withValues(alpha: 0.5),
+                      ),
                     ),
                     icon: const Icon(Icons.delete_outline),
                     label: const Text('卸载扩展'),
@@ -214,7 +214,8 @@ class _ExtensionDetailScreenState extends State<ExtensionDetailScreen> {
                                   ..hideCurrentSnackBar()
                                   ..showSnackBar(
                                     SnackBar(
-                                        content: Text('成功安装 ${item.name}')),
+                                      content: Text('成功安装 ${item.name}'),
+                                    ),
                                   );
                               }
                             } catch (e) {
@@ -231,9 +232,7 @@ class _ExtensionDetailScreenState extends State<ExtensionDetailScreen> {
                         ? const SizedBox(
                             width: 18,
                             height: 18,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                            ),
+                            child: CircularProgressIndicator(strokeWidth: 2),
                           )
                         : const Icon(Icons.download),
                     label: Text(isPending ? '安装中...' : '安装扩展'),
@@ -256,8 +255,7 @@ class _ExtensionDetailScreenState extends State<ExtensionDetailScreen> {
                             ScaffoldMessenger.of(context)
                               ..hideCurrentSnackBar()
                               ..showSnackBar(
-                                SnackBar(
-                                    content: Text('已更新 ${item.name}')),
+                                SnackBar(content: Text('已更新 ${item.name}')),
                               );
                           }
                         } catch (e) {
@@ -347,13 +345,15 @@ class _ExtensionDetailScreenState extends State<ExtensionDetailScreen> {
                   ListTile(
                     leading: const Icon(Icons.public_outlined),
                     title: const Text('目标网站'),
-                    subtitle: Text(item.webSite!),
+                    subtitle: Text(
+                      item.webSite!,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                     trailing: IconButton(
                       icon: const Icon(Icons.copy, size: 20),
                       onPressed: () {
-                        Clipboard.setData(
-                          ClipboardData(text: item.webSite!),
-                        );
+                        Clipboard.setData(ClipboardData(text: item.webSite!));
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(content: Text('网站链接已复制到剪贴板')),
                         );
@@ -364,7 +364,11 @@ class _ExtensionDetailScreenState extends State<ExtensionDetailScreen> {
                   ListTile(
                     leading: const Icon(Icons.code_outlined),
                     title: const Text('脚本文件名'),
-                    subtitle: Text(item.url),
+                    subtitle: Text(
+                      item.url,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
               ],
             ),
