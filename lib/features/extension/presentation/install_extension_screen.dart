@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:miru/app/widgets/empty_state_widget.dart';
 import '../data/extension_repo_service.dart';
 import '../domain/models/extension_item.dart';
 import 'extension_detail_screen.dart';
@@ -198,8 +199,12 @@ class _InstallExtensionScreenState extends State<InstallExtensionScreen> {
               child: CircularProgressIndicator(),
             )
           : filteredExtensions.isEmpty
-              ? const Center(
-                  child: Text('没有找到符合条件的扩展'),
+              ? EmptyStateWidget(
+                  icon: Icons.search_off_rounded,
+                  title: '未找到符合条件的扩展',
+                  subtitle: _searchController.text.trim().isNotEmpty
+                      ? '未能找到匹配 [${_searchController.text.trim()}] 的扩展'
+                      : '暂无可用扩展，请检查扩展仓库配置',
                 )
               : ListView.builder(
                   itemCount: filteredExtensions.length,

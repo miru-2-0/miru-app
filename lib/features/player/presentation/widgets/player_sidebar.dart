@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:miru/app/widgets/empty_state_widget.dart';
 import '../../../media_detail/domain/models/media_detail.dart';
 
 /// 选集面板背后的半透明遮罩（点击关闭）
@@ -64,11 +65,11 @@ class PlayerSidebar extends StatelessWidget {
                 ),
                 Expanded(
                   child: episodes.isEmpty
-                      ? const Center(
-                          child: Text(
-                            '暂无选集',
-                            style: TextStyle(color: Colors.white38),
-                          ),
+                      ? const EmptyStateWidget(
+                          compact: true,
+                          icon: Icons.format_list_bulleted_outlined,
+                          title: '暂无选集',
+                          subtitle: '未能加载到剧集列表',
                         )
                       : Scrollbar(
                           controller: scrollController,

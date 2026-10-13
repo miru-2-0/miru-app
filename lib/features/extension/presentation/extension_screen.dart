@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:miru/app/widgets/empty_state_widget.dart';
 import '../data/extension_repo_service.dart';
 import 'extension_detail_screen.dart';
 import 'install_extension_screen.dart';
@@ -59,38 +60,19 @@ class _ExtensionScreenState extends State<ExtensionScreen> {
         ],
       ),
       body: installedExtensions.isEmpty
-          ? Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.extension_outlined,
-                    size: 64,
-                    color: colorScheme.onSurfaceVariant,
+          ? EmptyStateWidget(
+              icon: Icons.extension_outlined,
+              title: '暂未安装任何扩展',
+              subtitle: '安装扩展后方可检索与播放各平台的影视资源',
+              actionLabel: '去安装扩展',
+              actionIcon: Icons.download_rounded,
+              onActionPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const InstallExtensionScreen(),
                   ),
-                  const SizedBox(height: 16),
-                  Text(
-                    '暂未安装任何扩展',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: colorScheme.onSurfaceVariant,
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  FilledButton.icon(
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              const InstallExtensionScreen(),
-                        ),
-                      );
-                    },
-                    icon: const Icon(Icons.download),
-                    label: const Text('去安装扩展'),
-                  ),
-                ],
-              ),
+                );
+              },
             )
           : ListView.builder(
               padding: const EdgeInsets.all(12),

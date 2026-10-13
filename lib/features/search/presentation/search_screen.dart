@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:miru/app/widgets/empty_state_widget.dart';
 import '../../extension/data/extension_repo_service.dart';
 import '../../extension/domain/models/extension_item.dart';
 import '../../extension/presentation/install_extension_screen.dart';
@@ -227,17 +228,13 @@ class _SearchScreenState extends State<SearchScreen> {
 
               // 横向影视卡片列表
               items.isEmpty
-                  ? Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 4.0,
-                        vertical: 12.0,
-                      ),
-                      child: Text(
-                        '未获取到内容',
-                        style: TextStyle(
-                          fontSize: 13,
-                          color: Theme.of(context).hintColor,
-                        ),
+                  ? const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 8.0),
+                      child: EmptyStateWidget(
+                        compact: true,
+                        icon: Icons.inbox_outlined,
+                        title: '未获取到内容',
+                        subtitle: '该扩展暂未提供首页推荐数据',
                       ),
                     )
                   : LayoutBuilder(
@@ -427,39 +424,19 @@ class _SearchScreenState extends State<SearchScreen> {
         ],
       ),
       body: installedExtensions.isEmpty
-          ? Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(
-                    Icons.extension_outlined,
-                    size: 64,
-                    color: Colors.grey,
+          ? EmptyStateWidget(
+              icon: Icons.extension_off_outlined,
+              title: '暂未安装任何扩展',
+              subtitle: '安装扩展后即可检索对应平台的影视内容',
+              actionLabel: '去安装扩展',
+              actionIcon: Icons.download_rounded,
+              onActionPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const InstallExtensionScreen(),
                   ),
-                  const SizedBox(height: 16),
-                  const Text(
-                    '暂未安装任何扩展',
-                    style: TextStyle(fontSize: 16, color: Colors.grey),
-                  ),
-                  const SizedBox(height: 8),
-                  const Text(
-                    '安装扩展后即可检索对应平台的影视内容',
-                    style: TextStyle(fontSize: 13, color: Colors.grey),
-                  ),
-                  const SizedBox(height: 16),
-                  FilledButton.icon(
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => const InstallExtensionScreen(),
-                        ),
-                      );
-                    },
-                    icon: const Icon(Icons.download),
-                    label: const Text('去安装扩展'),
-                  ),
-                ],
-              ),
+                );
+              },
             )
           : _isLoading && cachedGroupedMap.isEmpty
           ? const Center(child: CircularProgressIndicator())

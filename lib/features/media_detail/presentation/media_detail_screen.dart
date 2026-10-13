@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
+import 'package:miru/app/widgets/empty_state_widget.dart';
 import '../../favorite/data/favorite_service.dart';
 import '../../player/presentation/video_player_screen.dart';
 import '../../search/domain/models/media_item.dart';
@@ -483,7 +484,12 @@ class _MediaDetailScreenState extends State<MediaDetailScreen> {
   Widget _buildEpisodesTab(BuildContext context) {
     final epGroups = _detail?.episodes ?? [];
     if (epGroups.isEmpty || epGroups[0].urls.isEmpty) {
-      return const Center(child: Text('暂无剧集列表'));
+      return const EmptyStateWidget(
+        compact: true,
+        icon: Icons.video_library_outlined,
+        title: '暂无剧集列表',
+        subtitle: '该资源未提供播放剧集列表或暂未上线',
+      );
     }
 
     final episodes = epGroups[0].urls;
@@ -680,7 +686,12 @@ class _MediaDetailScreenState extends State<MediaDetailScreen> {
   Widget _buildActorsTab(BuildContext context) {
     final actors = _detail?.actors ?? [];
     if (actors.isEmpty) {
-      return const Center(child: Text('暂无演员信息'));
+      return const EmptyStateWidget(
+        compact: true,
+        icon: Icons.person_off_outlined,
+        title: '暂无演员信息',
+        subtitle: '该资源未记录演职人员相关信息',
+      );
     }
 
     return CustomScrollView(

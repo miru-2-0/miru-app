@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:miru/app/widgets/empty_state_widget.dart';
 import '../../extension/data/extension_repo_service.dart';
 import '../../favorite/data/favorite_service.dart';
 import '../../media_detail/presentation/media_detail_screen.dart';
@@ -158,22 +159,13 @@ class _HomeScreenState extends State<HomeScreen> {
               elevation: 0,
               color: Theme.of(context).colorScheme.surfaceContainerLow,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(16),
               ),
-              child: const Padding(
-                padding: EdgeInsets.all(16.0),
-                child: Row(
-                  children: [
-                    Icon(Icons.bookmark_border, color: Colors.grey, size: 28),
-                    SizedBox(width: 12),
-                    Expanded(
-                      child: Text(
-                        '暂无收藏影视，在影视详情界面点击【收藏】按钮即可在此处快速访问。',
-                        style: TextStyle(fontSize: 13, color: Colors.grey),
-                      ),
-                    ),
-                  ],
-                ),
+              child: const EmptyStateWidget(
+                compact: true,
+                icon: Icons.favorite_border_rounded,
+                title: '暂无收藏影视',
+                subtitle: '在影视详情界面点击【收藏】按钮即可在此处快速访问。',
               ),
             ),
           )

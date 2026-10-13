@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:miru/app/widgets/empty_state_widget.dart';
 import '../../extension/data/extension_repo_service.dart';
 import '../../extension/domain/models/extension_item.dart';
 import '../../media_detail/presentation/media_detail_screen.dart';
@@ -248,28 +249,19 @@ class _MediaSearchScreenState extends State<MediaSearchScreen> {
               child: CircularProgressIndicator(),
             )
           : _searchController.text.trim().isEmpty
-              ? Center(
-                  child: Text(
-                    widget.targetExtension != null
-                        ? '输入名称在 [${widget.targetExtension!.name}] 中搜索'
-                        : '输入影视名称进行搜索',
-                    style: const TextStyle(color: Colors.grey),
-                  ),
+              ? EmptyStateWidget(
+                  icon: Icons.search_rounded,
+                  title: '搜索影视资源',
+                  subtitle: widget.targetExtension != null
+                      ? '输入关键字在 [${widget.targetExtension!.name}] 中检索'
+                      : '输入片名、动漫或剧集名称开始搜索',
                 )
               : _searchResults.isEmpty
-                  ? Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Icon(Icons.search_off,
-                              size: 48, color: Colors.grey),
-                          const SizedBox(height: 12),
-                          Text(
-                            '未找到匹配 [${_searchController.text}] 的内容',
-                            style: const TextStyle(color: Colors.grey),
-                          ),
-                        ],
-                      ),
+                  ? EmptyStateWidget(
+                      icon: Icons.search_off_rounded,
+                      title: '未找到相关内容',
+                      subtitle:
+                          '未能找到与 [${_searchController.text.trim()}] 相关的影视资源，请尝试其他关键词',
                     )
                   : CustomScrollView(
                     controller: _scrollController,

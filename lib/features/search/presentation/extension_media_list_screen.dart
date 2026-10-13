@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:miru/app/widgets/empty_state_widget.dart';
 import '../../extension/domain/models/extension_item.dart';
 import '../../media_detail/presentation/media_detail_screen.dart';
 import '../data/media_search_service.dart';
@@ -188,24 +189,13 @@ class _ExtensionMediaListScreenState extends State<ExtensionMediaListScreen> {
               child: CircularProgressIndicator(),
             )
           : _mediaList.isEmpty
-              ? Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(Icons.search_off, size: 48, color: Colors.grey),
-                      const SizedBox(height: 12),
-                      Text(
-                        '未在 [${widget.extension.name}] 中获取到内容',
-                        style: const TextStyle(color: Colors.grey),
-                      ),
-                      const SizedBox(height: 12),
-                      OutlinedButton.icon(
-                        onPressed: _loadMedia,
-                        icon: const Icon(Icons.refresh),
-                        label: const Text('刷新'),
-                      ),
-                    ],
-                  ),
+              ? EmptyStateWidget(
+                  icon: Icons.movie_filter_outlined,
+                  title: '暂未获取到内容',
+                  subtitle: '未能从 [${widget.extension.name}] 中加载到影视资源',
+                  actionLabel: '刷新重试',
+                  actionIcon: Icons.refresh_rounded,
+                  onActionPressed: _loadMedia,
                 )
               : CustomScrollView(
                   controller: _scrollController,
