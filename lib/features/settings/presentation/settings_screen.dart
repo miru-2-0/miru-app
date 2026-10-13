@@ -51,7 +51,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
               SettingsTile.navigation(
                 leading: const Icon(Icons.extension_outlined),
                 title: const Text('扩展设置'),
-                description: const Text('管理扩展更新、仓库及权限'),
                 onPressed: (context) {
                   Navigator.of(context).push(
                     MaterialPageRoute(
