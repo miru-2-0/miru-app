@@ -348,7 +348,7 @@ class _InstallExtensionScreenState extends State<InstallExtensionScreen> {
                                                 strokeWidth: 2,
                                               ),
                                             )
-                                          : Text(l10n.uninstallExtension),
+                                          : Text(l10n.uninstallExtensionCard),
                                     )
                                   : FilledButton(
                                       onPressed: () async {
@@ -380,7 +380,7 @@ class _InstallExtensionScreenState extends State<InstallExtensionScreen> {
                                           }
                                         }
                                       },
-                                      child: Text(l10n.installExtensionButton),
+                                      child: Text(l10n.installExtensionCard),
                                     ),
                             ],
                           ),

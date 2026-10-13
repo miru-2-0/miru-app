@@ -352,7 +352,7 @@ class _MediaDetailScreenState extends State<MediaDetailScreen> {
                                           child: Text(
                                             (_detail?.type?.isNotEmpty ?? false)
                                                 ? _detail!.type!
-                                                : '影视',
+                                                : l10n.media,
                                             style: TextStyle(
                                               fontSize: 11,
                                               fontWeight: FontWeight.w600,
@@ -418,7 +418,7 @@ class _MediaDetailScreenState extends State<MediaDetailScreen> {
                                                       .primary
                                                 : null,
                                           ),
-                                          tooltip: '收藏',
+                                          tooltip: l10n.favorite,
                                         ),
                                       ],
                                     ),

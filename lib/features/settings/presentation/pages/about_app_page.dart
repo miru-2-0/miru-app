@@ -30,19 +30,16 @@ class _AboutAppPageState extends State<AboutAppPage> {
       builder: (context) {
         return AlertDialog(
           title: Text(l10n.privacyPolicy),
-          content: const SingleChildScrollView(
+          content: SingleChildScrollView(
             child: Text(
-              '本应用不收集、不上传任何个人数据。\n\n'
-              '收藏、设置与已安装扩展等信息均仅保存在本地设备。\n\n'
-              '安装第三方扩展或访问第三方站点时，相关内容由对应扩展与站点负责，'
-              '请自行甄别其安全性与合法性。',
-              style: TextStyle(height: 1.5),
+              l10n.privacyContent,
+              style: const TextStyle(height: 1.5),
             ),
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: Text(l10n.confirm),
+              child: Text(l10n.gotIt),
             ),
           ],
         );
@@ -109,7 +106,7 @@ class _AboutAppPageState extends State<AboutAppPage> {
                   Text(_versionText, style: hintStyle),
                   const SizedBox(height: 10),
                   Text(
-                    AppConstants.appDescription,
+                    l10n.appDescription,
                     textAlign: TextAlign.center,
                     style: hintStyle?.copyWith(height: 1.5),
                   ),
@@ -161,14 +158,14 @@ class _AboutAppPageState extends State<AboutAppPage> {
               SettingsTile.navigation(
                 leading: const Icon(Icons.description_outlined),
                 title: Text(l10n.openSourceLicense),
-                description: const Text('查看仓库中的 LICENSE'),
+                description: Text(l10n.viewLicenseInRepo),
                 onPressed: (context) =>
                     openExternalUrl(context, AppConstants.sourceRepoLicenseUrl),
               ),
               SettingsTile.navigation(
                 leading: const Icon(Icons.article_outlined),
                 title: Text(l10n.thirdPartyLicenses),
-                description: const Text('查看第三方依赖库的开源许可证'),
+                description: Text(l10n.viewThirdPartyLicenses),
                 onPressed: (context) => _showLicenses(),
               ),
             ],
@@ -188,7 +185,7 @@ class _AboutAppPageState extends State<AboutAppPage> {
               padding: const EdgeInsets.only(top: 24, bottom: 8),
               child: Center(
                 child: Text(
-                  '© 2026 Miru · 基于 Flutter 构建',
+                  l10n.builtWithFlutter,
                   style: theme.textTheme.bodySmall?.copyWith(
                     color: theme.hintColor,
                   ),

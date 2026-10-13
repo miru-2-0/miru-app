@@ -353,11 +353,7 @@ class _ExtensionDetailScreenState extends State<ExtensionDetailScreen> {
                 ListTile(
                   leading: const Icon(Icons.source_outlined),
                   title: Text(l10n.extensionSource),
-                  subtitle: Text(
-                    item.isFromLocal
-                        ? ExtensionItem.localRepoName
-                        : item.repoName,
-                  ),
+                  subtitle: Text(item.getDisplaySource(context)),
                 ),
                 if (item.lang != null && item.lang!.isNotEmpty)
                   ListTile(

@@ -1,10 +1,24 @@
 {
   "@@locale": "en",
+
   "appTitle": "Miru",
+  "appDescription": "A cross-platform video aggregation player built with Flutter, parsing video sites via JavaScript extension scripts.",
+  "builtWithFlutter": "© 2026 Miru · Built with Flutter",
+  "unknown": "Unknown",
+  "none": "(None)",
+  "close": "Close",
+  "cancel": "Cancel",
+  "confirm": "Confirm",
+  "retry": "Retry",
+  "refreshRetry": "Refresh",
+  "add": "Add",
+  "gotIt": "Got It",
+
   "navHome": "Home",
   "navSearch": "Search",
   "navExtension": "Extensions",
   "navSettings": "Settings",
+
   "myFavorites": "Favorites ({count})",
   "@myFavorites": {
     "placeholders": {
@@ -16,16 +30,69 @@
   "hotRecommendations": "Hot Recommendations",
   "noFavoritesTitle": "No Favorites Yet",
   "noFavoritesSubtitle": "Click [Favorite] on media details to access them quickly here.",
+
   "extensionSettings": "Extension Settings",
+  "extensionDetails": "Extension Details",
+  "extensionInfo": "Basic Information",
+  "extensionDesc": "Description",
+  "extensionVersion": "Extension Version",
+  "author": "Author",
+  "extensionSource": "Extension Source",
+  "supportedLanguage": "Supported Language",
+  "license": "License",
+  "targetWebsite": "Target Website",
+  "scriptFileName": "Script File Name",
+  "builtIn": "Built-in",
+  "localExtension": "Local",
+  "localImport": "Locally Imported",
   "noExtensionsTitle": "No Extensions Installed",
   "noExtensionsSubtitle": "Install extensions to search and play media from various platforms",
   "goToInstallExtensions": "Install Extensions",
   "installExtension": "Install Extensions",
-  "uninstallExtension": "Uninstall",
+  "installExtensionButton": "Install Extension",
+  "installExtensionCard": "Install",
+  "uninstallExtensionButton": "Uninstall Extension",
+  "uninstallExtensionCard": "Uninstall",
+  "installing": "Installing...",
+  "updating": "Updating...",
+  "updateToVersion": "Update to {version}",
+  "@updateToVersion": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "newVersionFound": "New version found: {version}",
+  "@newVersionFound": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "alreadyLatest": "Already on the latest version",
+  "checkUpdates": "Check for Updates",
+  "checkUpdateFailed": "Failed to check for updates: {error}",
+  "@checkUpdateFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "uninstalledSuccess": "Uninstalled {name}",
   "@uninstalledSuccess": {
     "placeholders": {
       "name": {
+        "type": "String"
+      }
+    }
+  },
+  "uninstallFailed": "Uninstall failed: {error}",
+  "@uninstallFailed": {
+    "placeholders": {
+      "error": {
         "type": "String"
       }
     }
@@ -38,11 +105,61 @@
       }
     }
   },
-  "localExtension": "Local",
+  "installFailed": "Install failed: {error}",
+  "@installFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "updatedSuccess": "Updated {name}",
+  "@updatedSuccess": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "updateFailed": "Update failed: {error}",
+  "@updateFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "searchExtensionHint": "Search extension name...",
   "noMatchingExtensionsTitle": "No Matching Extensions",
   "noMatchingExtensionsSubtitle": "Try different keywords or check extension repository settings",
   "importLocalExtension": "Import Local Extension",
+  "localExtensionImportSuccess": "Local extension imported successfully",
+  "cannotOpenFilePicker": "Cannot open file picker: {error}",
+  "@cannotOpenFilePicker": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "readFileFailed": "Failed to read file: {error}",
+  "@readFileFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "importFailed": "Import failed: {error}",
+  "@importFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "linkCopied": "Link copied to clipboard",
+
   "searchMediaHint": "Search titles, anime, series...",
   "searchInExtensionHint": "Search in [{name}]...",
   "@searchInExtensionHint": {
@@ -81,9 +198,14 @@
   },
   "noExtensionRecommendSubtitle": "No recommendation data provided by this extension",
   "viewAll": "View All",
+
   "watchNow": "Watch Now",
+  "favorite": "Favorite",
   "addedToFavorites": "Added to Favorites",
   "removedFromFavorites": "Removed from Favorites",
+  "episodes": "Episodes",
+  "summary": "Summary",
+  "actors": "Cast",
   "selectEpisode": "Episodes ({count})",
   "@selectEpisode": {
     "placeholders": {
@@ -92,154 +214,12 @@
       }
     }
   },
-  "summary": "Summary",
-  "actors": "Cast",
-  "episodes": "Episodes",
   "noEpisodesTitle": "No Episodes Available",
   "noEpisodesSubtitle": "No episodes available for this item yet",
   "noActorsTitle": "No Cast Information",
   "noActorsSubtitle": "No cast or staff details recorded for this item",
   "synopsis": "Synopsis",
-  "speedHud": "{speed}x",
-  "@speedHud": {
-    "placeholders": {
-      "speed": {
-        "type": "String"
-      }
-    }
-  },
-  "videoDetail": "Video Details",
-  "copyMediaUrl": "Copy",
-  "mediaUrlCopied": "Media URL copied to clipboard",
-  "playbackError": "Playback Error",
-  "retry": "Retry",
-  "refreshRetry": "Refresh",
-  "settings": "Settings",
-  "general": "General",
-  "appearanceAndTheme": "Appearance & Theme",
-  "language": "Language",
-  "languageSystem": "Follow System",
-  "languageZh": "简体中文",
-  "languageEn": "English",
-  "aboutApp": "About App",
-  "darkMode": "Dark Mode",
-  "darkModeDesc": "Choose follow system or toggle light/dark mode",
-  "darkModeFollowSystem": "Follow System",
-  "darkModeLight": "Light Mode",
-  "darkModeDark": "Dark Mode",
-  "dynamicColor": "Dynamic Color",
-  "dynamicColorDesc": "Use system wallpaper colors (Material You)",
-  "themeSettings": "Theme Settings",
-  "checkUpdates": "Check for Updates",
-  "alreadyLatestVersion": "Already on latest version ({version})",
-  "@alreadyLatestVersion": {
-    "placeholders": {
-      "version": {
-        "type": "String"
-      }
-    }
-  },
-  "openSourceRepo": "Source Repository",
-  "officialExtensionRepo": "Official Extension Repository",
-  "openSourceLicense": "Open Source License",
-  "thirdPartyLicenses": "Third-Party Licenses",
-  "privacyPolicy": "Privacy Statement",
-  "cancel": "Cancel",
-  "confirm": "Confirm",
-  "info": "Info",
-  "links": "Links",
-  "legal": "Legal",
-  "privacy": "Privacy",
-  "customRepo": "Custom Repository",
-  "updateAndPermissions": "Updates & Permissions",
-  "autoUpdateExtensions": "Auto Update Extensions",
-  "autoUpdateDesc": "Automatically check and update installed extensions in background",
-  "allowThirdParty": "Allow Third-Party Extensions",
-  "allowThirdPartyDesc": "Allow installing locally imported extensions, disabled by default",
-  "extensionRepoManagement": "Repository Management",
-  "importRepo": "Import Repository",
-  "importRepoDesc": "Add custom extension repository URL",
-  "builtIn": "Built-in",
-  "extensionDetails": "Extension Details",
-  "extensionInfo": "Basic Information",
-  "extensionDesc": "Description",
-  "extensionVersion": "Extension Version",
-  "author": "Author",
-  "extensionSource": "Extension Source",
-  "supportedLanguage": "Supported Language",
-  "license": "License",
-  "targetWebsite": "Target Website",
-  "scriptFileName": "Script File Name",
-  "uninstallExtensionButton": "Uninstall Extension",
-  "installExtensionButton": "Install Extension",
-  "installing": "Installing...",
-  "updating": "Updating...",
-  "updateToVersion": "Update to {version}",
-  "@updateToVersion": {
-    "placeholders": {
-      "version": {
-        "type": "String"
-      }
-    }
-  },
-  "newVersionFound": "New version found: {version}",
-  "@newVersionFound": {
-    "placeholders": {
-      "version": {
-        "type": "String"
-      }
-    }
-  },
-  "alreadyLatest": "Already on the latest version",
-  "checkUpdateFailed": "Failed to check for updates: {error}",
-  "@checkUpdateFailed": {
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
-  "uninstallFailed": "Uninstall failed: {error}",
-  "@uninstallFailed": {
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
-  "installFailed": "Install failed: {error}",
-  "@installFailed": {
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
-  "updatedSuccess": "Updated {name}",
-  "@updatedSuccess": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
-  "updateFailed": "Update failed: {error}",
-  "@updateFailed": {
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
-  "linkCopied": "Link copied to clipboard",
-  "unknown": "Unknown",
-  "localImport": "Locally Imported",
-  "close": "Close",
-  "mediaTitleLabel": "Title",
-  "currentEpisodeLabel": "Current Episode",
-  "mediaUrlLabel": "Media URL",
-  "none": "(None)",
-  "errorMessageTitle": "Error Information",
+  "media": "Media",
   "originalName": "Original Title",
   "otherName": "Other Title",
   "type": "Type",
@@ -255,26 +235,11 @@
   "totalEpisodes": "Total Episodes",
   "score": "Rating",
   "tags": "Tags",
-  "repoNameLabel": "Repository Name",
-  "repoNameHint": "e.g., Community Repo",
-  "repoUrlLabel": "Repository URL",
-  "repoUrlHint": "https://...",
-  "repoUrlEmpty": "Please enter repository URL",
-  "repoImportSuccess": "Repository imported successfully",
-  "add": "Add",
-  "deletedRepo": "Deleted {name}",
-  "@deletedRepo": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
-  "privacyTitle": "Privacy Statement",
-  "privacyContent": "This app does not collect or upload any personal data.\n\nFavorites, settings, and installed extensions are stored locally on your device.\n\nWhen installing third-party extensions or visiting third-party sites, content is handled by respective extensions and sites. Please verify security and legality yourself.",
-  "gotIt": "Got It",
-  "favorite": "Favorite",
-  "media": "Media",
+
+  "play": "Play",
+  "pause": "Pause",
+  "nextEpisode": "Next Episode",
+  "mainEpisode": "Main Episode",
   "back": "Back",
   "moreOptions": "More Options",
   "aspectRatio": "Aspect Ratio",
@@ -282,14 +247,29 @@
   "aspectRatioCrop": "Crop",
   "aspectRatioStretch": "Stretch",
   "speed": "Speed",
+  "speedHud": "{speed}x",
+  "@speedHud": {
+    "placeholders": {
+      "speed": {
+        "type": "String"
+      }
+    }
+  },
   "episodesPanel": "Episodes Panel",
   "exitFullscreen": "Exit Fullscreen",
-  "play": "Play",
-  "pause": "Pause",
-  "nextEpisode": "Next Episode",
   "lockPanel": "Lock Controls",
   "unlockPanel": "Unlock Controls",
-  "mainEpisode": "Main Episode",
+  "videoDetail": "Video Details",
+  "mediaTitleLabel": "Title",
+  "currentEpisodeLabel": "Current Episode",
+  "mediaUrlLabel": "Media URL",
+  "copyMediaUrl": "Copy",
+  "mediaUrlCopied": "Media URL copied to clipboard",
+  "playbackError": "Playback Error",
+  "errorMessageTitle": "Error Information",
+  "playbackCompleted": "Playback completed",
+  "alreadyLastEpisode": "Already at the last episode",
+  "copiedToClipboard": "Copied to clipboard",
   "noPlayableLink": "No valid playback URL for this episode",
   "extensionNotFound": "Extension [{package}] not found, cannot resolve playback URL",
   "@extensionNotFound": {
@@ -301,32 +281,65 @@
   },
   "noValidUrlFromExtension": "Extension returned no valid playback URL",
   "torrentNotSupported": "Torrent resources are not currently supported",
+
+  "settings": "Settings",
+  "general": "General",
+  "appearanceAndTheme": "Appearance & Theme",
+  "themeSettings": "Theme Settings",
+  "darkMode": "Dark Mode",
+  "darkModeDesc": "Choose follow system or toggle light/dark mode",
+  "darkModeFollowSystem": "Follow System",
+  "darkModeLight": "Light Mode",
+  "darkModeDark": "Dark Mode",
+  "dynamicColor": "Dynamic Color",
+  "dynamicColorDesc": "Use system wallpaper colors (Material You)",
+  "language": "Language",
+  "languageSystem": "Follow System",
+  "languageZh": "简体中文",
+  "languageEn": "English",
+  "updateAndPermissions": "Updates & Permissions",
+  "autoUpdateExtensions": "Auto Update Extensions",
+  "autoUpdateDesc": "Automatically check and update installed extensions in background",
+  "allowThirdParty": "Allow Third-Party Extensions",
+  "allowThirdPartyDesc": "Allow installing locally imported extensions, disabled by default",
+  "extensionRepoManagement": "Repository Management",
+  "importRepo": "Import Repository",
+  "importRepoDesc": "Add custom extension repository URL",
+  "customRepo": "Custom Repository",
+  "repoNameLabel": "Repository Name",
+  "repoNameHint": "e.g., Community Repo",
+  "repoUrlLabel": "Repository URL",
+  "repoUrlHint": "https://...",
+  "repoUrlEmpty": "Please enter repository URL",
+  "repoImportSuccess": "Repository imported successfully",
+  "deletedRepo": "Deleted {name}",
+  "@deletedRepo": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "aboutApp": "About App",
+  "info": "Info",
+  "links": "Links",
+  "legal": "Legal",
+  "privacy": "Privacy",
+  "alreadyLatestVersion": "Already on latest version ({version})",
+  "@alreadyLatestVersion": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "openSourceRepo": "Source Repository",
+  "officialExtensionRepo": "Official Extension Repository",
+  "openSourceLicense": "Open Source License",
+  "thirdPartyLicenses": "Third-Party Licenses",
+  "privacyPolicy": "Privacy Statement",
+  "privacyTitle": "Privacy Statement",
+  "privacyContent": "This app does not collect or upload any personal data.\n\nFavorites, settings, and installed extensions are stored locally on your device.\n\nWhen installing third-party extensions or visiting third-party sites, content is handled by respective extensions and sites. Please verify security and legality yourself.",
   "viewLicenseInRepo": "View LICENSE in repository",
-  "viewThirdPartyLicenses": "View open-source licenses for third-party dependencies",
-  "builtWithFlutter": "© 2026 Miru · Built with Flutter",
-  "cannotOpenFilePicker": "Cannot open file picker: {error}",
-  "@cannotOpenFilePicker": {
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
-  "readFileFailed": "Failed to read file: {error}",
-  "@readFileFailed": {
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
-  "localExtensionImportSuccess": "Local extension imported successfully",
-  "importFailed": "Import failed: {error}",
-  "@importFailed": {
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  }
+  "viewThirdPartyLicenses": "View open-source licenses for third-party dependencies"
 }

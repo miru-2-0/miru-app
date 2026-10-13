@@ -85,7 +85,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               SettingsTile.navigation(
                 leading: const Icon(Icons.palette_outlined),
                 title: Text(l10n.appearanceAndTheme),
-                value: Text(_themeService.themeMode.label),
+                value: Text(_themeService.themeMode.getLabel(context)),
                 onPressed: (context) {
                   Navigator.of(context).push(
                     MaterialPageRoute(

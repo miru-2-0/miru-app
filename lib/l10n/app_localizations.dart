@@ -104,6 +104,72 @@ abstract class AppLocalizations {
   /// **'Miru'**
   String get appTitle;
 
+  /// No description provided for @appDescription.
+  ///
+  /// In zh, this message translates to:
+  /// **'一个基于 Flutter 的跨平台影视聚合播放器，通过 JavaScript 扩展脚本解析影视站点。'**
+  String get appDescription;
+
+  /// No description provided for @builtWithFlutter.
+  ///
+  /// In zh, this message translates to:
+  /// **'© 2026 Miru · 基于 Flutter 构建'**
+  String get builtWithFlutter;
+
+  /// No description provided for @unknown.
+  ///
+  /// In zh, this message translates to:
+  /// **'未知'**
+  String get unknown;
+
+  /// No description provided for @none.
+  ///
+  /// In zh, this message translates to:
+  /// **'（无）'**
+  String get none;
+
+  /// No description provided for @close.
+  ///
+  /// In zh, this message translates to:
+  /// **'关闭'**
+  String get close;
+
+  /// No description provided for @cancel.
+  ///
+  /// In zh, this message translates to:
+  /// **'取消'**
+  String get cancel;
+
+  /// No description provided for @confirm.
+  ///
+  /// In zh, this message translates to:
+  /// **'确认'**
+  String get confirm;
+
+  /// No description provided for @retry.
+  ///
+  /// In zh, this message translates to:
+  /// **'重试'**
+  String get retry;
+
+  /// No description provided for @refreshRetry.
+  ///
+  /// In zh, this message translates to:
+  /// **'刷新重试'**
+  String get refreshRetry;
+
+  /// No description provided for @add.
+  ///
+  /// In zh, this message translates to:
+  /// **'添加'**
+  String get add;
+
+  /// No description provided for @gotIt.
+  ///
+  /// In zh, this message translates to:
+  /// **'知道了'**
+  String get gotIt;
+
   /// No description provided for @navHome.
   ///
   /// In zh, this message translates to:
@@ -158,6 +224,84 @@ abstract class AppLocalizations {
   /// **'扩展设置'**
   String get extensionSettings;
 
+  /// No description provided for @extensionDetails.
+  ///
+  /// In zh, this message translates to:
+  /// **'扩展详情'**
+  String get extensionDetails;
+
+  /// No description provided for @extensionInfo.
+  ///
+  /// In zh, this message translates to:
+  /// **'基本信息'**
+  String get extensionInfo;
+
+  /// No description provided for @extensionDesc.
+  ///
+  /// In zh, this message translates to:
+  /// **'扩展简介'**
+  String get extensionDesc;
+
+  /// No description provided for @extensionVersion.
+  ///
+  /// In zh, this message translates to:
+  /// **'扩展版本'**
+  String get extensionVersion;
+
+  /// No description provided for @author.
+  ///
+  /// In zh, this message translates to:
+  /// **'作者'**
+  String get author;
+
+  /// No description provided for @extensionSource.
+  ///
+  /// In zh, this message translates to:
+  /// **'扩展来源'**
+  String get extensionSource;
+
+  /// No description provided for @supportedLanguage.
+  ///
+  /// In zh, this message translates to:
+  /// **'支持语言'**
+  String get supportedLanguage;
+
+  /// No description provided for @license.
+  ///
+  /// In zh, this message translates to:
+  /// **'开源协议'**
+  String get license;
+
+  /// No description provided for @targetWebsite.
+  ///
+  /// In zh, this message translates to:
+  /// **'目标网站'**
+  String get targetWebsite;
+
+  /// No description provided for @scriptFileName.
+  ///
+  /// In zh, this message translates to:
+  /// **'脚本文件名'**
+  String get scriptFileName;
+
+  /// No description provided for @builtIn.
+  ///
+  /// In zh, this message translates to:
+  /// **'内置'**
+  String get builtIn;
+
+  /// No description provided for @localExtension.
+  ///
+  /// In zh, this message translates to:
+  /// **'本地'**
+  String get localExtension;
+
+  /// No description provided for @localImport.
+  ///
+  /// In zh, this message translates to:
+  /// **'本地导入'**
+  String get localImport;
+
   /// No description provided for @noExtensionsTitle.
   ///
   /// In zh, this message translates to:
@@ -182,11 +326,71 @@ abstract class AppLocalizations {
   /// **'安装扩展'**
   String get installExtension;
 
-  /// No description provided for @uninstallExtension.
+  /// No description provided for @installExtensionButton.
+  ///
+  /// In zh, this message translates to:
+  /// **'安装扩展'**
+  String get installExtensionButton;
+
+  /// No description provided for @installExtensionCard.
+  ///
+  /// In zh, this message translates to:
+  /// **'安装'**
+  String get installExtensionCard;
+
+  /// No description provided for @uninstallExtensionButton.
+  ///
+  /// In zh, this message translates to:
+  /// **'卸载扩展'**
+  String get uninstallExtensionButton;
+
+  /// No description provided for @uninstallExtensionCard.
   ///
   /// In zh, this message translates to:
   /// **'卸载'**
-  String get uninstallExtension;
+  String get uninstallExtensionCard;
+
+  /// No description provided for @installing.
+  ///
+  /// In zh, this message translates to:
+  /// **'安装中...'**
+  String get installing;
+
+  /// No description provided for @updating.
+  ///
+  /// In zh, this message translates to:
+  /// **'更新中...'**
+  String get updating;
+
+  /// No description provided for @updateToVersion.
+  ///
+  /// In zh, this message translates to:
+  /// **'更新到 {version}'**
+  String updateToVersion(String version);
+
+  /// No description provided for @newVersionFound.
+  ///
+  /// In zh, this message translates to:
+  /// **'发现新版本 {version}'**
+  String newVersionFound(String version);
+
+  /// No description provided for @alreadyLatest.
+  ///
+  /// In zh, this message translates to:
+  /// **'当前已是最新版本'**
+  String get alreadyLatest;
+
+  /// No description provided for @checkUpdates.
+  ///
+  /// In zh, this message translates to:
+  /// **'检查更新'**
+  String get checkUpdates;
+
+  /// No description provided for @checkUpdateFailed.
+  ///
+  /// In zh, this message translates to:
+  /// **'检查更新失败：{error}'**
+  String checkUpdateFailed(String error);
 
   /// No description provided for @uninstalledSuccess.
   ///
@@ -194,17 +398,35 @@ abstract class AppLocalizations {
   /// **'已卸载 {name}'**
   String uninstalledSuccess(String name);
 
+  /// No description provided for @uninstallFailed.
+  ///
+  /// In zh, this message translates to:
+  /// **'卸载失败：{error}'**
+  String uninstallFailed(String error);
+
   /// No description provided for @installSuccess.
   ///
   /// In zh, this message translates to:
   /// **'成功安装 {name}'**
   String installSuccess(String name);
 
-  /// No description provided for @localExtension.
+  /// No description provided for @installFailed.
   ///
   /// In zh, this message translates to:
-  /// **'本地'**
-  String get localExtension;
+  /// **'安装失败：{error}'**
+  String installFailed(String error);
+
+  /// No description provided for @updatedSuccess.
+  ///
+  /// In zh, this message translates to:
+  /// **'已更新 {name}'**
+  String updatedSuccess(String name);
+
+  /// No description provided for @updateFailed.
+  ///
+  /// In zh, this message translates to:
+  /// **'更新失败：{error}'**
+  String updateFailed(String error);
 
   /// No description provided for @searchExtensionHint.
   ///
@@ -229,6 +451,36 @@ abstract class AppLocalizations {
   /// In zh, this message translates to:
   /// **'导入本地扩展'**
   String get importLocalExtension;
+
+  /// No description provided for @localExtensionImportSuccess.
+  ///
+  /// In zh, this message translates to:
+  /// **'本地扩展导入成功'**
+  String get localExtensionImportSuccess;
+
+  /// No description provided for @cannotOpenFilePicker.
+  ///
+  /// In zh, this message translates to:
+  /// **'无法打开文件选择器：{error}'**
+  String cannotOpenFilePicker(String error);
+
+  /// No description provided for @readFileFailed.
+  ///
+  /// In zh, this message translates to:
+  /// **'读取文件失败：{error}'**
+  String readFileFailed(String error);
+
+  /// No description provided for @importFailed.
+  ///
+  /// In zh, this message translates to:
+  /// **'导入失败：{error}'**
+  String importFailed(String error);
+
+  /// No description provided for @linkCopied.
+  ///
+  /// In zh, this message translates to:
+  /// **'网站链接已复制到剪贴板'**
+  String get linkCopied;
 
   /// No description provided for @searchMediaHint.
   ///
@@ -296,6 +548,12 @@ abstract class AppLocalizations {
   /// **'立即观看'**
   String get watchNow;
 
+  /// No description provided for @favorite.
+  ///
+  /// In zh, this message translates to:
+  /// **'收藏'**
+  String get favorite;
+
   /// No description provided for @addedToFavorites.
   ///
   /// In zh, this message translates to:
@@ -308,11 +566,11 @@ abstract class AppLocalizations {
   /// **'已取消收藏'**
   String get removedFromFavorites;
 
-  /// No description provided for @selectEpisode.
+  /// No description provided for @episodes.
   ///
   /// In zh, this message translates to:
-  /// **'选择剧集 ({count})'**
-  String selectEpisode(int count);
+  /// **'剧集'**
+  String get episodes;
 
   /// No description provided for @summary.
   ///
@@ -326,11 +584,11 @@ abstract class AppLocalizations {
   /// **'演员'**
   String get actors;
 
-  /// No description provided for @episodes.
+  /// No description provided for @selectEpisode.
   ///
   /// In zh, this message translates to:
-  /// **'剧集'**
-  String get episodes;
+  /// **'选择剧集 ({count})'**
+  String selectEpisode(int count);
 
   /// No description provided for @noEpisodesTitle.
   ///
@@ -362,467 +620,11 @@ abstract class AppLocalizations {
   /// **'剧情简介'**
   String get synopsis;
 
-  /// No description provided for @speedHud.
+  /// No description provided for @media.
   ///
   /// In zh, this message translates to:
-  /// **'{speed}x'**
-  String speedHud(String speed);
-
-  /// No description provided for @videoDetail.
-  ///
-  /// In zh, this message translates to:
-  /// **'视频详情'**
-  String get videoDetail;
-
-  /// No description provided for @copyMediaUrl.
-  ///
-  /// In zh, this message translates to:
-  /// **'复制'**
-  String get copyMediaUrl;
-
-  /// No description provided for @mediaUrlCopied.
-  ///
-  /// In zh, this message translates to:
-  /// **'已复制播放地址'**
-  String get mediaUrlCopied;
-
-  /// No description provided for @playbackError.
-  ///
-  /// In zh, this message translates to:
-  /// **'播放出错'**
-  String get playbackError;
-
-  /// No description provided for @retry.
-  ///
-  /// In zh, this message translates to:
-  /// **'重试'**
-  String get retry;
-
-  /// No description provided for @refreshRetry.
-  ///
-  /// In zh, this message translates to:
-  /// **'刷新重试'**
-  String get refreshRetry;
-
-  /// No description provided for @settings.
-  ///
-  /// In zh, this message translates to:
-  /// **'设置'**
-  String get settings;
-
-  /// No description provided for @general.
-  ///
-  /// In zh, this message translates to:
-  /// **'常规'**
-  String get general;
-
-  /// No description provided for @appearanceAndTheme.
-  ///
-  /// In zh, this message translates to:
-  /// **'外观与主题'**
-  String get appearanceAndTheme;
-
-  /// No description provided for @language.
-  ///
-  /// In zh, this message translates to:
-  /// **'语言'**
-  String get language;
-
-  /// No description provided for @languageSystem.
-  ///
-  /// In zh, this message translates to:
-  /// **'跟随系统'**
-  String get languageSystem;
-
-  /// No description provided for @languageZh.
-  ///
-  /// In zh, this message translates to:
-  /// **'简体中文'**
-  String get languageZh;
-
-  /// No description provided for @languageEn.
-  ///
-  /// In zh, this message translates to:
-  /// **'English'**
-  String get languageEn;
-
-  /// No description provided for @aboutApp.
-  ///
-  /// In zh, this message translates to:
-  /// **'关于应用'**
-  String get aboutApp;
-
-  /// No description provided for @darkMode.
-  ///
-  /// In zh, this message translates to:
-  /// **'深色模式'**
-  String get darkMode;
-
-  /// No description provided for @darkModeDesc.
-  ///
-  /// In zh, this message translates to:
-  /// **'可选择跟随系统或切换浅色/深色模式'**
-  String get darkModeDesc;
-
-  /// No description provided for @darkModeFollowSystem.
-  ///
-  /// In zh, this message translates to:
-  /// **'跟随系统'**
-  String get darkModeFollowSystem;
-
-  /// No description provided for @darkModeLight.
-  ///
-  /// In zh, this message translates to:
-  /// **'浅色模式'**
-  String get darkModeLight;
-
-  /// No description provided for @darkModeDark.
-  ///
-  /// In zh, this message translates to:
-  /// **'深色模式'**
-  String get darkModeDark;
-
-  /// No description provided for @dynamicColor.
-  ///
-  /// In zh, this message translates to:
-  /// **'动态配色'**
-  String get dynamicColor;
-
-  /// No description provided for @dynamicColorDesc.
-  ///
-  /// In zh, this message translates to:
-  /// **'使用系统壁纸颜色（Material You）'**
-  String get dynamicColorDesc;
-
-  /// No description provided for @themeSettings.
-  ///
-  /// In zh, this message translates to:
-  /// **'主题设置'**
-  String get themeSettings;
-
-  /// No description provided for @checkUpdates.
-  ///
-  /// In zh, this message translates to:
-  /// **'检查更新'**
-  String get checkUpdates;
-
-  /// No description provided for @alreadyLatestVersion.
-  ///
-  /// In zh, this message translates to:
-  /// **'已是最新版本（{version}）'**
-  String alreadyLatestVersion(String version);
-
-  /// No description provided for @openSourceRepo.
-  ///
-  /// In zh, this message translates to:
-  /// **'开源仓库'**
-  String get openSourceRepo;
-
-  /// No description provided for @officialExtensionRepo.
-  ///
-  /// In zh, this message translates to:
-  /// **'官方扩展仓库'**
-  String get officialExtensionRepo;
-
-  /// No description provided for @openSourceLicense.
-  ///
-  /// In zh, this message translates to:
-  /// **'开源协议'**
-  String get openSourceLicense;
-
-  /// No description provided for @thirdPartyLicenses.
-  ///
-  /// In zh, this message translates to:
-  /// **'开源许可证'**
-  String get thirdPartyLicenses;
-
-  /// No description provided for @privacyPolicy.
-  ///
-  /// In zh, this message translates to:
-  /// **'隐私说明'**
-  String get privacyPolicy;
-
-  /// No description provided for @cancel.
-  ///
-  /// In zh, this message translates to:
-  /// **'取消'**
-  String get cancel;
-
-  /// No description provided for @confirm.
-  ///
-  /// In zh, this message translates to:
-  /// **'确认'**
-  String get confirm;
-
-  /// No description provided for @info.
-  ///
-  /// In zh, this message translates to:
-  /// **'信息'**
-  String get info;
-
-  /// No description provided for @links.
-  ///
-  /// In zh, this message translates to:
-  /// **'链接'**
-  String get links;
-
-  /// No description provided for @legal.
-  ///
-  /// In zh, this message translates to:
-  /// **'法律'**
-  String get legal;
-
-  /// No description provided for @privacy.
-  ///
-  /// In zh, this message translates to:
-  /// **'隐私'**
-  String get privacy;
-
-  /// No description provided for @customRepo.
-  ///
-  /// In zh, this message translates to:
-  /// **'自定义仓库'**
-  String get customRepo;
-
-  /// No description provided for @updateAndPermissions.
-  ///
-  /// In zh, this message translates to:
-  /// **'更新与权限'**
-  String get updateAndPermissions;
-
-  /// No description provided for @autoUpdateExtensions.
-  ///
-  /// In zh, this message translates to:
-  /// **'自动更新扩展'**
-  String get autoUpdateExtensions;
-
-  /// No description provided for @autoUpdateDesc.
-  ///
-  /// In zh, this message translates to:
-  /// **'后台自动检测并更新已安装的扩展'**
-  String get autoUpdateDesc;
-
-  /// No description provided for @allowThirdParty.
-  ///
-  /// In zh, this message translates to:
-  /// **'允许第三方扩展'**
-  String get allowThirdParty;
-
-  /// No description provided for @allowThirdPartyDesc.
-  ///
-  /// In zh, this message translates to:
-  /// **'允许安装从本地导入的扩展，默认关闭'**
-  String get allowThirdPartyDesc;
-
-  /// No description provided for @extensionRepoManagement.
-  ///
-  /// In zh, this message translates to:
-  /// **'扩展仓库管理'**
-  String get extensionRepoManagement;
-
-  /// No description provided for @importRepo.
-  ///
-  /// In zh, this message translates to:
-  /// **'导入扩展仓库'**
-  String get importRepo;
-
-  /// No description provided for @importRepoDesc.
-  ///
-  /// In zh, this message translates to:
-  /// **'添加自定义扩展仓库地址'**
-  String get importRepoDesc;
-
-  /// No description provided for @builtIn.
-  ///
-  /// In zh, this message translates to:
-  /// **'内置'**
-  String get builtIn;
-
-  /// No description provided for @extensionDetails.
-  ///
-  /// In zh, this message translates to:
-  /// **'扩展详情'**
-  String get extensionDetails;
-
-  /// No description provided for @extensionInfo.
-  ///
-  /// In zh, this message translates to:
-  /// **'基本信息'**
-  String get extensionInfo;
-
-  /// No description provided for @extensionDesc.
-  ///
-  /// In zh, this message translates to:
-  /// **'扩展简介'**
-  String get extensionDesc;
-
-  /// No description provided for @extensionVersion.
-  ///
-  /// In zh, this message translates to:
-  /// **'扩展版本'**
-  String get extensionVersion;
-
-  /// No description provided for @author.
-  ///
-  /// In zh, this message translates to:
-  /// **'作者'**
-  String get author;
-
-  /// No description provided for @extensionSource.
-  ///
-  /// In zh, this message translates to:
-  /// **'扩展来源'**
-  String get extensionSource;
-
-  /// No description provided for @supportedLanguage.
-  ///
-  /// In zh, this message translates to:
-  /// **'支持语言'**
-  String get supportedLanguage;
-
-  /// No description provided for @license.
-  ///
-  /// In zh, this message translates to:
-  /// **'开源协议'**
-  String get license;
-
-  /// No description provided for @targetWebsite.
-  ///
-  /// In zh, this message translates to:
-  /// **'目标网站'**
-  String get targetWebsite;
-
-  /// No description provided for @scriptFileName.
-  ///
-  /// In zh, this message translates to:
-  /// **'脚本文件名'**
-  String get scriptFileName;
-
-  /// No description provided for @uninstallExtensionButton.
-  ///
-  /// In zh, this message translates to:
-  /// **'卸载扩展'**
-  String get uninstallExtensionButton;
-
-  /// No description provided for @installExtensionButton.
-  ///
-  /// In zh, this message translates to:
-  /// **'安装扩展'**
-  String get installExtensionButton;
-
-  /// No description provided for @installing.
-  ///
-  /// In zh, this message translates to:
-  /// **'安装中...'**
-  String get installing;
-
-  /// No description provided for @updating.
-  ///
-  /// In zh, this message translates to:
-  /// **'更新中...'**
-  String get updating;
-
-  /// No description provided for @updateToVersion.
-  ///
-  /// In zh, this message translates to:
-  /// **'更新到 {version}'**
-  String updateToVersion(String version);
-
-  /// No description provided for @newVersionFound.
-  ///
-  /// In zh, this message translates to:
-  /// **'发现新版本 {version}'**
-  String newVersionFound(String version);
-
-  /// No description provided for @alreadyLatest.
-  ///
-  /// In zh, this message translates to:
-  /// **'当前已是最新版本'**
-  String get alreadyLatest;
-
-  /// No description provided for @checkUpdateFailed.
-  ///
-  /// In zh, this message translates to:
-  /// **'检查更新失败：{error}'**
-  String checkUpdateFailed(String error);
-
-  /// No description provided for @uninstallFailed.
-  ///
-  /// In zh, this message translates to:
-  /// **'卸载失败：{error}'**
-  String uninstallFailed(String error);
-
-  /// No description provided for @installFailed.
-  ///
-  /// In zh, this message translates to:
-  /// **'安装失败：{error}'**
-  String installFailed(String error);
-
-  /// No description provided for @updatedSuccess.
-  ///
-  /// In zh, this message translates to:
-  /// **'已更新 {name}'**
-  String updatedSuccess(String name);
-
-  /// No description provided for @updateFailed.
-  ///
-  /// In zh, this message translates to:
-  /// **'更新失败：{error}'**
-  String updateFailed(String error);
-
-  /// No description provided for @linkCopied.
-  ///
-  /// In zh, this message translates to:
-  /// **'网站链接已复制到剪贴板'**
-  String get linkCopied;
-
-  /// No description provided for @unknown.
-  ///
-  /// In zh, this message translates to:
-  /// **'未知'**
-  String get unknown;
-
-  /// No description provided for @localImport.
-  ///
-  /// In zh, this message translates to:
-  /// **'本地导入'**
-  String get localImport;
-
-  /// No description provided for @close.
-  ///
-  /// In zh, this message translates to:
-  /// **'关闭'**
-  String get close;
-
-  /// No description provided for @mediaTitleLabel.
-  ///
-  /// In zh, this message translates to:
-  /// **'片名'**
-  String get mediaTitleLabel;
-
-  /// No description provided for @currentEpisodeLabel.
-  ///
-  /// In zh, this message translates to:
-  /// **'当前剧集'**
-  String get currentEpisodeLabel;
-
-  /// No description provided for @mediaUrlLabel.
-  ///
-  /// In zh, this message translates to:
-  /// **'播放地址'**
-  String get mediaUrlLabel;
-
-  /// No description provided for @none.
-  ///
-  /// In zh, this message translates to:
-  /// **'（无）'**
-  String get none;
-
-  /// No description provided for @errorMessageTitle.
-  ///
-  /// In zh, this message translates to:
-  /// **'错误信息'**
-  String get errorMessageTitle;
+  /// **'影视'**
+  String get media;
 
   /// No description provided for @originalName.
   ///
@@ -914,83 +716,29 @@ abstract class AppLocalizations {
   /// **'标签'**
   String get tags;
 
-  /// No description provided for @repoNameLabel.
+  /// No description provided for @play.
   ///
   /// In zh, this message translates to:
-  /// **'仓库名称'**
-  String get repoNameLabel;
+  /// **'播放'**
+  String get play;
 
-  /// No description provided for @repoNameHint.
+  /// No description provided for @pause.
   ///
   /// In zh, this message translates to:
-  /// **'如：社区源'**
-  String get repoNameHint;
+  /// **'暂停'**
+  String get pause;
 
-  /// No description provided for @repoUrlLabel.
+  /// No description provided for @nextEpisode.
   ///
   /// In zh, this message translates to:
-  /// **'仓库 URL'**
-  String get repoUrlLabel;
+  /// **'下一集'**
+  String get nextEpisode;
 
-  /// No description provided for @repoUrlHint.
+  /// No description provided for @mainEpisode.
   ///
   /// In zh, this message translates to:
-  /// **'https://...'**
-  String get repoUrlHint;
-
-  /// No description provided for @repoUrlEmpty.
-  ///
-  /// In zh, this message translates to:
-  /// **'请输入仓库 URL'**
-  String get repoUrlEmpty;
-
-  /// No description provided for @repoImportSuccess.
-  ///
-  /// In zh, this message translates to:
-  /// **'扩展仓库导入成功'**
-  String get repoImportSuccess;
-
-  /// No description provided for @add.
-  ///
-  /// In zh, this message translates to:
-  /// **'添加'**
-  String get add;
-
-  /// No description provided for @deletedRepo.
-  ///
-  /// In zh, this message translates to:
-  /// **'已删除 {name}'**
-  String deletedRepo(String name);
-
-  /// No description provided for @privacyTitle.
-  ///
-  /// In zh, this message translates to:
-  /// **'隐私说明'**
-  String get privacyTitle;
-
-  /// No description provided for @privacyContent.
-  ///
-  /// In zh, this message translates to:
-  /// **'本应用不收集、不上传任何个人数据。\n\n收藏、设置与已安装扩展等信息均仅保存在本地设备。\n\n安装第三方扩展或访问第三方站点时，相关内容由对应扩展与站点负责，请自行甄别其安全性与合法性。'**
-  String get privacyContent;
-
-  /// No description provided for @gotIt.
-  ///
-  /// In zh, this message translates to:
-  /// **'知道了'**
-  String get gotIt;
-
-  /// No description provided for @favorite.
-  ///
-  /// In zh, this message translates to:
-  /// **'收藏'**
-  String get favorite;
-
-  /// No description provided for @media.
-  ///
-  /// In zh, this message translates to:
-  /// **'影视'**
-  String get media;
+  /// **'正片'**
+  String get mainEpisode;
 
   /// No description provided for @back.
   ///
@@ -1034,6 +782,12 @@ abstract class AppLocalizations {
   /// **'倍速'**
   String get speed;
 
+  /// No description provided for @speedHud.
+  ///
+  /// In zh, this message translates to:
+  /// **'{speed}x'**
+  String speedHud(String speed);
+
   /// No description provided for @episodesPanel.
   ///
   /// In zh, this message translates to:
@@ -1045,24 +799,6 @@ abstract class AppLocalizations {
   /// In zh, this message translates to:
   /// **'退出全屏'**
   String get exitFullscreen;
-
-  /// No description provided for @play.
-  ///
-  /// In zh, this message translates to:
-  /// **'播放'**
-  String get play;
-
-  /// No description provided for @pause.
-  ///
-  /// In zh, this message translates to:
-  /// **'暂停'**
-  String get pause;
-
-  /// No description provided for @nextEpisode.
-  ///
-  /// In zh, this message translates to:
-  /// **'下一集'**
-  String get nextEpisode;
 
   /// No description provided for @lockPanel.
   ///
@@ -1076,11 +812,71 @@ abstract class AppLocalizations {
   /// **'解锁面板'**
   String get unlockPanel;
 
-  /// No description provided for @mainEpisode.
+  /// No description provided for @videoDetail.
   ///
   /// In zh, this message translates to:
-  /// **'正片'**
-  String get mainEpisode;
+  /// **'视频详情'**
+  String get videoDetail;
+
+  /// No description provided for @mediaTitleLabel.
+  ///
+  /// In zh, this message translates to:
+  /// **'片名'**
+  String get mediaTitleLabel;
+
+  /// No description provided for @currentEpisodeLabel.
+  ///
+  /// In zh, this message translates to:
+  /// **'当前剧集'**
+  String get currentEpisodeLabel;
+
+  /// No description provided for @mediaUrlLabel.
+  ///
+  /// In zh, this message translates to:
+  /// **'播放地址'**
+  String get mediaUrlLabel;
+
+  /// No description provided for @copyMediaUrl.
+  ///
+  /// In zh, this message translates to:
+  /// **'复制'**
+  String get copyMediaUrl;
+
+  /// No description provided for @mediaUrlCopied.
+  ///
+  /// In zh, this message translates to:
+  /// **'已复制播放地址'**
+  String get mediaUrlCopied;
+
+  /// No description provided for @playbackError.
+  ///
+  /// In zh, this message translates to:
+  /// **'播放出错'**
+  String get playbackError;
+
+  /// No description provided for @errorMessageTitle.
+  ///
+  /// In zh, this message translates to:
+  /// **'错误信息'**
+  String get errorMessageTitle;
+
+  /// No description provided for @playbackCompleted.
+  ///
+  /// In zh, this message translates to:
+  /// **'播放完成'**
+  String get playbackCompleted;
+
+  /// No description provided for @alreadyLastEpisode.
+  ///
+  /// In zh, this message translates to:
+  /// **'已是最后一集'**
+  String get alreadyLastEpisode;
+
+  /// No description provided for @copiedToClipboard.
+  ///
+  /// In zh, this message translates to:
+  /// **'已复制到剪贴板'**
+  String get copiedToClipboard;
 
   /// No description provided for @noPlayableLink.
   ///
@@ -1106,6 +902,270 @@ abstract class AppLocalizations {
   /// **'当前扩展返回的是 BT 磁力资源，暂不支持播放'**
   String get torrentNotSupported;
 
+  /// No description provided for @settings.
+  ///
+  /// In zh, this message translates to:
+  /// **'设置'**
+  String get settings;
+
+  /// No description provided for @general.
+  ///
+  /// In zh, this message translates to:
+  /// **'常规'**
+  String get general;
+
+  /// No description provided for @appearanceAndTheme.
+  ///
+  /// In zh, this message translates to:
+  /// **'外观与主题'**
+  String get appearanceAndTheme;
+
+  /// No description provided for @themeSettings.
+  ///
+  /// In zh, this message translates to:
+  /// **'主题设置'**
+  String get themeSettings;
+
+  /// No description provided for @darkMode.
+  ///
+  /// In zh, this message translates to:
+  /// **'深色模式'**
+  String get darkMode;
+
+  /// No description provided for @darkModeDesc.
+  ///
+  /// In zh, this message translates to:
+  /// **'可选择跟随系统或切换浅色/深色模式'**
+  String get darkModeDesc;
+
+  /// No description provided for @darkModeFollowSystem.
+  ///
+  /// In zh, this message translates to:
+  /// **'跟随系统'**
+  String get darkModeFollowSystem;
+
+  /// No description provided for @darkModeLight.
+  ///
+  /// In zh, this message translates to:
+  /// **'浅色模式'**
+  String get darkModeLight;
+
+  /// No description provided for @darkModeDark.
+  ///
+  /// In zh, this message translates to:
+  /// **'深色模式'**
+  String get darkModeDark;
+
+  /// No description provided for @dynamicColor.
+  ///
+  /// In zh, this message translates to:
+  /// **'动态配色'**
+  String get dynamicColor;
+
+  /// No description provided for @dynamicColorDesc.
+  ///
+  /// In zh, this message translates to:
+  /// **'使用系统壁纸颜色（Material You）'**
+  String get dynamicColorDesc;
+
+  /// No description provided for @language.
+  ///
+  /// In zh, this message translates to:
+  /// **'语言'**
+  String get language;
+
+  /// No description provided for @languageSystem.
+  ///
+  /// In zh, this message translates to:
+  /// **'跟随系统'**
+  String get languageSystem;
+
+  /// No description provided for @languageZh.
+  ///
+  /// In zh, this message translates to:
+  /// **'简体中文'**
+  String get languageZh;
+
+  /// No description provided for @languageEn.
+  ///
+  /// In zh, this message translates to:
+  /// **'English'**
+  String get languageEn;
+
+  /// No description provided for @updateAndPermissions.
+  ///
+  /// In zh, this message translates to:
+  /// **'更新与权限'**
+  String get updateAndPermissions;
+
+  /// No description provided for @autoUpdateExtensions.
+  ///
+  /// In zh, this message translates to:
+  /// **'自动更新扩展'**
+  String get autoUpdateExtensions;
+
+  /// No description provided for @autoUpdateDesc.
+  ///
+  /// In zh, this message translates to:
+  /// **'后台自动检测并更新已安装的扩展'**
+  String get autoUpdateDesc;
+
+  /// No description provided for @allowThirdParty.
+  ///
+  /// In zh, this message translates to:
+  /// **'允许第三方扩展'**
+  String get allowThirdParty;
+
+  /// No description provided for @allowThirdPartyDesc.
+  ///
+  /// In zh, this message translates to:
+  /// **'允许安装从本地导入的扩展，默认关闭'**
+  String get allowThirdPartyDesc;
+
+  /// No description provided for @extensionRepoManagement.
+  ///
+  /// In zh, this message translates to:
+  /// **'扩展仓库管理'**
+  String get extensionRepoManagement;
+
+  /// No description provided for @importRepo.
+  ///
+  /// In zh, this message translates to:
+  /// **'导入扩展仓库'**
+  String get importRepo;
+
+  /// No description provided for @importRepoDesc.
+  ///
+  /// In zh, this message translates to:
+  /// **'添加自定义扩展仓库地址'**
+  String get importRepoDesc;
+
+  /// No description provided for @customRepo.
+  ///
+  /// In zh, this message translates to:
+  /// **'自定义仓库'**
+  String get customRepo;
+
+  /// No description provided for @repoNameLabel.
+  ///
+  /// In zh, this message translates to:
+  /// **'仓库名称'**
+  String get repoNameLabel;
+
+  /// No description provided for @repoNameHint.
+  ///
+  /// In zh, this message translates to:
+  /// **'如：社区源'**
+  String get repoNameHint;
+
+  /// No description provided for @repoUrlLabel.
+  ///
+  /// In zh, this message translates to:
+  /// **'仓库 URL'**
+  String get repoUrlLabel;
+
+  /// No description provided for @repoUrlHint.
+  ///
+  /// In zh, this message translates to:
+  /// **'https://...'**
+  String get repoUrlHint;
+
+  /// No description provided for @repoUrlEmpty.
+  ///
+  /// In zh, this message translates to:
+  /// **'请输入仓库 URL'**
+  String get repoUrlEmpty;
+
+  /// No description provided for @repoImportSuccess.
+  ///
+  /// In zh, this message translates to:
+  /// **'扩展仓库导入成功'**
+  String get repoImportSuccess;
+
+  /// No description provided for @deletedRepo.
+  ///
+  /// In zh, this message translates to:
+  /// **'已删除 {name}'**
+  String deletedRepo(String name);
+
+  /// No description provided for @aboutApp.
+  ///
+  /// In zh, this message translates to:
+  /// **'关于应用'**
+  String get aboutApp;
+
+  /// No description provided for @info.
+  ///
+  /// In zh, this message translates to:
+  /// **'信息'**
+  String get info;
+
+  /// No description provided for @links.
+  ///
+  /// In zh, this message translates to:
+  /// **'链接'**
+  String get links;
+
+  /// No description provided for @legal.
+  ///
+  /// In zh, this message translates to:
+  /// **'法律'**
+  String get legal;
+
+  /// No description provided for @privacy.
+  ///
+  /// In zh, this message translates to:
+  /// **'隐私'**
+  String get privacy;
+
+  /// No description provided for @alreadyLatestVersion.
+  ///
+  /// In zh, this message translates to:
+  /// **'已是最新版本（{version}）'**
+  String alreadyLatestVersion(String version);
+
+  /// No description provided for @openSourceRepo.
+  ///
+  /// In zh, this message translates to:
+  /// **'开源仓库'**
+  String get openSourceRepo;
+
+  /// No description provided for @officialExtensionRepo.
+  ///
+  /// In zh, this message translates to:
+  /// **'官方扩展仓库'**
+  String get officialExtensionRepo;
+
+  /// No description provided for @openSourceLicense.
+  ///
+  /// In zh, this message translates to:
+  /// **'开源协议'**
+  String get openSourceLicense;
+
+  /// No description provided for @thirdPartyLicenses.
+  ///
+  /// In zh, this message translates to:
+  /// **'开源许可证'**
+  String get thirdPartyLicenses;
+
+  /// No description provided for @privacyPolicy.
+  ///
+  /// In zh, this message translates to:
+  /// **'隐私说明'**
+  String get privacyPolicy;
+
+  /// No description provided for @privacyTitle.
+  ///
+  /// In zh, this message translates to:
+  /// **'隐私说明'**
+  String get privacyTitle;
+
+  /// No description provided for @privacyContent.
+  ///
+  /// In zh, this message translates to:
+  /// **'本应用不收集、不上传任何个人数据。\n\n收藏、设置与已安装扩展等信息均仅保存在本地设备。\n\n安装第三方扩展或访问第三方站点时，相关内容由对应扩展与站点负责，请自行甄别其安全性与合法性。'**
+  String get privacyContent;
+
   /// No description provided for @viewLicenseInRepo.
   ///
   /// In zh, this message translates to:
@@ -1117,36 +1177,6 @@ abstract class AppLocalizations {
   /// In zh, this message translates to:
   /// **'查看第三方依赖库的开源许可证'**
   String get viewThirdPartyLicenses;
-
-  /// No description provided for @builtWithFlutter.
-  ///
-  /// In zh, this message translates to:
-  /// **'© 2026 Miru · 基于 Flutter 构建'**
-  String get builtWithFlutter;
-
-  /// No description provided for @cannotOpenFilePicker.
-  ///
-  /// In zh, this message translates to:
-  /// **'无法打开文件选择器：{error}'**
-  String cannotOpenFilePicker(String error);
-
-  /// No description provided for @readFileFailed.
-  ///
-  /// In zh, this message translates to:
-  /// **'读取文件失败：{error}'**
-  String readFileFailed(String error);
-
-  /// No description provided for @localExtensionImportSuccess.
-  ///
-  /// In zh, this message translates to:
-  /// **'本地扩展导入成功'**
-  String get localExtensionImportSuccess;
-
-  /// No description provided for @importFailed.
-  ///
-  /// In zh, this message translates to:
-  /// **'导入失败：{error}'**
-  String importFailed(String error);
 }
 
 class _AppLocalizationsDelegate

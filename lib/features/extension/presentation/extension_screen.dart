@@ -223,7 +223,7 @@ class _ExtensionScreenState extends State<ExtensionScreen> {
                               side: BorderSide(
                                   color: colorScheme.error.withValues(alpha: 0.5)),
                             ),
-                            child: Text(l10n.uninstallExtension),
+                            child: Text(l10n.uninstallExtensionCard),
                           ),
                         ],
                       ),

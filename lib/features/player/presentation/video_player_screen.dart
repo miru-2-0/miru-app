@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_volume_controller/flutter_volume_controller.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:media_kit_video/media_kit_video.dart';
+import 'package:miru/app/l10n/l10n_extension.dart';
 import 'package:screen_brightness/screen_brightness.dart';
 
 import '../../extension/data/extension_manager.dart';
@@ -281,7 +282,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
       if (_currentEpisodeIndex < widget.episodes.length - 1) {
         _changeEpisode(_currentEpisodeIndex + 1);
       } else {
-        _showPillToastMsg('播放完成');
+        _showPillToastMsg(context.l10n.playbackCompleted);
       }
     });
   }
@@ -480,7 +481,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
       _changeEpisode(_currentEpisodeIndex + 1);
       return;
     }
-    _showPillToastMsg('已是最后一集');
+    _showPillToastMsg(context.l10n.alreadyLastEpisode);
   }
 
   void _changeEpisode(int newIndex) {
@@ -568,7 +569,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
       title: widget.mediaItem.title,
       episodeName: _currentEpisodeName,
       mediaUrl: _currentMediaUrl,
-      onCopied: () => _showPillToastMsg('已复制到剪贴板'),
+      onCopied: () => _showPillToastMsg(context.l10n.copiedToClipboard),
     );
   }
 

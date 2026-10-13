@@ -46,19 +46,19 @@ class _ExtensionSettingsPageState extends State<ExtensionSettingsPage> {
             children: [
               TextField(
                 controller: nameController,
-                decoration: const InputDecoration(
-                  labelText: '仓库名称',
-                  hintText: '如：社区源',
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  labelText: l10n.repoNameLabel,
+                  hintText: l10n.repoNameHint,
+                  border: const OutlineInputBorder(),
                 ),
               ),
               const SizedBox(height: 12),
               TextField(
                 controller: urlController,
-                decoration: const InputDecoration(
-                  labelText: '仓库 URL',
-                  hintText: 'https://...',
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  labelText: l10n.repoUrlLabel,
+                  hintText: l10n.repoUrlHint,
+                  border: const OutlineInputBorder(),
                 ),
               ),
             ],
@@ -74,17 +74,17 @@ class _ExtensionSettingsPageState extends State<ExtensionSettingsPage> {
                 final url = urlController.text.trim();
                 if (url.isEmpty) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('请输入仓库 URL')),
+                    SnackBar(content: Text(l10n.repoUrlEmpty)),
                   );
                   return;
                 }
                 _service.addCustomRepo(name, url);
                 Navigator.pop(context);
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('扩展仓库导入成功')),
+                  SnackBar(content: Text(l10n.repoImportSuccess)),
                 );
               },
-              child: Text(l10n.confirm),
+              child: Text(l10n.add),
             ),
           ],
         );
@@ -133,7 +133,7 @@ class _ExtensionSettingsPageState extends State<ExtensionSettingsPage> {
                 if (repo.isBuiltIn) {
                   return SettingsTile.navigation(
                     leading: const Icon(Icons.verified_outlined),
-                    title: Text(repo.name),
+                    title: Text(l10n.officialExtensionRepo),
                     description: Text(
                       repo.url,
                       maxLines: 1,
@@ -155,7 +155,7 @@ class _ExtensionSettingsPageState extends State<ExtensionSettingsPage> {
                       onPressed: () {
                         _service.removeRepo(repo.id);
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('已删除 ${repo.name}')),
+                          SnackBar(content: Text(l10n.deletedRepo(repo.name))),
                         );
                       },
                     ),

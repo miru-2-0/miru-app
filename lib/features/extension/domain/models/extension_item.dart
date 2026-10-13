@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+import 'package:miru/app/l10n/l10n_extension.dart';
+
 /// 比较版本号，返回 -1 / 0 / 1。忽略前导 v 与非数字后缀（如 -beta）。
 int compareVersions(String a, String b) {
   List<int> parse(String v) {
@@ -46,6 +49,19 @@ class ExtensionItem {
 
   /// 是否通过"本地导入"方式安装的扩展。
   bool get isFromLocal => source == sourceLocal;
+
+  /// 获取适合 UI 展示的本地化扩展来源名称。
+  String getDisplaySource(BuildContext context) {
+    if (isFromLocal) {
+      return context.l10n.localImport;
+    }
+    if (repoName == '官方扩展仓库' ||
+        repoName == 'Official Extension Repository' ||
+        repoName == 'official') {
+      return context.l10n.officialExtensionRepo;
+    }
+    return repoName;
+  }
 
   /// 内部唯一存储标识（来源 + 包名），用于区分同名扩展的不同来源。
   String get storageKey => '$source:$package';
