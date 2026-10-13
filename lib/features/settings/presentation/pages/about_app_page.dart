@@ -1,8 +1,8 @@
 import 'package:card_settings_ui/card_settings_ui.dart';
 import 'package:flutter/material.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 
 import '../../../../core/constants/app_constants.dart';
+import '../../../../core/utils/app_version_service.dart';
 import '../../../../core/utils/url_helper.dart';
 
 class AboutAppPage extends StatefulWidget {
@@ -13,28 +13,7 @@ class AboutAppPage extends StatefulWidget {
 }
 
 class _AboutAppPageState extends State<AboutAppPage> {
-  String _version = '';
-  String _buildNumber = '';
-
-  @override
-  void initState() {
-    super.initState();
-    _loadVersion();
-  }
-
-  Future<void> _loadVersion() async {
-    final info = await PackageInfo.fromPlatform();
-    if (!mounted) return;
-    setState(() {
-      _version = info.version;
-      _buildNumber = info.buildNumber;
-    });
-  }
-
-  String get _versionText {
-    if (_version.isEmpty) return 'v1.0.0';
-    return _buildNumber.isEmpty ? 'v$_version' : 'v$_version+$_buildNumber';
-  }
+  String get _versionText => AppVersionService.instance.fullVersion;
 
   void _checkUpdate() {
     ScaffoldMessenger.of(context).showSnackBar(
