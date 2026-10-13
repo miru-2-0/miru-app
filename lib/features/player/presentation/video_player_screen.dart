@@ -754,10 +754,21 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
         MediaQuery.textScalerOf(context).scale(600);
     final menus = _menuActions;
 
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final darkTheme = isDark
+        ? Theme.of(context)
+        : ThemeData(
+            useMaterial3: true,
+            colorScheme: ColorScheme.fromSeed(
+              seedColor: Theme.of(context).colorScheme.primary,
+              brightness: Brightness.dark,
+            ),
+          );
+
     return Scaffold(
       backgroundColor: Colors.black,
       body: Theme(
-        data: ThemeData.dark(useMaterial3: true),
+        data: darkTheme,
         child: DefaultTextStyle(
           style: const TextStyle(color: Colors.white),
           child: Stack(
