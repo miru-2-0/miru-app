@@ -1,6 +1,7 @@
 import 'package:card_settings_ui/card_settings_ui.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../app/l10n/l10n_extension.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/utils/app_version_service.dart';
 import '../../../../core/utils/url_helper.dart';
@@ -16,17 +17,19 @@ class _AboutAppPageState extends State<AboutAppPage> {
   String get _versionText => AppVersionService.instance.fullVersion;
 
   void _checkUpdate() {
+    final l10n = context.l10n;
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('已是最新版本（$_versionText）')),
+      SnackBar(content: Text(l10n.alreadyLatestVersion(_versionText))),
     );
   }
 
   void _showPrivacyDialog() {
+    final l10n = context.l10n;
     showDialog<void>(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('隐私说明'),
+          title: Text(l10n.privacyPolicy),
           content: const SingleChildScrollView(
             child: Text(
               '本应用不收集、不上传任何个人数据。\n\n'
@@ -39,7 +42,7 @@ class _AboutAppPageState extends State<AboutAppPage> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('知道了'),
+              child: Text(l10n.confirm),
             ),
           ],
         );
@@ -65,6 +68,7 @@ class _AboutAppPageState extends State<AboutAppPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final theme = Theme.of(context);
     final hintStyle = theme.textTheme.bodySmall?.copyWith(
       color: theme.hintColor,
@@ -72,7 +76,7 @@ class _AboutAppPageState extends State<AboutAppPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('关于应用'),
+        title: Text(l10n.aboutApp),
       ),
       body: SettingsList(
         sections: [
@@ -114,22 +118,22 @@ class _AboutAppPageState extends State<AboutAppPage> {
             ),
           ),
           SettingsSection(
-            title: const Text('信息'),
+            title: Text(l10n.info),
             tiles: [
               SettingsTile.navigation(
                 leading: const Icon(Icons.system_update_alt_outlined),
-                title: const Text('检查更新'),
+                title: Text(l10n.checkUpdates),
                 value: Text(_versionText),
                 onPressed: (context) => _checkUpdate(),
               ),
             ],
           ),
           SettingsSection(
-            title: const Text('链接'),
+            title: Text(l10n.links),
             tiles: [
               SettingsTile.navigation(
                 leading: const Icon(Icons.code_outlined),
-                title: const Text('开源仓库'),
+                title: Text(l10n.openSourceRepo),
                 description: const Text(
                   AppConstants.sourceRepoUrl,
                   maxLines: 1,
@@ -140,7 +144,7 @@ class _AboutAppPageState extends State<AboutAppPage> {
               ),
               SettingsTile.navigation(
                 leading: const Icon(Icons.extension_outlined),
-                title: const Text('官方扩展仓库'),
+                title: Text(l10n.officialExtensionRepo),
                 description: const Text(
                   AppConstants.officialRepoUrl,
                   maxLines: 1,
@@ -152,29 +156,29 @@ class _AboutAppPageState extends State<AboutAppPage> {
             ],
           ),
           SettingsSection(
-            title: const Text('法律'),
+            title: Text(l10n.legal),
             tiles: [
               SettingsTile.navigation(
                 leading: const Icon(Icons.description_outlined),
-                title: const Text('开源协议'),
+                title: Text(l10n.openSourceLicense),
                 description: const Text('查看仓库中的 LICENSE'),
                 onPressed: (context) =>
                     openExternalUrl(context, AppConstants.sourceRepoLicenseUrl),
               ),
               SettingsTile.navigation(
                 leading: const Icon(Icons.article_outlined),
-                title: const Text('开源许可证'),
+                title: Text(l10n.thirdPartyLicenses),
                 description: const Text('查看第三方依赖库的开源许可证'),
                 onPressed: (context) => _showLicenses(),
               ),
             ],
           ),
           SettingsSection(
-            title: const Text('隐私'),
+            title: Text(l10n.privacy),
             tiles: [
               SettingsTile.navigation(
                 leading: const Icon(Icons.privacy_tip_outlined),
-                title: const Text('隐私说明'),
+                title: Text(l10n.privacyPolicy),
                 onPressed: (context) => _showPrivacyDialog(),
               ),
             ],

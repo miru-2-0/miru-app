@@ -1,5 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:card_settings_ui/card_settings_ui.dart';
+import 'package:flutter/material.dart';
+import '../../../../app/l10n/l10n_extension.dart';
 import '../../../extension/data/extension_repo_service.dart';
 
 class ExtensionSettingsPage extends StatefulWidget {
@@ -31,6 +32,7 @@ class _ExtensionSettingsPageState extends State<ExtensionSettingsPage> {
   }
 
   void _showAddCustomRepoDialog() {
+    final l10n = context.l10n;
     final nameController = TextEditingController();
     final urlController = TextEditingController();
 
@@ -38,7 +40,7 @@ class _ExtensionSettingsPageState extends State<ExtensionSettingsPage> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('导入扩展仓库'),
+          title: Text(l10n.importRepo),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -64,7 +66,7 @@ class _ExtensionSettingsPageState extends State<ExtensionSettingsPage> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('取消'),
+              child: Text(l10n.cancel),
             ),
             FilledButton(
               onPressed: () {
@@ -82,7 +84,7 @@ class _ExtensionSettingsPageState extends State<ExtensionSettingsPage> {
                   const SnackBar(content: Text('扩展仓库导入成功')),
                 );
               },
-              child: const Text('添加'),
+              child: Text(l10n.confirm),
             ),
           ],
         );
@@ -92,21 +94,22 @@ class _ExtensionSettingsPageState extends State<ExtensionSettingsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final repos = _service.repos;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('扩展设置'),
+        title: Text(l10n.extensionSettings),
       ),
       body: SettingsList(
         sections: [
           SettingsSection(
-            title: const Text('更新与权限'),
+            title: Text(l10n.updateAndPermissions),
             tiles: [
               SettingsTile.switchTile(
                 leading: const Icon(Icons.system_update_alt_outlined),
-                title: const Text('自动更新扩展'),
-                description: const Text('后台自动检测并更新已安装的扩展'),
+                title: Text(l10n.autoUpdateExtensions),
+                description: Text(l10n.autoUpdateDesc),
                 initialValue: _service.autoUpdate,
                 onToggle: (value) {
                   _service.setAutoUpdate(value ?? false);
@@ -114,8 +117,8 @@ class _ExtensionSettingsPageState extends State<ExtensionSettingsPage> {
               ),
               SettingsTile.switchTile(
                 leading: const Icon(Icons.security_outlined),
-                title: const Text('允许第三方扩展'),
-                description: const Text('允许安装从本地导入的扩展，默认关闭'),
+                title: Text(l10n.allowThirdParty),
+                description: Text(l10n.allowThirdPartyDesc),
                 initialValue: _service.allowThirdParty,
                 onToggle: (value) {
                   _service.setAllowThirdParty(value ?? false);
@@ -124,7 +127,7 @@ class _ExtensionSettingsPageState extends State<ExtensionSettingsPage> {
             ],
           ),
           SettingsSection(
-            title: const Text('扩展仓库管理'),
+            title: Text(l10n.extensionRepoManagement),
             tiles: [
               ...repos.map((repo) {
                 if (repo.isBuiltIn) {
@@ -136,7 +139,7 @@ class _ExtensionSettingsPageState extends State<ExtensionSettingsPage> {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    value: const Text('内置'),
+                    value: Text(l10n.builtIn),
                   );
                 } else {
                   return SettingsTile.navigation(
@@ -161,8 +164,8 @@ class _ExtensionSettingsPageState extends State<ExtensionSettingsPage> {
               }),
               SettingsTile.navigation(
                 leading: const Icon(Icons.add_circle_outline),
-                title: const Text('导入扩展仓库'),
-                description: const Text('添加自定义扩展仓库地址'),
+                title: Text(l10n.importRepo),
+                description: Text(l10n.importRepoDesc),
                 onPressed: (context) => _showAddCustomRepoDialog(),
               ),
             ],

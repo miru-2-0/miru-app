@@ -1,5 +1,6 @@
 import 'package:card_settings_ui/card_settings_ui.dart';
 import 'package:flutter/material.dart';
+import '../../../../app/l10n/l10n_extension.dart';
 import '../../../../app/theme/theme_service.dart';
 
 class AppearanceSettingsPage extends StatefulWidget {
@@ -31,11 +32,12 @@ class _AppearanceSettingsPageState extends State<AppearanceSettingsPage> {
   }
 
   void _showThemeModeDialog() {
+    final l10n = context.l10n;
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('深色模式'),
+          title: Text(l10n.darkMode),
           content: RadioGroup<AppThemeMode>(
             groupValue: _service.themeMode,
             onChanged: (value) {
@@ -51,7 +53,7 @@ class _AppearanceSettingsPageState extends State<AppearanceSettingsPage> {
                   leading: Radio<AppThemeMode>(
                     value: mode,
                   ),
-                  title: Text(mode.label),
+                  title: Text(mode.getLabel(context)),
                   onTap: () {
                     _service.setThemeMode(mode);
                     Navigator.pop(context);
@@ -63,7 +65,7 @@ class _AppearanceSettingsPageState extends State<AppearanceSettingsPage> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('取消'),
+              child: Text(l10n.cancel),
             ),
           ],
         );
@@ -73,26 +75,28 @@ class _AppearanceSettingsPageState extends State<AppearanceSettingsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('外观与主题'),
+        title: Text(l10n.appearanceAndTheme),
       ),
       body: SettingsList(
         sections: [
           SettingsSection(
-            title: const Text('主题设置'),
+            title: Text(l10n.themeSettings),
             tiles: [
               SettingsTile.navigation(
                 leading: const Icon(Icons.dark_mode_outlined),
-                title: const Text('深色模式'),
-                description: const Text('可选择跟随系统或切换浅色/深色模式'),
-                value: Text(_service.themeMode.label),
+                title: Text(l10n.darkMode),
+                description: Text(l10n.darkModeDesc),
+                value: Text(_service.themeMode.getLabel(context)),
                 onPressed: (context) => _showThemeModeDialog(),
               ),
               SettingsTile.switchTile(
                 leading: const Icon(Icons.color_lens_outlined),
-                title: const Text('动态配色'),
-                description: const Text('使用系统壁纸颜色（Material You）'),
+                title: Text(l10n.dynamicColor),
+                description: Text(l10n.dynamicColorDesc),
                 initialValue: _service.useDynamicColor,
                 onToggle: (value) {
                   _service.setUseDynamicColor(value ?? false);

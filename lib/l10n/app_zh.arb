@@ -1,0 +1,163 @@
+{
+  "@@locale": "zh",
+  "appTitle": "Miru",
+  "navHome": "首页",
+  "navSearch": "搜索",
+  "navExtension": "扩展",
+  "navSettings": "设置",
+  "myFavorites": "我的收藏 ({count})",
+  "@myFavorites": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hotRecommendations": "热门推荐",
+  "noFavoritesTitle": "暂无收藏影视",
+  "noFavoritesSubtitle": "在影视详情界面点击【收藏】按钮即可在此处快速访问。",
+  "extensionSettings": "扩展设置",
+  "noExtensionsTitle": "暂未安装任何扩展",
+  "noExtensionsSubtitle": "安装扩展后方可检索与播放各平台的影视资源",
+  "goToInstallExtensions": "去安装扩展",
+  "installExtension": "安装扩展",
+  "uninstallExtension": "卸载",
+  "uninstalledSuccess": "已卸载 {name}",
+  "@uninstalledSuccess": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "installSuccess": "成功安装 {name}",
+  "@installSuccess": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "localExtension": "本地",
+  "searchExtensionHint": "搜索扩展名称...",
+  "noMatchingExtensionsTitle": "未找到符合条件的扩展",
+  "noMatchingExtensionsSubtitle": "尝试更换搜索关键词，或检查扩展仓库设置",
+  "importLocalExtension": "导入本地扩展",
+  "searchMediaHint": "搜索片名、动漫、剧集...",
+  "searchInExtensionHint": "在 [{name}] 中搜索...",
+  "@searchInExtensionHint": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "searchPromptTitle": "搜索影视资源",
+  "searchPromptSubtitle": "输入片名、动漫或剧集名称开始搜索",
+  "searchPromptInExtensionSubtitle": "输入关键字在 [{name}] 中检索",
+  "@searchPromptInExtensionSubtitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "noSearchResultsTitle": "未找到相关内容",
+  "noSearchResultsSubtitle": "未能找到与 [{query}] 相关的影视资源，请尝试其他关键词",
+  "@noSearchResultsSubtitle": {
+    "placeholders": {
+      "query": {
+        "type": "String"
+      }
+    }
+  },
+  "noExtensionContentSubtitle": "未能从 [{name}] 中加载到影视资源",
+  "@noExtensionContentSubtitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "noExtensionRecommendSubtitle": "该扩展暂未提供首页推荐数据",
+  "viewAll": "查看全部",
+  "watchNow": "立即观看",
+  "addedToFavorites": "已加入我的收藏",
+  "removedFromFavorites": "已取消收藏",
+  "selectEpisode": "选择剧集 ({count})",
+  "@selectEpisode": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "summary": "概括",
+  "actors": "演员",
+  "episodes": "剧集",
+  "noEpisodesTitle": "暂无剧集列表",
+  "noEpisodesSubtitle": "该资源未提供播放剧集列表或暂未上线",
+  "noActorsTitle": "暂无演员信息",
+  "noActorsSubtitle": "该资源未记录演职人员相关信息",
+  "synopsis": "剧情简介",
+  "speedHud": "{speed}x",
+  "@speedHud": {
+    "placeholders": {
+      "speed": {
+        "type": "String"
+      }
+    }
+  },
+  "videoDetail": "视频详情",
+  "copyMediaUrl": "复制",
+  "mediaUrlCopied": "已复制播放地址",
+  "playbackError": "播放出错",
+  "retry": "重试",
+  "refreshRetry": "刷新重试",
+  "settings": "设置",
+  "general": "常规",
+  "appearanceAndTheme": "外观与主题",
+  "language": "语言",
+  "languageSystem": "跟随系统",
+  "languageZh": "简体中文",
+  "languageEn": "English",
+  "aboutApp": "关于应用",
+  "darkMode": "深色模式",
+  "darkModeDesc": "可选择跟随系统或切换浅色/深色模式",
+  "darkModeFollowSystem": "跟随系统",
+  "darkModeLight": "浅色模式",
+  "darkModeDark": "深色模式",
+  "dynamicColor": "动态配色",
+  "dynamicColorDesc": "使用系统壁纸颜色（Material You）",
+  "themeSettings": "主题设置",
+  "checkUpdates": "检查更新",
+  "alreadyLatestVersion": "已是最新版本（{version}）",
+  "@alreadyLatestVersion": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "openSourceRepo": "开源仓库",
+  "officialExtensionRepo": "官方扩展仓库",
+  "openSourceLicense": "开源协议",
+  "thirdPartyLicenses": "开源许可证",
+  "privacyPolicy": "隐私说明",
+  "cancel": "取消",
+  "confirm": "确认",
+  "info": "信息",
+  "links": "链接",
+  "legal": "法律",
+  "privacy": "隐私",
+  "customRepo": "自定义仓库",
+  "updateAndPermissions": "更新与权限",
+  "autoUpdateExtensions": "自动更新扩展",
+  "autoUpdateDesc": "后台自动检测并更新已安装的扩展",
+  "allowThirdParty": "允许第三方扩展",
+  "allowThirdPartyDesc": "允许安装从本地导入的扩展，默认关闭",
+  "extensionRepoManagement": "扩展仓库管理",
+  "importRepo": "导入扩展仓库",
+  "importRepoDesc": "添加自定义扩展仓库地址",
+  "builtIn": "内置"
+}

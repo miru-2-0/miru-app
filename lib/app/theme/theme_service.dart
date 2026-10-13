@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../l10n/l10n_extension.dart';
 
 enum AppThemeMode {
   system('system', '跟随系统'),
@@ -18,6 +19,17 @@ enum AppThemeMode {
         return ThemeMode.light;
       case AppThemeMode.dark:
         return ThemeMode.dark;
+    }
+  }
+
+  String getLabel(BuildContext context) {
+    switch (this) {
+      case AppThemeMode.system:
+        return context.l10n.darkModeFollowSystem;
+      case AppThemeMode.light:
+        return context.l10n.darkModeLight;
+      case AppThemeMode.dark:
+        return context.l10n.darkModeDark;
     }
   }
 

@@ -1,0 +1,163 @@
+{
+  "@@locale": "en",
+  "appTitle": "Miru",
+  "navHome": "Home",
+  "navSearch": "Search",
+  "navExtension": "Extensions",
+  "navSettings": "Settings",
+  "myFavorites": "Favorites ({count})",
+  "@myFavorites": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hotRecommendations": "Hot Recommendations",
+  "noFavoritesTitle": "No Favorites Yet",
+  "noFavoritesSubtitle": "Click [Favorite] on media details to access them quickly here.",
+  "extensionSettings": "Extension Settings",
+  "noExtensionsTitle": "No Extensions Installed",
+  "noExtensionsSubtitle": "Install extensions to search and play media from various platforms",
+  "goToInstallExtensions": "Install Extensions",
+  "installExtension": "Install Extensions",
+  "uninstallExtension": "Uninstall",
+  "uninstalledSuccess": "Uninstalled {name}",
+  "@uninstalledSuccess": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "installSuccess": "Successfully installed {name}",
+  "@installSuccess": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "localExtension": "Local",
+  "searchExtensionHint": "Search extension name...",
+  "noMatchingExtensionsTitle": "No Matching Extensions",
+  "noMatchingExtensionsSubtitle": "Try different keywords or check extension repository settings",
+  "importLocalExtension": "Import Local Extension",
+  "searchMediaHint": "Search titles, anime, series...",
+  "searchInExtensionHint": "Search in [{name}]...",
+  "@searchInExtensionHint": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "searchPromptTitle": "Search Media Resources",
+  "searchPromptSubtitle": "Enter titles, anime, or series to start searching",
+  "searchPromptInExtensionSubtitle": "Enter keywords to search in [{name}]",
+  "@searchPromptInExtensionSubtitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "noSearchResultsTitle": "No Content Found",
+  "noSearchResultsSubtitle": "Could not find media related to [{query}], try other keywords",
+  "@noSearchResultsSubtitle": {
+    "placeholders": {
+      "query": {
+        "type": "String"
+      }
+    }
+  },
+  "noExtensionContentSubtitle": "Failed to load media content from [{name}]",
+  "@noExtensionContentSubtitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "noExtensionRecommendSubtitle": "No recommendation data provided by this extension",
+  "viewAll": "View All",
+  "watchNow": "Watch Now",
+  "addedToFavorites": "Added to Favorites",
+  "removedFromFavorites": "Removed from Favorites",
+  "selectEpisode": "Episodes ({count})",
+  "@selectEpisode": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "summary": "Summary",
+  "actors": "Cast",
+  "episodes": "Episodes",
+  "noEpisodesTitle": "No Episodes Available",
+  "noEpisodesSubtitle": "No episodes available for this item yet",
+  "noActorsTitle": "No Cast Information",
+  "noActorsSubtitle": "No cast or staff details recorded for this item",
+  "synopsis": "Synopsis",
+  "speedHud": "{speed}x",
+  "@speedHud": {
+    "placeholders": {
+      "speed": {
+        "type": "String"
+      }
+    }
+  },
+  "videoDetail": "Video Details",
+  "copyMediaUrl": "Copy",
+  "mediaUrlCopied": "Media URL copied to clipboard",
+  "playbackError": "Playback Error",
+  "retry": "Retry",
+  "refreshRetry": "Refresh",
+  "settings": "Settings",
+  "general": "General",
+  "appearanceAndTheme": "Appearance & Theme",
+  "language": "Language",
+  "languageSystem": "Follow System",
+  "languageZh": "简体中文",
+  "languageEn": "English",
+  "aboutApp": "About App",
+  "darkMode": "Dark Mode",
+  "darkModeDesc": "Choose follow system or toggle light/dark mode",
+  "darkModeFollowSystem": "Follow System",
+  "darkModeLight": "Light Mode",
+  "darkModeDark": "Dark Mode",
+  "dynamicColor": "Dynamic Color",
+  "dynamicColorDesc": "Use system wallpaper colors (Material You)",
+  "themeSettings": "Theme Settings",
+  "checkUpdates": "Check for Updates",
+  "alreadyLatestVersion": "Already on latest version ({version})",
+  "@alreadyLatestVersion": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "openSourceRepo": "Source Repository",
+  "officialExtensionRepo": "Official Extension Repository",
+  "openSourceLicense": "Open Source License",
+  "thirdPartyLicenses": "Third-Party Licenses",
+  "privacyPolicy": "Privacy Statement",
+  "cancel": "Cancel",
+  "confirm": "Confirm",
+  "info": "Info",
+  "links": "Links",
+  "legal": "Legal",
+  "privacy": "Privacy",
+  "customRepo": "Custom Repository",
+  "updateAndPermissions": "Updates & Permissions",
+  "autoUpdateExtensions": "Auto Update Extensions",
+  "autoUpdateDesc": "Automatically check and update installed extensions in background",
+  "allowThirdParty": "Allow Third-Party Extensions",
+  "allowThirdPartyDesc": "Allow installing locally imported extensions, disabled by default",
+  "extensionRepoManagement": "Repository Management",
+  "importRepo": "Import Repository",
+  "importRepoDesc": "Add custom extension repository URL",
+  "builtIn": "Built-in"
+}
