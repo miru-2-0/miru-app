@@ -8,9 +8,12 @@ A cross-platform media aggregation player built with Flutter. By loading JavaScr
 
 - **Extension mechanism**: JavaScript scripts act as plugins, executed at runtime via QuickJS, covering list / search / detail / playback extraction
 - **Favorites**: locally store your favorited titles (persisted via `shared_preferences`)
-- **Built-in player**: powered by `media_kit` (libmpv/MSVPw backend), with progress memory and draggable progress bar
-- **Search**: shows search results across installed extensions
-- **Settings**: manage installed extensions, browse the extension repository, install local extensions
+- **Built-in player**: powered by `media_kit` (libmpv/MSVPw backend), with progress memory, episode sidebar, speed/aspect ratio & gesture controls
+- **Search**: shows search results across installed extensions and in-extension searching
+- **Themes & Dark Mode**: supports Dark Mode / Light Mode / Follow System, and Material You system Dynamic Color
+- **Internationalization (i18n)**: complete bilingual (English / Simplified Chinese) architecture built on Flutter `gen-l10n`, with system follow & manual switching
+- **Unified Empty States**: globally encapsulated `EmptyStateWidget` maintaining consistent visual style and layout baselines
+- **Settings**: extension repository management, local extension import, app versioning & privacy details
 
 ## Supported Platforms
 
@@ -47,8 +50,8 @@ flutter build ios --release --no-codesign  # iOS (unsigned)
 The repository comes with a GitHub Actions pipeline (`.github/workflows/release.yml`). Pushing a tag automatically builds every platform and uploads the artifacts to a GitHub Release:
 
 ```bash
-git tag v0.0.5
-git push main v0.0.5
+git tag v1.0.4
+git push main v1.0.4
 ```
 
 Per-platform artifacts:
@@ -121,18 +124,22 @@ Scripts can be loaded through either:
 ```
 lib/
 ├── app/
-│   ├── app.dart               # App entry & routing
-│   └── theme/app_theme.dart   # Theme (deepPurple seed)
+│   ├── app.dart               # App entry, routing & DynamicColorBuilder / AppLocalizations integration
+│   ├── l10n/                  # Language service (LanguageService) & l10n extension methods
+│   ├── theme/                 # Theme service (ThemeService) & dark mode / dynamic color management
+│   └── widgets/               # Reusable UI widgets like EmptyStateWidget
 ├── core/
-│   └── constants/             # Global constants
+│   ├── constants/             # Global constants
+│   └── utils/                 # AppVersionService versioning, URL opening helpers, etc.
+├── l10n/                      # i18n ARB resource dictionaries (app_zh.arb / app_en.arb)
 └── features/
     ├── extension/             # Extensions: runtime, manager, repo, install & detail screens
     ├── home/                  # Home (recommendations + favorites)
     ├── search/                # Search
     ├── media_detail/          # Detail screen & detail parsing
-    ├── player/                # Player
+    ├── player/                # Full-screen player with HUD & control bar widgets
     ├── favorite/              # Favorites data service
-    ├── settings/              # Settings
+    ├── settings/              # Settings main page & sub-pages (appearance, language, repo, about)
     └── main_navigation/       # Bottom main navigation
 assets/
 ├── js/                        # Bundled extension scripts & crypto tools (md5 / CryptoJS / jsencrypt)

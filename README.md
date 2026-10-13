@@ -8,9 +8,12 @@
 
 - **扩展机制**：以 JavaScript 脚本为插件，运行时通过 QuickJS 解析，支持列表 / 搜索 / 详情 / 播放四个阶段的数据提取
 - **收藏夹**：本地收藏你的影视条目（基于 `shared_preferences` 持久化）
-- **内置播放器**：基于 `media_kit`（libmpv/MSVPw 后端），支持进度记忆与进度条拖动
-- **搜索**：展示各扩展的搜索结果
-- **设置页**：管理已安装扩展、浏览扩展仓库、安装本地扩展
+- **内置播放器**：基于 `media_kit`（libmpv/MSVPw 后端），支持进度记忆、选集面板、倍速/画面比例与手势控制
+- **搜索**：展示各扩展的搜索结果与单独扩展内检索
+- **主题与深色模式**：支持深色模式 / 浅色模式 / 跟随系统，并集成 Material You 系统动态配色（Dynamic Color）
+- **多语言（i18n）**：基于 Flutter `gen-l10n` 的完整双语（简体中文 / English）架构，支持跟随系统或手动切换
+- **统一空状态**：全局封装 `EmptyStateWidget` 保持各界面一致的视觉风格与对齐基线
+- **设置页**：扩展仓库管理、离线/本地扩展导入、应用版本统一管理与隐私说明
 
 ## 支持的平台
 
@@ -47,8 +50,8 @@ flutter build ios --release --no-codesign  # iOS（未签名）
 仓库已配置 GitHub Actions 流水线（`.github/workflows/release.yml`）。打 tag 后自动为全平台构建并上传到 GitHub Release：
 
 ```bash
-git tag v0.0.5
-git push main v0.0.5
+git tag v1.0.4
+git push main v1.0.4
 ```
 
 每个平台作业产出：
@@ -121,18 +124,22 @@ flutter test integration_test -d windows
 ```
 lib/
 ├── app/
-│   ├── app.dart               # 应用入口与路由
-│   └── theme/app_theme.dart   # 主题（deepPurple seed）
+│   ├── app.dart               # 应用入口、路由与 DynamicColorBuilder / AppLocalizations 集成
+│   ├── l10n/                  # 语言服务 (LanguageService) 与 l10n 拓展方法
+│   ├── theme/                 # 主题服务 (ThemeService) 与深色模式/动态配色管理
+│   └── widgets/               # 全局统一 EmptyStateWidget 等通用 UI 组件
 ├── core/
-│   └── constants/             # 全局常量
+│   ├── constants/             # 全局常量
+│   └── utils/                 # AppVersionService 版本管理、URL 唤起辅助等工具类
+├── l10n/                      # 国际化 ARB 资源文件 (app_zh.arb / app_en.arb)
 └── features/
     ├── extension/             # 扩展：运行时、管理器、仓库、安装与详情页
     ├── home/                  # 首页（推荐列表 + 我的收藏）
-    ├── search/                # 搜索
+    ├── search/                # 搜索与离线扩展检索
     ├── media_detail/          # 详情页与详情数据解析
-    ├── player/                # 播放器
+    ├── player/                # 全屏播放器与 HUD/控制栏控件
     ├── favorite/              # 收藏数据服务
-    ├── settings/              # 设置
+    ├── settings/              # 设置主页与子设置页（外观、语言、扩展仓库、关于）
     └── main_navigation/       # 底部主导航
 assets/
 ├── js/                        # 内置扩展脚本与加密工具（md5 / CryptoJS / jsencrypt）
