@@ -119,7 +119,7 @@ class PlayerTopControls extends StatelessWidget {
                   menuChildren: [
                     if (compact) ...[
                       SubmenuButton(
-                        menuChildren: menus.aspectRatioMenuItems(context),
+                        menuChildren: menus.aspectRatioMenuItems(),
                         child: playerMenuLabel(l10n.aspectRatio),
                       ),
                       SubmenuButton(
@@ -216,7 +216,7 @@ class PlayerBottomControls extends StatelessWidget {
         ),
         PlayerMenuAnchor(
           tooltip: l10n.aspectRatio,
-          menuChildren: menus.aspectRatioMenuItems(context),
+          menuChildren: menus.aspectRatioMenuItems(),
           onOpen: menus.onMenuOpen,
           onClose: menus.onMenuClose,
           child: const Icon(Icons.aspect_ratio_rounded, color: Colors.white),

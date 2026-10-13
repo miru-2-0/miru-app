@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:miru/app/l10n/l10n_extension.dart';
 
 /// 播放倍速档位（0.5 为步进单位，对齐 Kazumi v2.3.6）
 const List<double> kPlayerSpeeds = <double>[0.5, 1.0, 1.5, 2.0, 2.5, 3.0];
@@ -18,19 +17,6 @@ enum PlayerAspectRatio {
 
   final String label;
   final BoxFit fit;
-
-  String getLabel(BuildContext context) {
-    switch (this) {
-      case PlayerAspectRatio.automatic:
-        return context.l10n.aspectRatioAuto;
-      case PlayerAspectRatio.crop:
-        return context.l10n.aspectRatioCrop;
-      case PlayerAspectRatio.stretch:
-        return context.l10n.aspectRatioStretch;
-      case PlayerAspectRatio.ratio4x3:
-        return '4:3';
-    }
-  }
 }
 
 /// 底栏时间标签的摆放位置（按视口宽高比推断）
@@ -158,14 +144,14 @@ class PlayerMenuActions {
   }
 
   /// 视频比例子菜单项
-  List<Widget> aspectRatioMenuItems(BuildContext context) {
+  List<Widget> aspectRatioMenuItems() {
     return [
       for (final (int index, PlayerAspectRatio option)
           in PlayerAspectRatio.values.indexed)
         MenuItemButton(
           onPressed: () => onAspectRatioChanged(index),
           child: playerMenuLabel(
-            option.getLabel(context),
+            option.label,
             selected: aspectRatioIndex == index,
           ),
         ),
