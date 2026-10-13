@@ -153,8 +153,8 @@ class _SeekHudState extends State<SeekHud> {
       width: 248,
       background: scheme.surfaceContainerHighest,
       border: scheme.outlineVariant.withValues(alpha: 0.34),
-      accentGlow: scheme.secondaryContainer.withValues(
-        alpha: widget.visible ? 0.24 : 0,
+      accentGlow: scheme.primary.withValues(
+        alpha: widget.visible ? 0.28 : 0,
       ),
       child: Stack(
         children: [
@@ -170,7 +170,7 @@ class _SeekHudState extends State<SeekHud> {
                   alignment: Alignment.centerLeft,
                   child: FractionallySizedBox(
                     widthFactor: animatedProgress,
-                    child: ColoredBox(color: scheme.secondaryContainer),
+                    child: ColoredBox(color: scheme.primary.withValues(alpha: 0.28)),
                   ),
                 );
               },
@@ -184,8 +184,8 @@ class _SeekHudState extends State<SeekHud> {
                   icon: forward
                       ? Icons.fast_forward_rounded
                       : Icons.fast_rewind_rounded,
-                  container: scheme.secondary,
-                  onContainer: scheme.onSecondary,
+                  container: scheme.primary,
+                  onContainer: scheme.onPrimary,
                   size: 36,
                   iconSize: 22,
                   radius: 20,
@@ -288,9 +288,16 @@ class _SpeedHudState extends State<SpeedHud> {
                   color: scheme.surfaceContainerHighest,
                   borderRadius: BorderRadius.circular(18),
                   border: Border.all(
-                    color: scheme.outlineVariant.withValues(alpha: 0.22),
+                    color: scheme.primary.withValues(alpha: 0.35),
                   ),
                   boxShadow: [
+                    BoxShadow(
+                      color: scheme.primary.withValues(
+                        alpha: widget.visible ? 0.28 : 0,
+                      ),
+                      blurRadius: 16,
+                      spreadRadius: 1,
+                    ),
                     BoxShadow(
                       color: Colors.black.withValues(alpha: 0.18),
                       blurRadius: 12,
@@ -303,8 +310,8 @@ class _SpeedHudState extends State<SpeedHud> {
                   children: [
                     _HudIconTile(
                       icon: Icons.speed_rounded,
-                      container: scheme.inverseSurface,
-                      onContainer: scheme.onInverseSurface,
+                      container: scheme.primary,
+                      onContainer: scheme.onPrimary,
                       size: 22,
                       iconSize: 15,
                       radius: 12,
@@ -317,7 +324,7 @@ class _SpeedHudState extends State<SpeedHud> {
                         overflow: TextOverflow.ellipsis,
                         style: Theme.of(context).textTheme.labelMedium
                             ?.copyWith(
-                              color: scheme.onSurface,
+                              color: scheme.primary,
                               fontWeight: FontWeight.w700,
                             ),
                       ),
@@ -406,8 +413,8 @@ class _AdjustmentHudState extends State<AdjustmentHud> {
 
   Color _accent(ColorScheme scheme) {
     return switch (_displayType) {
-      PlayerAdjustmentHudType.brightness => scheme.tertiaryContainer,
-      PlayerAdjustmentHudType.volume => scheme.primaryContainer,
+      PlayerAdjustmentHudType.brightness => scheme.tertiary,
+      PlayerAdjustmentHudType.volume => scheme.primary,
     };
   }
 
@@ -434,8 +441,8 @@ class _AdjustmentHudState extends State<AdjustmentHud> {
 
   Color _inactiveTracker(ColorScheme scheme) {
     return switch (_displayType) {
-      PlayerAdjustmentHudType.brightness => scheme.tertiaryContainer,
-      PlayerAdjustmentHudType.volume => scheme.secondaryContainer,
+      PlayerAdjustmentHudType.brightness => scheme.tertiary.withValues(alpha: 0.22),
+      PlayerAdjustmentHudType.volume => scheme.primary.withValues(alpha: 0.22),
     };
   }
 

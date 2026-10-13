@@ -437,7 +437,7 @@ class PlayerCenterOverlay extends StatelessWidget {
                 ],
               )
             : buffering
-            ? const CircularProgressIndicator(color: Colors.white)
+            ? CircularProgressIndicator(color: Theme.of(context).colorScheme.primary)
             : const SizedBox.shrink(),
       ),
     );
