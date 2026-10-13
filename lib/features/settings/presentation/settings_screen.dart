@@ -37,7 +37,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final versionText = AppVersionService.instance.fullVersion;
+    final versionText = AppVersionService.instance.shortVersion;
 
     return Scaffold(
       appBar: AppBar(
