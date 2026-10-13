@@ -2,7 +2,9 @@ import 'package:card_settings_ui/card_settings_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
+import '../../../app/theme/theme_service.dart';
 import 'pages/about_app_page.dart';
+import 'pages/appearance_settings_page.dart';
 import 'pages/extension_settings_page.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -14,11 +16,25 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> {
   String _appVersion = '';
+  final _themeService = ThemeService.instance;
 
   @override
   void initState() {
     super.initState();
     _loadVersion();
+    _themeService.addListener(_onThemeChanged);
+  }
+
+  @override
+  void dispose() {
+    _themeService.removeListener(_onThemeChanged);
+    super.dispose();
+  }
+
+  void _onThemeChanged() {
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   Future<void> _loadVersion() async {
@@ -60,8 +76,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
               SettingsTile.navigation(
                 leading: const Icon(Icons.palette_outlined),
                 title: const Text('外观与主题'),
-                value: const Text('跟随系统'),
-                onPressed: (context) {},
+                value: Text(_themeService.themeMode.label),
+                onPressed: (context) {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const AppearanceSettingsPage(),
+                    ),
+                  );
+                },
               ),
               SettingsTile.navigation(
                 leading: const Icon(Icons.language_outlined),

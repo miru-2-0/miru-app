@@ -1,23 +1,28 @@
+import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 
 class AppTheme {
-  static ThemeData get lightTheme {
+  static ThemeData lightTheme([ColorScheme? dynamicColorScheme]) {
+    final colorScheme = dynamicColorScheme?.harmonized() ??
+        ColorScheme.fromSeed(
+          seedColor: Colors.deepPurple,
+          brightness: Brightness.light,
+        );
     return ThemeData(
       useMaterial3: true,
-      colorScheme: ColorScheme.fromSeed(
-        seedColor: Colors.deepPurple,
-        brightness: Brightness.light,
-      ),
+      colorScheme: colorScheme,
     );
   }
 
-  static ThemeData get darkTheme {
+  static ThemeData darkTheme([ColorScheme? dynamicColorScheme]) {
+    final colorScheme = dynamicColorScheme?.harmonized() ??
+        ColorScheme.fromSeed(
+          seedColor: Colors.deepPurple,
+          brightness: Brightness.dark,
+        );
     return ThemeData(
       useMaterial3: true,
-      colorScheme: ColorScheme.fromSeed(
-        seedColor: Colors.deepPurple,
-        brightness: Brightness.dark,
-      ),
+      colorScheme: colorScheme,
     );
   }
 }
