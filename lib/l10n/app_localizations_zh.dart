@@ -298,4 +298,192 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get builtIn => '内置';
+
+  @override
+  String get extensionDetails => '扩展详情';
+
+  @override
+  String get extensionInfo => '基本信息';
+
+  @override
+  String get extensionDesc => '扩展简介';
+
+  @override
+  String get extensionVersion => '扩展版本';
+
+  @override
+  String get author => '作者';
+
+  @override
+  String get extensionSource => '扩展来源';
+
+  @override
+  String get supportedLanguage => '支持语言';
+
+  @override
+  String get license => '开源协议';
+
+  @override
+  String get targetWebsite => '目标网站';
+
+  @override
+  String get scriptFileName => '脚本文件名';
+
+  @override
+  String get uninstallExtensionButton => '卸载扩展';
+
+  @override
+  String get installExtensionButton => '安装扩展';
+
+  @override
+  String get installing => '安装中...';
+
+  @override
+  String get updating => '更新中...';
+
+  @override
+  String updateToVersion(String version) {
+    return '更新到 $version';
+  }
+
+  @override
+  String newVersionFound(String version) {
+    return '发现新版本 $version';
+  }
+
+  @override
+  String get alreadyLatest => '当前已是最新版本';
+
+  @override
+  String checkUpdateFailed(String error) {
+    return '检查更新失败：$error';
+  }
+
+  @override
+  String uninstallFailed(String error) {
+    return '卸载失败：$error';
+  }
+
+  @override
+  String installFailed(String error) {
+    return '安装失败：$error';
+  }
+
+  @override
+  String updatedSuccess(String name) {
+    return '已更新 $name';
+  }
+
+  @override
+  String updateFailed(String error) {
+    return '更新失败：$error';
+  }
+
+  @override
+  String get linkCopied => '网站链接已复制到剪贴板';
+
+  @override
+  String get unknown => '未知';
+
+  @override
+  String get localImport => '本地导入';
+
+  @override
+  String get close => '关闭';
+
+  @override
+  String get mediaTitleLabel => '片名';
+
+  @override
+  String get currentEpisodeLabel => '当前剧集';
+
+  @override
+  String get mediaUrlLabel => '播放地址';
+
+  @override
+  String get none => '（无）';
+
+  @override
+  String get errorMessageTitle => '错误信息';
+
+  @override
+  String get originalName => '原版名称';
+
+  @override
+  String get otherName => '其他名称';
+
+  @override
+  String get type => '类型';
+
+  @override
+  String get kind => '种类';
+
+  @override
+  String get director => '导演';
+
+  @override
+  String get writer => '编剧';
+
+  @override
+  String get authorLabel => '原作';
+
+  @override
+  String get studio => '制作公司';
+
+  @override
+  String get region => '发行地区';
+
+  @override
+  String get year => '上映年份';
+
+  @override
+  String get pubdate => '上映日期';
+
+  @override
+  String get remarks => '状态';
+
+  @override
+  String get totalEpisodes => '总集数';
+
+  @override
+  String get score => '评分';
+
+  @override
+  String get tags => '标签';
+
+  @override
+  String get repoNameLabel => '仓库名称';
+
+  @override
+  String get repoNameHint => '如：社区源';
+
+  @override
+  String get repoUrlLabel => '仓库 URL';
+
+  @override
+  String get repoUrlHint => 'https://...';
+
+  @override
+  String get repoUrlEmpty => '请输入仓库 URL';
+
+  @override
+  String get repoImportSuccess => '扩展仓库导入成功';
+
+  @override
+  String get add => '添加';
+
+  @override
+  String deletedRepo(String name) {
+    return '已删除 $name';
+  }
+
+  @override
+  String get privacyTitle => '隐私说明';
+
+  @override
+  String get privacyContent =>
+      '本应用不收集、不上传任何个人数据。\n\n收藏、设置与已安装扩展等信息均仅保存在本地设备。\n\n安装第三方扩展或访问第三方站点时，相关内容由对应扩展与站点负责，请自行甄别其安全性与合法性。';
+
+  @override
+  String get gotIt => '知道了';
 }

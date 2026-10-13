@@ -159,5 +159,118 @@
   "extensionRepoManagement": "扩展仓库管理",
   "importRepo": "导入扩展仓库",
   "importRepoDesc": "添加自定义扩展仓库地址",
-  "builtIn": "内置"
+  "builtIn": "内置",
+  "extensionDetails": "扩展详情",
+  "extensionInfo": "基本信息",
+  "extensionDesc": "扩展简介",
+  "extensionVersion": "扩展版本",
+  "author": "作者",
+  "extensionSource": "扩展来源",
+  "supportedLanguage": "支持语言",
+  "license": "开源协议",
+  "targetWebsite": "目标网站",
+  "scriptFileName": "脚本文件名",
+  "uninstallExtensionButton": "卸载扩展",
+  "installExtensionButton": "安装扩展",
+  "installing": "安装中...",
+  "updating": "更新中...",
+  "updateToVersion": "更新到 {version}",
+  "@updateToVersion": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "newVersionFound": "发现新版本 {version}",
+  "@newVersionFound": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "alreadyLatest": "当前已是最新版本",
+  "checkUpdateFailed": "检查更新失败：{error}",
+  "@checkUpdateFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "uninstallFailed": "卸载失败：{error}",
+  "@uninstallFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "installFailed": "安装失败：{error}",
+  "@installFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "updatedSuccess": "已更新 {name}",
+  "@updatedSuccess": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "updateFailed": "更新失败：{error}",
+  "@updateFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "linkCopied": "网站链接已复制到剪贴板",
+  "unknown": "未知",
+  "localImport": "本地导入",
+  "close": "关闭",
+  "mediaTitleLabel": "片名",
+  "currentEpisodeLabel": "当前剧集",
+  "mediaUrlLabel": "播放地址",
+  "none": "（无）",
+  "errorMessageTitle": "错误信息",
+  "originalName": "原版名称",
+  "otherName": "其他名称",
+  "type": "类型",
+  "kind": "种类",
+  "director": "导演",
+  "writer": "编剧",
+  "authorLabel": "原作",
+  "studio": "制作公司",
+  "region": "发行地区",
+  "year": "上映年份",
+  "pubdate": "上映日期",
+  "remarks": "状态",
+  "totalEpisodes": "总集数",
+  "score": "评分",
+  "tags": "标签",
+  "repoNameLabel": "仓库名称",
+  "repoNameHint": "如：社区源",
+  "repoUrlLabel": "仓库 URL",
+  "repoUrlHint": "https://...",
+  "repoUrlEmpty": "请输入仓库 URL",
+  "repoImportSuccess": "扩展仓库导入成功",
+  "add": "添加",
+  "deletedRepo": "已删除 {name}",
+  "@deletedRepo": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "privacyTitle": "隐私说明",
+  "privacyContent": "本应用不收集、不上传任何个人数据。\n\n收藏、设置与已安装扩展等信息均仅保存在本地设备。\n\n安装第三方扩展或访问第三方站点时，相关内容由对应扩展与站点负责，请自行甄别其安全性与合法性。",
+  "gotIt": "知道了"
 }

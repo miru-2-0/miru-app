@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:miru/app/l10n/l10n_extension.dart';
 import 'package:miru/app/widgets/empty_state_widget.dart';
 import '../data/extension_repo_service.dart';
 import 'extension_detail_screen.dart';
@@ -39,16 +40,17 @@ class _ExtensionScreenState extends State<ExtensionScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final installedExtensions = _service.installedExtensions;
     final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('扩展'),
+        title: Text(l10n.navExtension),
         actions: [
           IconButton(
             icon: const Icon(Icons.download_outlined),
-            tooltip: '安装扩展',
+            tooltip: l10n.installExtension,
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
@@ -62,9 +64,9 @@ class _ExtensionScreenState extends State<ExtensionScreen> {
       body: installedExtensions.isEmpty
           ? EmptyStateWidget(
               icon: Icons.extension_outlined,
-              title: '暂未安装任何扩展',
-              subtitle: '安装扩展后方可检索与播放各平台的影视资源',
-              actionLabel: '去安装扩展',
+              title: l10n.noExtensionsTitle,
+              subtitle: l10n.noExtensionsSubtitle,
+              actionLabel: l10n.goToInstallExtensions,
               actionIcon: Icons.download_rounded,
               onActionPressed: () {
                 Navigator.of(context).push(
@@ -174,7 +176,7 @@ class _ExtensionScreenState extends State<ExtensionScreen> {
                                               BorderRadius.circular(6),
                                         ),
                                         child: Text(
-                                          '本地',
+                                          l10n.localExtension,
                                           style: TextStyle(
                                             fontSize: 10,
                                             fontWeight: FontWeight.w600,
@@ -200,7 +202,8 @@ class _ExtensionScreenState extends State<ExtensionScreen> {
                                     ..hideCurrentSnackBar()
                                     ..showSnackBar(
                                       SnackBar(
-                                          content: Text('已卸载 ${item.name}')),
+                                          content: Text(
+                                              l10n.uninstalledSuccess(item.name))),
                                     );
                                 }
                               } catch (e) {
@@ -209,7 +212,8 @@ class _ExtensionScreenState extends State<ExtensionScreen> {
                                     ..hideCurrentSnackBar()
                                     ..showSnackBar(
                                       SnackBar(
-                                          content: Text('卸载失败：$e')),
+                                          content: Text(
+                                              l10n.uninstallFailed(e.toString()))),
                                     );
                                 }
                               }
@@ -219,7 +223,7 @@ class _ExtensionScreenState extends State<ExtensionScreen> {
                               side: BorderSide(
                                   color: colorScheme.error.withValues(alpha: 0.5)),
                             ),
-                            child: const Text('卸载'),
+                            child: Text(l10n.uninstallExtension),
                           ),
                         ],
                       ),

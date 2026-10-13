@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:miru/app/l10n/l10n_extension.dart';
 import 'package:miru/app/widgets/empty_state_widget.dart';
 import '../../extension/data/extension_repo_service.dart';
 import '../../extension/domain/models/extension_item.dart';
@@ -144,7 +145,7 @@ class _MediaSearchScreenState extends State<MediaSearchScreen> {
             : TextButton.icon(
                 onPressed: _loadMore,
                 icon: const Icon(Icons.expand_more),
-                label: const Text('加载更多'),
+                label: Text(context.l10n.viewAll),
               ),
       ),
     );
@@ -205,10 +206,11 @@ class _MediaSearchScreenState extends State<MediaSearchScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final showSourceBadge = widget.targetExtension == null;
     final hintText = widget.targetExtension != null
-        ? '在 [${widget.targetExtension!.name}] 中搜索...'
-        : '搜索片名、动漫、剧集...';
+        ? l10n.searchInExtensionHint(widget.targetExtension!.name)
+        : l10n.searchMediaHint;
 
     return Scaffold(
       appBar: AppBar(
@@ -251,17 +253,20 @@ class _MediaSearchScreenState extends State<MediaSearchScreen> {
           : _searchController.text.trim().isEmpty
               ? EmptyStateWidget(
                   icon: Icons.search_rounded,
-                  title: '搜索影视资源',
+                  title: l10n.searchPromptTitle,
                   subtitle: widget.targetExtension != null
-                      ? '输入关键字在 [${widget.targetExtension!.name}] 中检索'
-                      : '输入片名、动漫或剧集名称开始搜索',
+                      ? l10n.searchPromptInExtensionSubtitle(
+                          widget.targetExtension!.name,
+                        )
+                      : l10n.searchPromptSubtitle,
                 )
               : _searchResults.isEmpty
                   ? EmptyStateWidget(
                       icon: Icons.search_off_rounded,
-                      title: '未找到相关内容',
-                      subtitle:
-                          '未能找到与 [${_searchController.text.trim()}] 相关的影视资源，请尝试其他关键词',
+                      title: l10n.noSearchResultsTitle,
+                      subtitle: l10n.noSearchResultsSubtitle(
+                        _searchController.text.trim(),
+                      ),
                     )
                   : CustomScrollView(
                     controller: _scrollController,

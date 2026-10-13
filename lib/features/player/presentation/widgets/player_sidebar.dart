@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:miru/app/l10n/l10n_extension.dart';
 import 'package:miru/app/widgets/empty_state_widget.dart';
 import '../../../media_detail/domain/models/media_detail.dart';
 
@@ -39,6 +40,7 @@ class PlayerSidebar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final primaryColor = Theme.of(context).colorScheme.primary;
 
     return Positioned(
@@ -60,16 +62,16 @@ class PlayerSidebar extends StatelessWidget {
                   child: TabBar(
                     tabAlignment: TabAlignment.center,
                     isScrollable: true,
-                    tabs: [Tab(text: '选集 (${episodes.length})')],
+                    tabs: [Tab(text: l10n.selectEpisode(episodes.length))],
                   ),
                 ),
                 Expanded(
                   child: episodes.isEmpty
-                      ? const EmptyStateWidget(
+                      ? EmptyStateWidget(
                           compact: true,
                           icon: Icons.format_list_bulleted_outlined,
-                          title: '暂无选集',
-                          subtitle: '未能加载到剧集列表',
+                          title: l10n.noEpisodesTitle,
+                          subtitle: l10n.noEpisodesSubtitle,
                         )
                       : Scrollbar(
                           controller: scrollController,

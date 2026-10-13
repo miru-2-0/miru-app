@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:miru/app/l10n/l10n_extension.dart';
 import 'package:miru/app/widgets/empty_state_widget.dart';
 import '../data/extension_repo_service.dart';
 import '../domain/models/extension_item.dart';
@@ -95,7 +96,7 @@ class _InstallExtensionScreenState extends State<InstallExtensionScreen> {
       picked = await FilePicker.pickFile(
         type: FileType.custom,
         allowedExtensions: ['js'],
-        dialogTitle: '选择本地扩展脚本 (.js)',
+        dialogTitle: context.l10n.importLocalExtension,
       );
     } catch (e) {
       if (mounted) {
@@ -144,6 +145,7 @@ class _InstallExtensionScreenState extends State<InstallExtensionScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final filteredExtensions = _getFilteredExtensions();
 
     return Scaffold(
@@ -162,13 +164,13 @@ class _InstallExtensionScreenState extends State<InstallExtensionScreen> {
                   color: Theme.of(context).colorScheme.onSurface,
                   fontSize: 18,
                 ),
-                decoration: const InputDecoration(
-                  hintText: '搜索扩展名称...',
+                decoration: InputDecoration(
+                  hintText: l10n.searchExtensionHint,
                   border: InputBorder.none,
                 ),
                 onChanged: (_) => setState(() {}),
               )
-            : const Text('安装扩展'),
+            : Text(l10n.installExtension),
         actions: [
           if (_isSearching) ...[
             if (_searchController.text.isNotEmpty)
@@ -183,12 +185,12 @@ class _InstallExtensionScreenState extends State<InstallExtensionScreen> {
             if (_service.allowThirdParty)
               IconButton(
                 icon: const Icon(Icons.upload_file_outlined),
-                tooltip: '导入本地扩展',
+                tooltip: l10n.importLocalExtension,
                 onPressed: _importLocalExtension,
               ),
             IconButton(
               icon: const Icon(Icons.search),
-              tooltip: '搜索扩展',
+              tooltip: l10n.searchExtensionHint,
               onPressed: _startSearch,
             ),
           ],
@@ -201,10 +203,8 @@ class _InstallExtensionScreenState extends State<InstallExtensionScreen> {
           : filteredExtensions.isEmpty
               ? EmptyStateWidget(
                   icon: Icons.search_off_rounded,
-                  title: '未找到符合条件的扩展',
-                  subtitle: _searchController.text.trim().isNotEmpty
-                      ? '未能找到匹配 [${_searchController.text.trim()}] 的扩展'
-                      : '暂无可用扩展，请检查扩展仓库配置',
+                  title: l10n.noMatchingExtensionsTitle,
+                  subtitle: l10n.noMatchingExtensionsSubtitle,
                 )
               : ListView.builder(
                   itemCount: filteredExtensions.length,
@@ -317,7 +317,8 @@ class _InstallExtensionScreenState extends State<InstallExtensionScreen> {
                                                     ..showSnackBar(
                                                       SnackBar(
                                                         content: Text(
-                                                            '已卸载 ${item.name}'),
+                                                          l10n.uninstalledSuccess(item.name),
+                                                        ),
                                                       ),
                                                     );
                                                 }
@@ -328,7 +329,8 @@ class _InstallExtensionScreenState extends State<InstallExtensionScreen> {
                                                     ..showSnackBar(
                                                       SnackBar(
                                                         content: Text(
-                                                            '卸载失败：$e'),
+                                                          l10n.uninstallFailed(e.toString()),
+                                                        ),
                                                       ),
                                                     );
                                                 }
@@ -346,7 +348,7 @@ class _InstallExtensionScreenState extends State<InstallExtensionScreen> {
                                                 strokeWidth: 2,
                                               ),
                                             )
-                                          : const Text('卸载'),
+                                          : Text(l10n.uninstallExtension),
                                     )
                                   : FilledButton(
                                       onPressed: () async {
@@ -359,7 +361,8 @@ class _InstallExtensionScreenState extends State<InstallExtensionScreen> {
                                               ..showSnackBar(
                                                 SnackBar(
                                                   content: Text(
-                                                      '成功安装 ${item.name}'),
+                                                    l10n.installSuccess(item.name),
+                                                  ),
                                                 ),
                                               );
                                           }
@@ -369,13 +372,15 @@ class _InstallExtensionScreenState extends State<InstallExtensionScreen> {
                                               ..hideCurrentSnackBar()
                                               ..showSnackBar(
                                                 SnackBar(
-                                                  content: Text('安装失败：$e'),
+                                                  content: Text(
+                                                    l10n.installFailed(e.toString()),
+                                                  ),
                                                 ),
                                               );
                                           }
                                         }
                                       },
-                                      child: const Text('安装'),
+                                      child: Text(l10n.installExtensionButton),
                                     ),
                             ],
                           ),

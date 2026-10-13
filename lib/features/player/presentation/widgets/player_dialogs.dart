@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:miru/app/l10n/l10n_extension.dart';
 
 /// 视频详情弹窗：片名 / 当前剧集 / 播放地址（可点击复制）
 Future<void> showVideoInfoDialog(
@@ -9,6 +10,8 @@ Future<void> showVideoInfoDialog(
   required String mediaUrl,
   required VoidCallback onCopied,
 }) {
+  final l10n = context.l10n;
+
   return showDialog<void>(
     context: context,
     builder: (context) => Dialog(
@@ -40,10 +43,10 @@ Future<void> showVideoInfoDialog(
                         color: Theme.of(context).colorScheme.primary,
                       ),
                       const SizedBox(width: 10),
-                      const Expanded(
+                      Expanded(
                         child: Text(
-                          '视频详情',
-                          style: TextStyle(
+                          l10n.videoDetail,
+                          style: const TextStyle(
                             color: Colors.white,
                             fontSize: 17,
                             fontWeight: FontWeight.w700,
@@ -51,7 +54,7 @@ Future<void> showVideoInfoDialog(
                         ),
                       ),
                       IconButton(
-                        tooltip: '关闭',
+                        tooltip: l10n.close,
                         icon: const Icon(
                           Icons.close_rounded,
                           size: 20,
@@ -63,12 +66,12 @@ Future<void> showVideoInfoDialog(
                   ),
                 ),
                 const SizedBox(height: 8),
-                _InfoRow(label: '片名', value: title),
+                _InfoRow(label: l10n.mediaTitleLabel, value: title),
                 const Divider(height: 1, color: Colors.white12),
-                _InfoRow(label: '当前剧集', value: episodeName),
+                _InfoRow(label: l10n.currentEpisodeLabel, value: episodeName),
                 const Divider(height: 1, color: Colors.white12),
                 _InfoRow(
-                  label: '播放地址',
+                  label: l10n.mediaUrlLabel,
                   value: mediaUrl,
                   mono: true,
                   copyable: true,
@@ -85,15 +88,17 @@ Future<void> showVideoInfoDialog(
 
 /// 播放错误详情弹窗
 Future<void> showVideoErrorDialog(BuildContext context, String message) {
+  final l10n = context.l10n;
+
   return showDialog<void>(
     context: context,
     builder: (context) => AlertDialog(
-      title: const Text('错误信息'),
+      title: Text(l10n.errorMessageTitle),
       content: SelectableText(message),
       actions: [
         FilledButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: const Text('关闭'),
+          child: Text(l10n.close),
         ),
       ],
     ),
@@ -117,6 +122,7 @@ class _InfoRow extends StatelessWidget {
   final VoidCallback? onCopied;
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final scheme = Theme.of(context).colorScheme;
     void copy() {
       Clipboard.setData(ClipboardData(text: value));
@@ -138,7 +144,7 @@ class _InfoRow extends StatelessWidget {
           ),
           Expanded(
             child: Text(
-              value.isEmpty ? '（无）' : value,
+              value.isEmpty ? l10n.none : value,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
@@ -154,7 +160,7 @@ class _InfoRow extends StatelessWidget {
           ),
           if (copyable)
             IconButton(
-              tooltip: '复制',
+              tooltip: l10n.copyMediaUrl,
               onPressed: copy,
               padding: EdgeInsets.zero,
               constraints: const BoxConstraints(minWidth: 36, minHeight: 36),

@@ -1,5 +1,6 @@
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:miru/app/l10n/l10n_extension.dart';
 
 import 'player_common.dart';
 import 'player_dialogs.dart';
@@ -406,15 +407,17 @@ class PlayerCenterOverlay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
     return Positioned.fill(
       child: Center(
         child: hasError
             ? Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Text(
-                    '播放出错',
-                    style: TextStyle(
+                  Text(
+                    l10n.playbackError,
+                    style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
@@ -428,10 +431,10 @@ class PlayerCenterOverlay extends StatelessWidget {
                         onPressed: () {
                           showVideoErrorDialog(context, errorMessage);
                         },
-                        child: const Text('错误信息'),
+                        child: Text(l10n.errorMessageTitle),
                       ),
                       const SizedBox(width: 10),
-                      FilledButton(onPressed: onRetry, child: const Text('重试')),
+                      FilledButton(onPressed: onRetry, child: Text(l10n.retry)),
                     ],
                   ),
                 ],

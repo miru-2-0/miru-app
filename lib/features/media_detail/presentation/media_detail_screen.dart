@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
+import 'package:miru/app/l10n/l10n_extension.dart';
 import 'package:miru/app/widgets/empty_state_widget.dart';
 import '../../favorite/data/favorite_service.dart';
 import '../../player/presentation/video_player_screen.dart';
@@ -180,6 +181,7 @@ class _MediaDetailScreenState extends State<MediaDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final item = widget.mediaItem;
     final cover = _detail?.cover ?? item.cover;
 
@@ -350,7 +352,7 @@ class _MediaDetailScreenState extends State<MediaDetailScreen> {
                                           child: Text(
                                             (_detail?.type?.isNotEmpty ?? false)
                                                 ? _detail!.type!
-                                                : '影视/动漫',
+                                                : '影视',
                                             style: TextStyle(
                                               fontSize: 11,
                                               fontWeight: FontWeight.w600,
@@ -377,7 +379,7 @@ class _MediaDetailScreenState extends State<MediaDetailScreen> {
                                               Icons.play_arrow_rounded,
                                               size: 20,
                                             ),
-                                            label: const Text('立即观看'),
+                                            label: Text(l10n.watchNow),
                                           ),
                                         ),
                                         const SizedBox(width: 8),
@@ -395,7 +397,9 @@ class _MediaDetailScreenState extends State<MediaDetailScreen> {
                                               messenger.showSnackBar(
                                                 SnackBar(
                                                   content: Text(
-                                                    isFav ? '已加入我的收藏' : '已取消收藏',
+                                                    isFav
+                                                        ? l10n.addedToFavorites
+                                                        : l10n.removedFromFavorites,
                                                   ),
                                                   duration: const Duration(
                                                     seconds: 2,
@@ -431,10 +435,10 @@ class _MediaDetailScreenState extends State<MediaDetailScreen> {
                     labelColor: Theme.of(context).colorScheme.primary,
                     unselectedLabelColor: Theme.of(context).hintColor,
                     indicatorColor: Theme.of(context).colorScheme.primary,
-                    tabs: const [
-                      Tab(text: '剧集'),
-                      Tab(text: '概括'),
-                      Tab(text: '演员'),
+                    tabs: [
+                      Tab(text: l10n.episodes),
+                      Tab(text: l10n.summary),
+                      Tab(text: l10n.actors),
                     ],
                   ),
                 ),
@@ -482,13 +486,14 @@ class _MediaDetailScreenState extends State<MediaDetailScreen> {
 
   /// Tab 1: 剧集展示
   Widget _buildEpisodesTab(BuildContext context) {
+    final l10n = context.l10n;
     final epGroups = _detail?.episodes ?? [];
     if (epGroups.isEmpty || epGroups[0].urls.isEmpty) {
-      return const EmptyStateWidget(
+      return EmptyStateWidget(
         compact: true,
         icon: Icons.video_library_outlined,
-        title: '暂无剧集列表',
-        subtitle: '该资源未提供播放剧集列表或暂未上线',
+        title: l10n.noEpisodesTitle,
+        subtitle: l10n.noEpisodesSubtitle,
       );
     }
 
@@ -504,7 +509,7 @@ class _MediaDetailScreenState extends State<MediaDetailScreen> {
           sliver: SliverList(
             delegate: SliverChildListDelegate([
               Text(
-                '选择剧集 (${episodes.length})',
+                l10n.selectEpisode(episodes.length),
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
@@ -549,75 +554,76 @@ class _MediaDetailScreenState extends State<MediaDetailScreen> {
 
   /// Tab 2: 概括展示
   Widget _buildSummaryTab(BuildContext context) {
+    final l10n = context.l10n;
     final detail = _detail;
     final rows = <Widget>[
       if (_isNotEmpty(detail?.originalName))
         _summaryRow(
           context,
           Icons.title_outlined,
-          '原版名称',
+          l10n.originalName,
           detail!.originalName!,
         ),
       if (_isNotEmpty(detail?.otherName))
         _summaryRow(
           context,
           Icons.alternate_email_outlined,
-          '其他名称',
+          l10n.otherName,
           detail!.otherName!,
         ),
       if (_isNotEmpty(detail?.type))
         _summaryRow(
           context,
           Icons.local_movies_outlined,
-          '类型',
+          l10n.type,
           detail!.type!,
         ),
       if (_isNotEmpty(detail?.kind))
-        _summaryRow(context, Icons.category_outlined, '种类', detail!.kind!),
+        _summaryRow(context, Icons.category_outlined, l10n.kind, detail!.kind!),
       if (_isNotEmpty(detail?.director))
         _summaryRow(
           context,
           Icons.movie_creation_outlined,
-          '导演',
+          l10n.director,
           detail!.director!,
         ),
       if (_isNotEmpty(detail?.writer))
-        _summaryRow(context, Icons.edit_outlined, '编剧', detail!.writer!),
+        _summaryRow(context, Icons.edit_outlined, l10n.writer, detail!.writer!),
       if (_isNotEmpty(detail?.author))
-        _summaryRow(context, Icons.auto_stories_outlined, '原作', detail!.author!),
+        _summaryRow(context, Icons.auto_stories_outlined, l10n.authorLabel, detail!.author!),
       if (_isNotEmpty(detail?.company))
         _summaryRow(
           context,
           Icons.apartment_outlined,
-          '制作公司',
+          l10n.studio,
           detail!.company!,
         ),
       if (_isNotEmpty(detail?.area))
-        _summaryRow(context, Icons.public_outlined, '发行地区', detail!.area!),
+        _summaryRow(context, Icons.public_outlined, l10n.region, detail!.area!),
       if (_isNotEmpty(detail?.year))
         _summaryRow(
           context,
           Icons.calendar_today_outlined,
-          '上映年份',
+          l10n.year,
           detail!.year!,
         ),
       if (_isNotEmpty(detail?.pubdate))
-        _summaryRow(context, Icons.event_outlined, '上映日期', detail!.pubdate!),
+        _summaryRow(context, Icons.event_outlined, l10n.pubdate, detail!.pubdate!),
       if (_isNotEmpty(detail?.lang))
-        _summaryRow(context, Icons.language_outlined, '语言', detail!.lang!),
+        _summaryRow(context, Icons.language_outlined, l10n.language, detail!.lang!),
       if (_isNotEmpty(detail?.remarks))
-        _summaryRow(context, Icons.update_outlined, '状态', detail!.remarks!),
+        _summaryRow(context, Icons.update_outlined, l10n.remarks, detail!.remarks!),
       if (_isNotEmpty(detail?.total))
         _summaryRow(
           context,
           Icons.library_books_outlined,
-          '总集数',
+          l10n.totalEpisodes,
           detail!.total!,
         ),
       if (_isNotEmpty(detail?.score))
-        _summaryRow(context, Icons.star_outline, '评分', detail!.score!),
+        _summaryRow(context, Icons.star_outline, l10n.score, detail!.score!),
       if (_isNotEmpty(detail?.tags))
-        _summaryRow(context, Icons.sell_outlined, '标签', detail!.tags!),
+        _summaryRow(context, Icons.sell_outlined, l10n.tags, detail!.tags!),
     ];
 
     return CustomScrollView(
@@ -640,9 +646,9 @@ class _MediaDetailScreenState extends State<MediaDetailScreen> {
                 ),
                 const SizedBox(height: 16),
               ],
-              const Text(
-                '剧情简介',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              Text(
+                l10n.synopsis,
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),
               Card(
@@ -684,13 +690,14 @@ class _MediaDetailScreenState extends State<MediaDetailScreen> {
 
   /// Tab 3: 演员展示
   Widget _buildActorsTab(BuildContext context) {
+    final l10n = context.l10n;
     final actors = _detail?.actors ?? [];
     if (actors.isEmpty) {
-      return const EmptyStateWidget(
+      return EmptyStateWidget(
         compact: true,
         icon: Icons.person_off_outlined,
-        title: '暂无演员信息',
-        subtitle: '该资源未记录演职人员相关信息',
+        title: l10n.noActorsTitle,
+        subtitle: l10n.noActorsSubtitle,
       );
     }
 

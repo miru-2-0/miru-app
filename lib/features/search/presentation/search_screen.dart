@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:miru/app/l10n/l10n_extension.dart';
 import 'package:miru/app/widgets/empty_state_widget.dart';
 import '../../extension/data/extension_repo_service.dart';
 import '../../extension/domain/models/extension_item.dart';
@@ -141,6 +142,8 @@ class _SearchScreenState extends State<SearchScreen> {
     ExtensionItem ext,
     List<MediaItem> items,
   ) {
+    final l10n = context.l10n;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -204,7 +207,7 @@ class _SearchScreenState extends State<SearchScreen> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Text(
-                              '查看全部',
+                              l10n.viewAll,
                               style: TextStyle(
                                 color: Theme.of(context).colorScheme.primary,
                                 fontSize: 14,
@@ -228,13 +231,13 @@ class _SearchScreenState extends State<SearchScreen> {
 
               // 横向影视卡片列表
               items.isEmpty
-                  ? const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 8.0),
+                  ? Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
                       child: EmptyStateWidget(
                         compact: true,
                         icon: Icons.inbox_outlined,
-                        title: '未获取到内容',
-                        subtitle: '该扩展暂未提供首页推荐数据',
+                        title: l10n.noSearchResultsTitle,
+                        subtitle: l10n.noExtensionRecommendSubtitle,
                       ),
                     )
                   : LayoutBuilder(
@@ -403,16 +406,17 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final installedExtensions = _repoService.installedExtensions;
     final cachedGroupedMap = _searchService.cachedGroupedMediaMap;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('搜索'),
+        title: Text(l10n.navSearch),
         actions: [
           IconButton(
             icon: const Icon(Icons.search),
-            tooltip: '搜索影视',
+            tooltip: l10n.searchPromptTitle,
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
@@ -426,9 +430,9 @@ class _SearchScreenState extends State<SearchScreen> {
       body: installedExtensions.isEmpty
           ? EmptyStateWidget(
               icon: Icons.extension_off_outlined,
-              title: '暂未安装任何扩展',
-              subtitle: '安装扩展后即可检索对应平台的影视内容',
-              actionLabel: '去安装扩展',
+              title: l10n.noExtensionsTitle,
+              subtitle: l10n.noExtensionsSubtitle,
+              actionLabel: l10n.goToInstallExtensions,
               actionIcon: Icons.download_rounded,
               onActionPressed: () {
                 Navigator.of(context).push(

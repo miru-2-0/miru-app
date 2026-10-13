@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:miru/app/l10n/l10n_extension.dart';
 
 import '../data/extension_repo_service.dart';
 import '../domain/models/extension_item.dart';
@@ -42,20 +43,23 @@ class _ExtensionDetailScreenState extends State<ExtensionDetailScreen> {
       _checkingUpdate = true;
     });
     final messenger = ScaffoldMessenger.of(context);
+    final l10n = context.l10n;
     try {
       final installed =
           _service.installedForStorageKey(widget.item.storageKey) ??
           widget.item;
       final hasNewer = await _service.checkUpdateFor(installed);
       if (!mounted) return;
+      final updateVersion =
+          _service.availableUpdate(widget.item.storageKey)?.version ?? '';
       messenger
         ..hideCurrentSnackBar()
         ..showSnackBar(
           SnackBar(
             content: Text(
               hasNewer
-                  ? '发现新版本 ${_service.availableUpdate(widget.item.storageKey)?.version ?? ''}'
-                  : '当前已是最新版本',
+                  ? l10n.newVersionFound(updateVersion)
+                  : l10n.alreadyLatest,
             ),
           ),
         );
@@ -63,7 +67,9 @@ class _ExtensionDetailScreenState extends State<ExtensionDetailScreen> {
       if (!mounted) return;
       messenger
         ..hideCurrentSnackBar()
-        ..showSnackBar(SnackBar(content: Text('检查更新失败：$e')));
+        ..showSnackBar(
+          SnackBar(content: Text(l10n.checkUpdateFailed(e.toString()))),
+        );
     } finally {
       if (mounted) {
         setState(() {
@@ -84,6 +90,7 @@ class _ExtensionDetailScreenState extends State<ExtensionDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final item = widget.item;
     final isInstalled = _service.isInstalledWithSource(item);
     final isPending = _service.isPackagePending(item.storageKey);
@@ -92,7 +99,7 @@ class _ExtensionDetailScreenState extends State<ExtensionDetailScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('扩展详情'),
+        title: Text(l10n.extensionDetails),
         actions: [
           if (isInstalled && !item.isFromLocal)
             IconButton(
@@ -103,7 +110,7 @@ class _ExtensionDetailScreenState extends State<ExtensionDetailScreen> {
                       child: CircularProgressIndicator(strokeWidth: 2),
                     )
                   : const Icon(Icons.refresh),
-              tooltip: '检查更新',
+              tooltip: l10n.checkUpdates,
               onPressed: _checkingUpdate ? null : _checkUpdate,
             ),
         ],
@@ -141,7 +148,7 @@ class _ExtensionDetailScreenState extends State<ExtensionDetailScreen> {
                           borderRadius: BorderRadius.circular(6),
                         ),
                         child: Text(
-                          '本地导入',
+                          l10n.localImport,
                           style: TextStyle(
                             fontSize: 11,
                             fontWeight: FontWeight.w600,
@@ -181,7 +188,11 @@ class _ExtensionDetailScreenState extends State<ExtensionDetailScreen> {
                                 ScaffoldMessenger.of(context)
                                   ..hideCurrentSnackBar()
                                   ..showSnackBar(
-                                    SnackBar(content: Text('已卸载 ${item.name}')),
+                                    SnackBar(
+                                      content: Text(
+                                        l10n.uninstalledSuccess(item.name),
+                                      ),
+                                    ),
                                   );
                               }
                             } catch (e) {
@@ -189,7 +200,11 @@ class _ExtensionDetailScreenState extends State<ExtensionDetailScreen> {
                                 ScaffoldMessenger.of(context)
                                   ..hideCurrentSnackBar()
                                   ..showSnackBar(
-                                    SnackBar(content: Text('卸载失败：$e')),
+                                    SnackBar(
+                                      content: Text(
+                                        l10n.uninstallFailed(e.toString()),
+                                      ),
+                                    ),
                                   );
                               }
                             }
@@ -201,7 +216,7 @@ class _ExtensionDetailScreenState extends State<ExtensionDetailScreen> {
                       ),
                     ),
                     icon: const Icon(Icons.delete_outline),
-                    label: const Text('卸载扩展'),
+                    label: Text(l10n.uninstallExtensionButton),
                   )
                 : FilledButton.icon(
                     onPressed: isPending
@@ -214,7 +229,9 @@ class _ExtensionDetailScreenState extends State<ExtensionDetailScreen> {
                                   ..hideCurrentSnackBar()
                                   ..showSnackBar(
                                     SnackBar(
-                                      content: Text('成功安装 ${item.name}'),
+                                      content: Text(
+                                        l10n.installSuccess(item.name),
+                                      ),
                                     ),
                                   );
                               }
@@ -223,7 +240,11 @@ class _ExtensionDetailScreenState extends State<ExtensionDetailScreen> {
                                 ScaffoldMessenger.of(context)
                                   ..hideCurrentSnackBar()
                                   ..showSnackBar(
-                                    SnackBar(content: Text('安装失败：$e')),
+                                    SnackBar(
+                                      content: Text(
+                                        l10n.installFailed(e.toString()),
+                                      ),
+                                    ),
                                   );
                               }
                             }
@@ -235,7 +256,9 @@ class _ExtensionDetailScreenState extends State<ExtensionDetailScreen> {
                             child: CircularProgressIndicator(strokeWidth: 2),
                           )
                         : const Icon(Icons.download),
-                    label: Text(isPending ? '安装中...' : '安装扩展'),
+                    label: Text(
+                      isPending ? l10n.installing : l10n.installExtensionButton,
+                    ),
                   ),
           ),
 
@@ -255,7 +278,11 @@ class _ExtensionDetailScreenState extends State<ExtensionDetailScreen> {
                             ScaffoldMessenger.of(context)
                               ..hideCurrentSnackBar()
                               ..showSnackBar(
-                                SnackBar(content: Text('已更新 ${item.name}')),
+                                SnackBar(
+                                  content: Text(
+                                    l10n.updatedSuccess(item.name),
+                                  ),
+                                ),
                               );
                           }
                         } catch (e) {
@@ -263,7 +290,11 @@ class _ExtensionDetailScreenState extends State<ExtensionDetailScreen> {
                             ScaffoldMessenger.of(context)
                               ..hideCurrentSnackBar()
                               ..showSnackBar(
-                                SnackBar(content: Text('更新失败：$e')),
+                                SnackBar(
+                                  content: Text(
+                                    l10n.updateFailed(e.toString()),
+                                  ),
+                                ),
                               );
                           }
                         }
@@ -277,8 +308,10 @@ class _ExtensionDetailScreenState extends State<ExtensionDetailScreen> {
                     : const Icon(Icons.system_update_alt),
                 label: Text(
                   isPending
-                      ? '更新中...'
-                      : '更新到 ${_service.availableUpdate(item.storageKey)?.version ?? ''}',
+                      ? l10n.updating
+                      : l10n.updateToVersion(
+                          _service.availableUpdate(item.storageKey)?.version ?? '',
+                        ),
                 ),
               ),
             ),
@@ -290,7 +323,7 @@ class _ExtensionDetailScreenState extends State<ExtensionDetailScreen> {
 
           // 详细属性信息
           Text(
-            '基本信息',
+            l10n.extensionInfo,
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
@@ -309,17 +342,17 @@ class _ExtensionDetailScreenState extends State<ExtensionDetailScreen> {
               children: [
                 ListTile(
                   leading: const Icon(Icons.sell_outlined),
-                  title: const Text('扩展版本'),
+                  title: Text(l10n.extensionVersion),
                   subtitle: Text(item.version),
                 ),
                 ListTile(
                   leading: const Icon(Icons.person_outline),
-                  title: const Text('作者'),
-                  subtitle: Text(item.author.isEmpty ? '未知' : item.author),
+                  title: Text(l10n.author),
+                  subtitle: Text(item.author.isEmpty ? l10n.unknown : item.author),
                 ),
                 ListTile(
                   leading: const Icon(Icons.source_outlined),
-                  title: const Text('扩展来源'),
+                  title: Text(l10n.extensionSource),
                   subtitle: Text(
                     item.isFromLocal
                         ? ExtensionItem.localRepoName
@@ -329,22 +362,22 @@ class _ExtensionDetailScreenState extends State<ExtensionDetailScreen> {
                 if (item.lang != null && item.lang!.isNotEmpty)
                   ListTile(
                     leading: const Icon(Icons.language_outlined),
-                    title: const Text('支持语言'),
+                    title: Text(l10n.supportedLanguage),
                     subtitle: Text(item.lang!),
                   ),
                 ListTile(
                   leading: const Icon(Icons.verified_user_outlined),
-                  title: const Text('开源协议'),
+                  title: Text(l10n.license),
                   subtitle: Text(
                     (item.license == null || item.license!.isEmpty)
-                        ? '未知'
+                        ? l10n.unknown
                         : item.license!,
                   ),
                 ),
                 if (item.webSite != null && item.webSite!.isNotEmpty)
                   ListTile(
                     leading: const Icon(Icons.public_outlined),
-                    title: const Text('目标网站'),
+                    title: Text(l10n.targetWebsite),
                     subtitle: Text(
                       item.webSite!,
                       maxLines: 1,
@@ -355,7 +388,7 @@ class _ExtensionDetailScreenState extends State<ExtensionDetailScreen> {
                       onPressed: () {
                         Clipboard.setData(ClipboardData(text: item.webSite!));
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('网站链接已复制到剪贴板')),
+                          SnackBar(content: Text(l10n.linkCopied)),
                         );
                       },
                     ),
@@ -363,7 +396,7 @@ class _ExtensionDetailScreenState extends State<ExtensionDetailScreen> {
                 if (item.url.isNotEmpty)
                   ListTile(
                     leading: const Icon(Icons.code_outlined),
-                    title: const Text('脚本文件名'),
+                    title: Text(l10n.scriptFileName),
                     subtitle: Text(
                       item.url,
                       maxLines: 1,
@@ -377,7 +410,7 @@ class _ExtensionDetailScreenState extends State<ExtensionDetailScreen> {
           if (item.description != null && item.description!.isNotEmpty) ...[
             const SizedBox(height: 20),
             Text(
-              '扩展简介',
+              l10n.extensionDesc,
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,

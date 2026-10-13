@@ -159,5 +159,118 @@
   "extensionRepoManagement": "Repository Management",
   "importRepo": "Import Repository",
   "importRepoDesc": "Add custom extension repository URL",
-  "builtIn": "Built-in"
+  "builtIn": "Built-in",
+  "extensionDetails": "Extension Details",
+  "extensionInfo": "Basic Information",
+  "extensionDesc": "Description",
+  "extensionVersion": "Extension Version",
+  "author": "Author",
+  "extensionSource": "Extension Source",
+  "supportedLanguage": "Supported Language",
+  "license": "License",
+  "targetWebsite": "Target Website",
+  "scriptFileName": "Script File Name",
+  "uninstallExtensionButton": "Uninstall Extension",
+  "installExtensionButton": "Install Extension",
+  "installing": "Installing...",
+  "updating": "Updating...",
+  "updateToVersion": "Update to {version}",
+  "@updateToVersion": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "newVersionFound": "New version found: {version}",
+  "@newVersionFound": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "alreadyLatest": "Already on the latest version",
+  "checkUpdateFailed": "Failed to check for updates: {error}",
+  "@checkUpdateFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "uninstallFailed": "Uninstall failed: {error}",
+  "@uninstallFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "installFailed": "Install failed: {error}",
+  "@installFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "updatedSuccess": "Updated {name}",
+  "@updatedSuccess": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "updateFailed": "Update failed: {error}",
+  "@updateFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "linkCopied": "Link copied to clipboard",
+  "unknown": "Unknown",
+  "localImport": "Locally Imported",
+  "close": "Close",
+  "mediaTitleLabel": "Title",
+  "currentEpisodeLabel": "Current Episode",
+  "mediaUrlLabel": "Media URL",
+  "none": "(None)",
+  "errorMessageTitle": "Error Information",
+  "originalName": "Original Title",
+  "otherName": "Other Title",
+  "type": "Type",
+  "kind": "Category",
+  "director": "Director",
+  "writer": "Writer",
+  "authorLabel": "Creator",
+  "studio": "Studio",
+  "region": "Region",
+  "year": "Release Year",
+  "pubdate": "Release Date",
+  "remarks": "Status",
+  "totalEpisodes": "Total Episodes",
+  "score": "Rating",
+  "tags": "Tags",
+  "repoNameLabel": "Repository Name",
+  "repoNameHint": "e.g., Community Repo",
+  "repoUrlLabel": "Repository URL",
+  "repoUrlHint": "https://...",
+  "repoUrlEmpty": "Please enter repository URL",
+  "repoImportSuccess": "Repository imported successfully",
+  "add": "Add",
+  "deletedRepo": "Deleted {name}",
+  "@deletedRepo": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "privacyTitle": "Privacy Statement",
+  "privacyContent": "This app does not collect or upload any personal data.\n\nFavorites, settings, and installed extensions are stored locally on your device.\n\nWhen installing third-party extensions or visiting third-party sites, content is handled by respective extensions and sites. Please verify security and legality yourself.",
+  "gotIt": "Got It"
 }

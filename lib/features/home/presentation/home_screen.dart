@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:miru/app/l10n/l10n_extension.dart';
 import 'package:miru/app/widgets/empty_state_widget.dart';
 import '../../extension/data/extension_repo_service.dart';
 import '../../favorite/data/favorite_service.dart';
@@ -124,6 +125,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   /// 构建“我的收藏”模块
   Widget _buildFavoritesSection(BuildContext context) {
+    final l10n = context.l10n;
     final favorites = _favoriteService.favorites;
 
     return Column(
@@ -140,7 +142,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               const SizedBox(width: 8),
               Text(
-                '我的收藏 (${favorites.length})',
+                l10n.myFavorites(favorites.length),
                 style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -161,11 +163,11 @@ class _HomeScreenState extends State<HomeScreen> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
               ),
-              child: const EmptyStateWidget(
+              child: EmptyStateWidget(
                 compact: true,
                 icon: Icons.favorite_border_rounded,
-                title: '暂无收藏影视',
-                subtitle: '在影视详情界面点击【收藏】按钮即可在此处快速访问。',
+                title: l10n.noFavoritesTitle,
+                subtitle: l10n.noFavoritesSubtitle,
               ),
             ),
           )
@@ -282,6 +284,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   /// 构建推荐影视内容
   Widget _buildRecommendationsSection(BuildContext context) {
+    final l10n = context.l10n;
     final cachedMap = _searchService.cachedGroupedMediaMap;
     final List<MediaItem> allItems = [];
     for (final items in cachedMap.values) {
@@ -305,9 +308,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 size: 20,
               ),
               const SizedBox(width: 8),
-              const Text(
-                '热门推荐',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              Text(
+                l10n.hotRecommendations,
+                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
             ],
           ),
@@ -417,8 +420,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
     return Scaffold(
-      appBar: AppBar(title: const Text('首页')),
+      appBar: AppBar(title: Text(l10n.navHome)),
       body: RefreshIndicator(
         onRefresh: () async {
           await _loadRecommendations();

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:miru/app/l10n/l10n_extension.dart';
 import 'package:miru/app/widgets/empty_state_widget.dart';
 import '../../extension/domain/models/extension_item.dart';
 import '../../media_detail/presentation/media_detail_screen.dart';
@@ -123,7 +124,7 @@ class _ExtensionMediaListScreenState extends State<ExtensionMediaListScreen> {
             : TextButton.icon(
                 onPressed: _loadMore,
                 icon: const Icon(Icons.expand_more),
-                label: const Text('加载更多'),
+                label: Text(context.l10n.viewAll),
               ),
       ),
     );
@@ -165,13 +166,15 @@ class _ExtensionMediaListScreenState extends State<ExtensionMediaListScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.extension.name),
         actions: [
           IconButton(
             icon: const Icon(Icons.search),
-            tooltip: '在 ${widget.extension.name} 中搜索',
+            tooltip: l10n.searchInExtensionHint(widget.extension.name),
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
@@ -191,9 +194,11 @@ class _ExtensionMediaListScreenState extends State<ExtensionMediaListScreen> {
           : _mediaList.isEmpty
               ? EmptyStateWidget(
                   icon: Icons.movie_filter_outlined,
-                  title: '暂未获取到内容',
-                  subtitle: '未能从 [${widget.extension.name}] 中加载到影视资源',
-                  actionLabel: '刷新重试',
+                  title: l10n.noSearchResultsTitle,
+                  subtitle: l10n.noExtensionContentSubtitle(
+                    widget.extension.name,
+                  ),
+                  actionLabel: l10n.refreshRetry,
                   actionIcon: Icons.refresh_rounded,
                   onActionPressed: _loadMedia,
                 )

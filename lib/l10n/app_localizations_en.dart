@@ -306,4 +306,192 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get builtIn => 'Built-in';
+
+  @override
+  String get extensionDetails => 'Extension Details';
+
+  @override
+  String get extensionInfo => 'Basic Information';
+
+  @override
+  String get extensionDesc => 'Description';
+
+  @override
+  String get extensionVersion => 'Extension Version';
+
+  @override
+  String get author => 'Author';
+
+  @override
+  String get extensionSource => 'Extension Source';
+
+  @override
+  String get supportedLanguage => 'Supported Language';
+
+  @override
+  String get license => 'License';
+
+  @override
+  String get targetWebsite => 'Target Website';
+
+  @override
+  String get scriptFileName => 'Script File Name';
+
+  @override
+  String get uninstallExtensionButton => 'Uninstall Extension';
+
+  @override
+  String get installExtensionButton => 'Install Extension';
+
+  @override
+  String get installing => 'Installing...';
+
+  @override
+  String get updating => 'Updating...';
+
+  @override
+  String updateToVersion(String version) {
+    return 'Update to $version';
+  }
+
+  @override
+  String newVersionFound(String version) {
+    return 'New version found: $version';
+  }
+
+  @override
+  String get alreadyLatest => 'Already on the latest version';
+
+  @override
+  String checkUpdateFailed(String error) {
+    return 'Failed to check for updates: $error';
+  }
+
+  @override
+  String uninstallFailed(String error) {
+    return 'Uninstall failed: $error';
+  }
+
+  @override
+  String installFailed(String error) {
+    return 'Install failed: $error';
+  }
+
+  @override
+  String updatedSuccess(String name) {
+    return 'Updated $name';
+  }
+
+  @override
+  String updateFailed(String error) {
+    return 'Update failed: $error';
+  }
+
+  @override
+  String get linkCopied => 'Link copied to clipboard';
+
+  @override
+  String get unknown => 'Unknown';
+
+  @override
+  String get localImport => 'Locally Imported';
+
+  @override
+  String get close => 'Close';
+
+  @override
+  String get mediaTitleLabel => 'Title';
+
+  @override
+  String get currentEpisodeLabel => 'Current Episode';
+
+  @override
+  String get mediaUrlLabel => 'Media URL';
+
+  @override
+  String get none => '(None)';
+
+  @override
+  String get errorMessageTitle => 'Error Information';
+
+  @override
+  String get originalName => 'Original Title';
+
+  @override
+  String get otherName => 'Other Title';
+
+  @override
+  String get type => 'Type';
+
+  @override
+  String get kind => 'Category';
+
+  @override
+  String get director => 'Director';
+
+  @override
+  String get writer => 'Writer';
+
+  @override
+  String get authorLabel => 'Creator';
+
+  @override
+  String get studio => 'Studio';
+
+  @override
+  String get region => 'Region';
+
+  @override
+  String get year => 'Release Year';
+
+  @override
+  String get pubdate => 'Release Date';
+
+  @override
+  String get remarks => 'Status';
+
+  @override
+  String get totalEpisodes => 'Total Episodes';
+
+  @override
+  String get score => 'Rating';
+
+  @override
+  String get tags => 'Tags';
+
+  @override
+  String get repoNameLabel => 'Repository Name';
+
+  @override
+  String get repoNameHint => 'e.g., Community Repo';
+
+  @override
+  String get repoUrlLabel => 'Repository URL';
+
+  @override
+  String get repoUrlHint => 'https://...';
+
+  @override
+  String get repoUrlEmpty => 'Please enter repository URL';
+
+  @override
+  String get repoImportSuccess => 'Repository imported successfully';
+
+  @override
+  String get add => 'Add';
+
+  @override
+  String deletedRepo(String name) {
+    return 'Deleted $name';
+  }
+
+  @override
+  String get privacyTitle => 'Privacy Statement';
+
+  @override
+  String get privacyContent =>
+      'This app does not collect or upload any personal data.\n\nFavorites, settings, and installed extensions are stored locally on your device.\n\nWhen installing third-party extensions or visiting third-party sites, content is handled by respective extensions and sites. Please verify security and legality yourself.';
+
+  @override
+  String get gotIt => 'Got It';
 }
