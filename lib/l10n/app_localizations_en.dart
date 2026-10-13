@@ -494,4 +494,100 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get gotIt => 'Got It';
+
+  @override
+  String get favorite => 'Favorite';
+
+  @override
+  String get media => 'Media';
+
+  @override
+  String get back => 'Back';
+
+  @override
+  String get moreOptions => 'More Options';
+
+  @override
+  String get aspectRatio => 'Aspect Ratio';
+
+  @override
+  String get aspectRatioAuto => 'Auto';
+
+  @override
+  String get aspectRatioCrop => 'Crop';
+
+  @override
+  String get aspectRatioStretch => 'Stretch';
+
+  @override
+  String get speed => 'Speed';
+
+  @override
+  String get episodesPanel => 'Episodes Panel';
+
+  @override
+  String get exitFullscreen => 'Exit Fullscreen';
+
+  @override
+  String get play => 'Play';
+
+  @override
+  String get pause => 'Pause';
+
+  @override
+  String get nextEpisode => 'Next Episode';
+
+  @override
+  String get lockPanel => 'Lock Controls';
+
+  @override
+  String get unlockPanel => 'Unlock Controls';
+
+  @override
+  String get mainEpisode => 'Main Episode';
+
+  @override
+  String get noPlayableLink => 'No valid playback URL for this episode';
+
+  @override
+  String extensionNotFound(String package) {
+    return 'Extension [$package] not found, cannot resolve playback URL';
+  }
+
+  @override
+  String get noValidUrlFromExtension =>
+      'Extension returned no valid playback URL';
+
+  @override
+  String get torrentNotSupported =>
+      'Torrent resources are not currently supported';
+
+  @override
+  String get viewLicenseInRepo => 'View LICENSE in repository';
+
+  @override
+  String get viewThirdPartyLicenses =>
+      'View open-source licenses for third-party dependencies';
+
+  @override
+  String get builtWithFlutter => '© 2026 Miru · Built with Flutter';
+
+  @override
+  String cannotOpenFilePicker(String error) {
+    return 'Cannot open file picker: $error';
+  }
+
+  @override
+  String readFileFailed(String error) {
+    return 'Failed to read file: $error';
+  }
+
+  @override
+  String get localExtensionImportSuccess =>
+      'Local extension imported successfully';
+
+  @override
+  String importFailed(String error) {
+    return 'Import failed: $error';
+  }
 }

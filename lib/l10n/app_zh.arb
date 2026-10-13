@@ -272,5 +272,61 @@
   },
   "privacyTitle": "隐私说明",
   "privacyContent": "本应用不收集、不上传任何个人数据。\n\n收藏、设置与已安装扩展等信息均仅保存在本地设备。\n\n安装第三方扩展或访问第三方站点时，相关内容由对应扩展与站点负责，请自行甄别其安全性与合法性。",
-  "gotIt": "知道了"
+  "gotIt": "知道了",
+  "favorite": "收藏",
+  "media": "影视",
+  "back": "返回",
+  "moreOptions": "更多选项",
+  "aspectRatio": "视频比例",
+  "aspectRatioAuto": "自动",
+  "aspectRatioCrop": "裁剪",
+  "aspectRatioStretch": "拉伸",
+  "speed": "倍速",
+  "episodesPanel": "选集面板",
+  "exitFullscreen": "退出全屏",
+  "play": "播放",
+  "pause": "暂停",
+  "nextEpisode": "下一集",
+  "lockPanel": "锁定面板",
+  "unlockPanel": "解锁面板",
+  "mainEpisode": "正片",
+  "noPlayableLink": "该剧集未提供有效的播放链接",
+  "extensionNotFound": "未找到扩展 [{package}]，无法解析播放地址",
+  "@extensionNotFound": {
+    "placeholders": {
+      "package": {
+        "type": "String"
+      }
+    }
+  },
+  "noValidUrlFromExtension": "扩展未返回有效的播放地址",
+  "torrentNotSupported": "当前扩展返回的是 BT 磁力资源，暂不支持播放",
+  "viewLicenseInRepo": "查看仓库中的 LICENSE",
+  "viewThirdPartyLicenses": "查看第三方依赖库的开源许可证",
+  "builtWithFlutter": "© 2026 Miru · 基于 Flutter 构建",
+  "cannotOpenFilePicker": "无法打开文件选择器：{error}",
+  "@cannotOpenFilePicker": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "readFileFailed": "读取文件失败：{error}",
+  "@readFileFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "localExtensionImportSuccess": "本地扩展导入成功",
+  "importFailed": "导入失败：{error}",
+  "@importFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  }
 }

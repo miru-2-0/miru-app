@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_volume_controller/flutter_volume_controller.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:media_kit_video/media_kit_video.dart';
+import 'package:miru/app/l10n/l10n_extension.dart';
 import 'package:screen_brightness/screen_brightness.dart';
 
 import '../../extension/data/extension_manager.dart';
@@ -112,7 +113,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
           _currentEpisodeIndex >= 0 &&
           _currentEpisodeIndex < widget.episodes.length
       ? widget.episodes[_currentEpisodeIndex].name
-      : '正片';
+      : context.l10n.mainEpisode;
 
   double get _displaySpeed =>
       _showSpeedHud ? kPlayerLongPressSpeed : _playbackSpeed;
@@ -131,216 +132,111 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
   @override
   void initState() {
     super.initState();
-    _currentEpisodeIndex = widget.initialEpisodeIndex;
-    _previewPosition = Duration.zero;
+    _currentEpisodeIndex = widget.initialEpisodeIndex.clamp(
+      0,
+      widget.episodes.isEmpty ? 0 : widget.episodes.length - 1,
+    );
 
+    // 锁定屏幕横屏 + 全屏隐藏系统栏
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.landscapeLeft,
       DeviceOrientation.landscapeRight,
     ]);
 
-    _listenPlayerStreams();
-    _initVolume();
-    _syncBrightnessFromSystem();
-    _playEpisode(_currentEpisodeIndex);
-    _updateTimer();
+    _initHardwareStateAndSubscriptions();
+    _playEpisodeIndex(_currentEpisodeIndex);
   }
 
-  /// 读取当前系统/应用亮度作为手势调节的起始值（不支持时静默忽略）。
-  Future<void> _syncBrightnessFromSystem() async {
-    try {
-      final value = await ScreenBrightness().application;
-      if (mounted) {
-        setState(() {
-          _currentBrightness = value.clamp(0.0, 1.0);
-        });
-      }
-    } catch (_) {
-      // 平台不支持屏幕亮度控制时忽略，回退到默认值。
-    }
-  }
-
-  /// 应用亮度（0.0 ~ 1.0），平台不支持时静默忽略。
-  Future<void> _applyBrightness(double value) async {
-    try {
-      await ScreenBrightness().setApplicationScreenBrightness(
-        value.clamp(0.0, 1.0),
-      );
-    } catch (_) {
-      // 忽略不支持亮度的平台（如 Linux）。
-    }
-  }
-
-  /// 初始化音量：桌面端使用播放器内部音量；移动端接管系统音量。
-  void _initVolume() {
-    if (_isDesktop) {
-      _player.setVolume(_currentVolume * 100);
-      return;
-    }
-    _initSystemVolume();
-  }
-
-  Future<void> _initSystemVolume() async {
-    try {
-      final value = await FlutterVolumeController.getVolume();
-      if (value != null) {
-        // 记住进入播放器前的系统音量，退出时还原。
-        _systemVolumeBeforePlayback = value.clamp(0.0, 1.0);
-        if (mounted) {
-          setState(() {
-            _currentVolume = _systemVolumeBeforePlayback!;
-          });
-        }
-      }
-    } catch (_) {
-      // 平台不支持系统音量时忽略。
-    }
-    try {
-      // 用播放器内 HUD 代替系统音量面板。
-      await FlutterVolumeController.updateShowSystemUI(false);
-      FlutterVolumeController.addListener(
-        _onSystemVolumeChanged,
-        category: AudioSessionCategory.playback,
-        emitOnStart: false,
-      );
-    } catch (_) {}
-  }
-
-  /// 系统音量被外部（系统按键）改变时同步到手势基准值并提示。
-  void _onSystemVolumeChanged(double volume) {
-    if (!mounted || _verticalAdjusting) return;
-    // 忽略自己写入系统音量后回调的量化值，避免手势松手时回弹。
-    final last = _lastVolumeWrite;
-    if (last != null &&
-        DateTime.now().difference(last) < const Duration(milliseconds: 600)) {
-      return;
-    }
-    setState(() {
-      _currentVolume = volume.clamp(0.0, 1.0);
-      _showVolumeHud = true;
-      _showBrightnessHud = false;
-    });
-    _endAdjustment();
-  }
-
-  /// 应用音量（0.0 ~ 1.0）：桌面端写播放器，移动端写系统音量。
-  void _applyVolume(double value) {
-    final v = value.clamp(0.0, 1.0);
-    if (_isDesktop) {
-      _player.setVolume(v * 100);
-    } else {
-      _lastVolumeWrite = DateTime.now();
-      FlutterVolumeController.setVolume(v).catchError((_) {});
-    }
-  }
-
-  void _listenPlayerStreams() {
+  Future<void> _initHardwareStateAndSubscriptions() async {
+    // 监听播放状态
     _positionSubscription = _player.stream.position.listen((pos) {
-      if (mounted) {
-        setState(() {
-          _position = pos;
-        });
-      }
+      if (mounted) setState(() => _position = pos);
     });
-
     _durationSubscription = _player.stream.duration.listen((dur) {
-      if (mounted) {
-        setState(() {
-          _duration = dur;
-        });
-      }
+      if (mounted) setState(() => _duration = dur);
     });
-
     _bufferSubscription = _player.stream.buffer.listen((buf) {
-      if (mounted) {
-        setState(() {
-          _buffered = buf;
-        });
-      }
+      if (mounted) setState(() => _buffered = buf);
     });
-
     _playingSubscription = _player.stream.playing.listen((playing) {
-      if (mounted) {
-        setState(() {
-          _isPlaying = playing;
-        });
-      }
+      if (mounted) setState(() => _isPlaying = playing);
     });
-
     _bufferingSubscription = _player.stream.buffering.listen((buffering) {
-      if (mounted) {
-        setState(() {
-          _isBuffering = buffering;
-        });
+      if (mounted) setState(() => _isBuffering = buffering);
+    });
+    _completedSubscription = _player.stream.completed.listen((completed) {
+      if (completed) {
+        _onNextEpisodePress();
       }
     });
 
-    _completedSubscription = _player.stream.completed.listen((completed) {
-      if (!completed || !mounted) return;
-      if (_currentEpisodeIndex < widget.episodes.length - 1) {
-        _changeEpisode(_currentEpisodeIndex + 1);
+    // 初始化硬件状态（亮度 / 音量）
+    try {
+      if (!_isDesktop) {
+        final currentSysVol = await FlutterVolumeController.getVolume();
+        _systemVolumeBeforePlayback = currentSysVol;
+        if (currentSysVol != null) {
+          _currentVolume = currentSysVol;
+        }
       } else {
-        _showPillToastMsg('播放完成');
+        _currentVolume = (_player.state.volume / 100).clamp(0.0, 1.0);
       }
-    });
+    } catch (_) {}
+
+    try {
+      _currentBrightness = await ScreenBrightness().current;
+    } catch (_) {
+      _currentBrightness = 1.0;
+    }
+
+    _startHideTimer();
   }
 
   @override
   void dispose() {
+    _hideTimer?.cancel();
+    _hudTimer?.cancel();
+    _pillTimer?.cancel();
+
     _positionSubscription?.cancel();
     _durationSubscription?.cancel();
     _bufferSubscription?.cancel();
     _playingSubscription?.cancel();
     _bufferingSubscription?.cancel();
     _completedSubscription?.cancel();
-    _hideTimer?.cancel();
-    _pillTimer?.cancel();
-    _hudTimer?.cancel();
+
     _episodeScrollController.dispose();
     _player.dispose();
 
-    // 恢复系统亮度，避免退出播放器后仍停留在调节值。
-    ScreenBrightness().resetApplicationScreenBrightness().catchError((_) {});
-
-    // 移动端解除系统音量监听、还原进入前的系统音量并恢复系统音量面板。
-    if (!_isDesktop) {
-      try {
-        FlutterVolumeController.removeListener();
-        final original = _systemVolumeBeforePlayback;
-        if (original != null) {
-          FlutterVolumeController.setVolume(original).catchError((_) {});
-        }
-        FlutterVolumeController.updateShowSystemUI(true);
-      } catch (_) {}
+    // 还原系统硬件状态
+    if (!_isDesktop && _systemVolumeBeforePlayback != null) {
+      FlutterVolumeController.setVolume(_systemVolumeBeforePlayback!);
     }
 
+    // 还原系统 UI 与竖屏方向
     SystemChrome.setEnabledSystemUIMode(
       SystemUiMode.edgeToEdge,
-      overlays: SystemUiOverlay.values,
     );
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
     super.dispose();
   }
 
-  Future<void> _playEpisode(int index) async {
+  // --- 播放控制逻辑 ---
+
+  Future<void> _playEpisodeIndex(int index) async {
+    if (index < 0 || index >= widget.episodes.length) return;
+
     setState(() {
+      _currentEpisodeIndex = index;
       _isBuffering = true;
       _hasError = false;
       _errorMessage = '';
+      _position = Duration.zero;
+      _duration = Duration.zero;
+      _buffered = Duration.zero;
     });
-
-    if (index < 0 || index >= widget.episodes.length) {
-      if (mounted) {
-        setState(() {
-          _isBuffering = false;
-          _hasError = true;
-          _errorMessage = '未找到对应的剧集播放地址';
-        });
-      }
-      return;
-    }
 
     final ep = widget.episodes[index];
     final epUrl = ep.url.trim();
@@ -350,14 +246,13 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
         setState(() {
           _isBuffering = false;
           _hasError = true;
-          _errorMessage = '该剧集未提供有效的播放链接';
+          _errorMessage = context.l10n.noPlayableLink;
         });
       }
       return;
     }
 
     try {
-      // 严格走 JS 扩展的 watch() 解出真实播放地址与请求头，不做任何直连兜底
       final manager = ExtensionManager.instance;
       final runtime = widget.mediaItem.extensionKey != null
           ? manager.runtimeForStorageKey(widget.mediaItem.extensionKey!)
@@ -365,19 +260,19 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
       final resolved =
           runtime ?? manager.runtimeForPackage(widget.mediaItem.package);
       if (resolved == null) {
-        throw StateError('未找到扩展 [${widget.mediaItem.package}]，无法解析播放地址');
+        throw StateError(context.l10n.extensionNotFound(widget.mediaItem.package));
       }
 
       final watch = await resolved.watch(epUrl);
       if (watch == null || watch.url.trim().isEmpty) {
-        throw StateError('扩展未返回有效的播放地址');
+        throw StateError(context.l10n.noValidUrlFromExtension);
       }
       if (watch.type == ExtensionWatchBangumiType.torrent) {
         if (mounted) {
           setState(() {
             _isBuffering = false;
             _hasError = true;
-            _errorMessage = '当前扩展返回的是 BT 磁力资源，暂不支持播放';
+            _errorMessage = context.l10n.torrentNotSupported;
           });
         }
         return;
@@ -391,22 +286,85 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
         setState(() {
           _isBuffering = false;
           _hasError = true;
-          _errorMessage = '视频播放异常：$e';
+          _errorMessage = e.toString();
         });
       }
     }
   }
 
-  // ---------- 控制栏显隐（对齐 Kazumi：4s 自动隐藏 + hold 机制） ----------
+  void _togglePlayPause() {
+    if (_hasError) return;
+    _player.playOrPause();
+    _updateTimer();
+  }
+
+  void _retryCurrentEpisode() {
+    _playEpisodeIndex(_currentEpisodeIndex);
+  }
+
+  void _onNextEpisodePress() {
+    if (_currentEpisodeIndex < widget.episodes.length - 1) {
+      _showToast('正在为您切换至下一集：${widget.episodes[_currentEpisodeIndex + 1].name}');
+      _playEpisodeIndex(_currentEpisodeIndex + 1);
+    } else {
+      _showToast('已是最后一集');
+    }
+  }
+
+  void _setSpeed(double speed) {
+    setState(() {
+      _playbackSpeed = speed;
+    });
+    _player.setRate(speed);
+    _showToast('已切换倍速至 ${speed}x');
+  }
+
+  void _setAspectRatio(int index) {
+    setState(() {
+      _aspectRatioIndex = index;
+    });
+    if (!mounted) return;
+    final label = PlayerAspectRatio.values[index].getLabel(context);
+    _showToast('已切换画面比例至 $label');
+  }
+
+  void _toggleSidebar() {
+    setState(() {
+      _sidebarOpen = !_sidebarOpen;
+    });
+    if (_sidebarOpen) {
+      _acquirePanelHold();
+    } else {
+      _releasePanelHold();
+    }
+  }
+
+  void _showVideoInfoDialog() {
+    _acquirePanelHold();
+    showVideoInfoDialog(
+      context,
+      title: widget.mediaItem.title,
+      episodeName: _currentEpisodeName,
+      mediaUrl: _currentMediaUrl,
+      onCopied: () => _showToast(context.l10n.mediaUrlCopied),
+    ).then((_) => _releasePanelHold());
+  }
+
+  // --- 定时器与控制栏可见性管理 ---
 
   int _panelHolds = 0;
-  int _openMenus = 0;
+  bool get _canHidePanel => _panelHolds == 0;
 
-  bool get _canHidePanel => _panelHolds == 0 && _openMenus == 0;
+  void _onMenuOpen() {
+    _acquirePanelHold();
+  }
+
+  void _onMenuClose() {
+    _releasePanelHold();
+  }
 
   void _startHideTimer() {
     _hideTimer?.cancel();
-    _hideTimer = null;
     if (!_canHidePanel) return;
     _hideTimer = Timer(const Duration(milliseconds: 4000), () {
       if (!mounted) return;
@@ -443,117 +401,42 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
   }
 
   void _releasePanelHold() {
-    if (_panelHolds > 0) _panelHolds--;
-    _startHideTimer();
-  }
-
-  // 菜单打开/关闭（MenuAnchor onOpen/onClose）
-
-  void _onMenuOpen() {
-    setState(() {
-      _openMenus++;
-    });
-    _acquirePanelHold();
-  }
-
-  void _onMenuClose() {
-    setState(() {
-      if (_openMenus > 0) _openMenus--;
-    });
-    _releasePanelHold();
+    if (_panelHolds > 0) {
+      _panelHolds--;
+    }
+    if (_canHidePanel) {
+      _updateTimer();
+    }
   }
 
   void _toggleVideoController() {
     if (_showControls) {
       _hideControls();
-      return;
+    } else {
+      _updateTimer();
     }
-    _updateTimer();
-  }
-
-  void _togglePlayPause() {
-    _player.playOrPause();
-  }
-
-  void _onNextEpisodePress() {
-    if (_currentEpisodeIndex < widget.episodes.length - 1) {
-      _changeEpisode(_currentEpisodeIndex + 1);
-      return;
-    }
-    _showPillToastMsg('已是最后一集');
-  }
-
-  void _changeEpisode(int newIndex) {
-    if (newIndex < 0 || newIndex >= widget.episodes.length) return;
-    setState(() {
-      _currentEpisodeIndex = newIndex;
-    });
-    _playEpisode(newIndex);
-  }
-
-  void _setSpeed(double speed) {
-    setState(() {
-      _playbackSpeed = speed;
-    });
-    _player.setRate(speed);
-  }
-
-  void _setAspectRatio(int index) {
-    setState(() {
-      _aspectRatioIndex = index;
-    });
   }
 
   void _toggleLock() {
     setState(() {
       _lockPanel = !_lockPanel;
     });
-    // 锁定/解锁后控制栏照常 4s 自动隐藏（锁定按钮随之隐藏）
-    _updateTimer();
-  }
-
-  void _toggleSidebar() {
-    final open = !_sidebarOpen;
-    setState(() {
-      _sidebarOpen = open;
-    });
-    if (open) {
-      _jumpToCurrentEpisode();
+    if (_lockPanel) {
+      _showToast('面板已锁定');
+      _startHideTimer();
+    } else {
+      _showToast('面板已解锁');
+      _updateTimer();
     }
   }
 
-  void _closeSidebar() {
-    setState(() {
-      _sidebarOpen = false;
-    });
-  }
-
-  void _handleEpisodeSelect(int index) {
-    _closeSidebar();
-    _changeEpisode(index);
-  }
-
-  void _jumpToCurrentEpisode() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!_episodeScrollController.hasClients) return;
-      // 每项固定 64px（卡片 margin 4 + 内容高 56）
-      final target = (_currentEpisodeIndex * 64).toDouble();
-      _episodeScrollController.jumpTo(
-        target.clamp(0.0, _episodeScrollController.position.maxScrollExtent),
-      );
-    });
-  }
-
-  void _showPillToastMsg(
-    String text, {
-    Duration duration = const Duration(seconds: 2),
-  }) {
+  void _showToast(String text) {
     _pillTimer?.cancel();
     setState(() {
-      _showPillToast = true;
       _pillToastText = text;
+      _showPillToast = true;
     });
-    _pillTimer = Timer(duration, () {
+    _pillTimer = Timer(const Duration(milliseconds: 2400), () {
       if (mounted) {
         setState(() {
           _showPillToast = false;
@@ -562,45 +445,76 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
     });
   }
 
-  void _showVideoInfoDialog() {
-    showVideoInfoDialog(
-      context,
-      title: widget.mediaItem.title,
-      episodeName: _currentEpisodeName,
-      mediaUrl: _currentMediaUrl,
-      onCopied: () => _showPillToastMsg('已复制到剪贴板'),
-    );
-  }
-
-  void _retryCurrentEpisode() {
-    setState(() {
-      _hasError = false;
-    });
-    _playEpisode(_currentEpisodeIndex);
-  }
-
-  // ---------- 手势层 ----------
+  // --- 手势与 HUD 控制 ---
 
   void _endLongPress() {
-    if (_lockPanel) return;
+    if (!_showSpeedHud) return;
     setState(() {
       _showSpeedHud = false;
     });
     _player.setRate(_lastSpeedBeforeLongPress);
   }
 
+  void _applyVolume(double volume) {
+    final v = volume.clamp(0.0, 1.0);
+    _currentVolume = v;
+    if (_isDesktop) {
+      _player.setVolume(v * 100);
+    } else {
+      _preciseVolume = v;
+      final now = DateTime.now();
+      if (_lastVolumeWrite == null ||
+          now.difference(_lastVolumeWrite!).inMilliseconds > 32) {
+        _lastVolumeWrite = now;
+        FlutterVolumeController.setVolume(v);
+      }
+    }
+  }
+
+  void _applyBrightness(double brightness) {
+    final b = brightness.clamp(0.0, 1.0);
+    _currentBrightness = b;
+    try {
+      ScreenBrightness().setScreenBrightness(b);
+    } catch (_) {}
+  }
+
   void _endAdjustment() {
     _hudTimer?.cancel();
-    _verticalAdjusting = false;
-    _hudTimer = Timer(const Duration(milliseconds: 650), () {
+    _hudTimer = Timer(const Duration(milliseconds: 1000), () {
       if (mounted) {
         setState(() {
+          _showSeekHud = false;
+          _showSpeedHud = false;
           _showVolumeHud = false;
           _showBrightnessHud = false;
+          _verticalAdjusting = false;
         });
       }
     });
     setState(() {});
+  }
+
+  Widget _buildHudLayer() {
+    final speedVisible = _showSpeedHud && !_lockPanel;
+    final seekVisible = _showSeekHud && !_lockPanel;
+    final adjustmentVisible =
+        (_showVolumeHud || _showBrightnessHud) && !_lockPanel;
+
+    return PlayerHudLayer(
+      speedVisible: speedVisible,
+      displaySpeed: _displaySpeed,
+      seekVisible: seekVisible,
+      position: _position,
+      previewPosition: _previewPosition,
+      duration: _duration,
+      adjustmentVisible: adjustmentVisible,
+      adjustmentType: _showBrightnessHud
+          ? PlayerAdjustmentHudType.brightness
+          : PlayerAdjustmentHudType.volume,
+      value: _showBrightnessHud ? _currentBrightness : _currentVolume,
+      adjustmentDisableAnimations: _verticalAdjusting,
+    );
   }
 
   Widget _buildGestureLayer() {
@@ -631,7 +545,6 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
           behavior: HitTestBehavior.opaque,
           onTap: () {
             if (_lockPanel) {
-              // 锁定状态下点按仅临时呼出锁定按钮（随后自动隐藏）
               _updateTimer();
               return;
             }
@@ -659,91 +572,53 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
             });
           },
           onHorizontalDragUpdate: (details) {
-            if (_lockPanel) return;
-            final scale = 180000 / screenWidth;
-            // 在上一帧预览值上累加，避免只用单帧 delta 导致回弹。
-            final target =
-                _previewPosition +
-                Duration(milliseconds: (details.delta.dx * scale).round());
-            final targetMs = _duration.inMilliseconds > 0
-                ? target.inMilliseconds.clamp(0, _duration.inMilliseconds)
-                : target.inMilliseconds;
+            if (_lockPanel || _duration.inMilliseconds <= 0) return;
+            _hudTimer?.cancel();
+            final deltaMs = (details.delta.dx * 120).toInt();
+            final newMs = (_previewPosition.inMilliseconds + deltaMs).clamp(
+              0,
+              _duration.inMilliseconds,
+            );
             setState(() {
-              _previewPosition = Duration(milliseconds: targetMs);
+              _previewPosition = Duration(milliseconds: newMs);
+              _showSeekHud = true;
             });
           },
           onHorizontalDragEnd: (_) {
             if (_lockPanel) return;
             _player.seek(_previewPosition);
-            setState(() {
-              _showSeekHud = false;
-            });
-          },
-          onHorizontalDragCancel: () {
-            if (_lockPanel) return;
-            setState(() {
-              _showSeekHud = false;
-            });
+            _endAdjustment();
           },
           onVerticalDragStart: (details) {
             if (_lockPanel) return;
+            _adjustingBrightness = details.globalPosition.dx < screenWidth / 2;
+            _verticalAdjusting = true;
             _hudTimer?.cancel();
-            _preciseVolume = _currentVolume;
-            setState(() {
-              _adjustingBrightness = details.localPosition.dx < screenWidth / 2;
-              _verticalAdjusting = true;
-              _showVolumeHud = !_adjustingBrightness;
-              _showBrightnessHud = _adjustingBrightness;
-            });
           },
           onVerticalDragUpdate: (details) {
             if (_lockPanel) return;
-            final delta = details.delta.dy;
+            final delta = -details.delta.dy / (screenHeight * 0.7);
             if (_adjustingBrightness) {
-              // 与 Kazumi 一致：整屏高度约对应 50% 亮度变化。
-              final level = screenHeight * 2;
-              final brightness = (_currentBrightness - delta / level).clamp(
-                0.0,
-                1.0,
-              );
-              _currentBrightness = brightness;
-              _applyBrightness(brightness);
-              setState(() {});
+              _applyBrightness(_currentBrightness + delta);
+              setState(() {
+                _showBrightnessHud = true;
+                _showVolumeHud = false;
+              });
             } else {
-              // 与 Kazumi 一致：累加写入 _preciseVolume，避免只用单帧 delta
-              // 计算导致松手/回拉时数值回弹。level = 高度 * 3 等价于
-              // Kazumi 的 0~100 刻度（整屏高度约 33%）。
-              final level = screenHeight * 3;
-              _preciseVolume = (_preciseVolume - delta / level).clamp(0.0, 1.0);
-              _currentVolume = _preciseVolume;
-              _applyVolume(_preciseVolume);
-              setState(() {});
+              _applyVolume(_currentVolume + delta);
+              setState(() {
+                _showVolumeHud = true;
+                _showBrightnessHud = false;
+              });
             }
           },
-          onVerticalDragEnd: (_) => _endAdjustment(),
-          onVerticalDragCancel: () => _endAdjustment(),
+          onVerticalDragEnd: (_) {
+            if (_lockPanel) return;
+            _endAdjustment();
+          },
           child: const SizedBox.expand(),
         ),
       ),
-    );
-  }
-
-  // ---------- HUD ----------
-
-  Widget _buildHudLayer() {
-    return PlayerHudLayer(
-      seekVisible: _showSeekHud && !_lockPanel,
-      speedVisible: _showSpeedHud && !_lockPanel,
-      adjustmentVisible: (_showVolumeHud || _showBrightnessHud) && !_lockPanel,
-      position: _position,
-      previewPosition: _previewPosition,
-      duration: _duration,
-      displaySpeed: _displaySpeed,
-      adjustmentType: _showBrightnessHud
-          ? PlayerAdjustmentHudType.brightness
-          : PlayerAdjustmentHudType.volume,
-      value: _showBrightnessHud ? _currentBrightness : _currentVolume,
-      adjustmentDisableAnimations: _verticalAdjusting,
     );
   }
 
@@ -825,24 +700,27 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                 onBack: () => Navigator.of(context).pop(),
               ),
 
-              // 8. 右侧锁定（随控制栏自动隐藏；锁定时点按屏幕可临时呼出）
+              // 8. 右侧锁定按钮
               PlayerRightControls(
-                visible: _showControls && (!_lockPanel || !compact),
+                visible: _showControls,
                 locked: _lockPanel,
                 onToggleLock: _toggleLock,
               ),
 
-              // 9. 选集面板遮罩
-              if (_sidebarOpen) PlayerSidebarOverlay(onDismiss: _closeSidebar),
-
-              // 10. 选集面板
-              PlayerSidebar(
-                open: _sidebarOpen,
-                episodes: widget.episodes,
-                currentEpisodeIndex: _currentEpisodeIndex,
-                scrollController: _episodeScrollController,
-                onSelect: _handleEpisodeSelect,
-              ),
+              // 9. 右侧选集面板
+              if (_sidebarOpen) ...[
+                PlayerSidebarOverlay(onDismiss: _toggleSidebar),
+                PlayerSidebar(
+                  open: _sidebarOpen,
+                  episodes: widget.episodes,
+                  currentEpisodeIndex: _currentEpisodeIndex,
+                  scrollController: _episodeScrollController,
+                  onSelect: (index) {
+                    _playEpisodeIndex(index);
+                    _toggleSidebar();
+                  },
+                ),
+              ],
             ],
           ),
         ),

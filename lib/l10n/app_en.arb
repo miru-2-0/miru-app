@@ -272,5 +272,61 @@
   },
   "privacyTitle": "Privacy Statement",
   "privacyContent": "This app does not collect or upload any personal data.\n\nFavorites, settings, and installed extensions are stored locally on your device.\n\nWhen installing third-party extensions or visiting third-party sites, content is handled by respective extensions and sites. Please verify security and legality yourself.",
-  "gotIt": "Got It"
+  "gotIt": "Got It",
+  "favorite": "Favorite",
+  "media": "Media",
+  "back": "Back",
+  "moreOptions": "More Options",
+  "aspectRatio": "Aspect Ratio",
+  "aspectRatioAuto": "Auto",
+  "aspectRatioCrop": "Crop",
+  "aspectRatioStretch": "Stretch",
+  "speed": "Speed",
+  "episodesPanel": "Episodes Panel",
+  "exitFullscreen": "Exit Fullscreen",
+  "play": "Play",
+  "pause": "Pause",
+  "nextEpisode": "Next Episode",
+  "lockPanel": "Lock Controls",
+  "unlockPanel": "Unlock Controls",
+  "mainEpisode": "Main Episode",
+  "noPlayableLink": "No valid playback URL for this episode",
+  "extensionNotFound": "Extension [{package}] not found, cannot resolve playback URL",
+  "@extensionNotFound": {
+    "placeholders": {
+      "package": {
+        "type": "String"
+      }
+    }
+  },
+  "noValidUrlFromExtension": "Extension returned no valid playback URL",
+  "torrentNotSupported": "Torrent resources are not currently supported",
+  "viewLicenseInRepo": "View LICENSE in repository",
+  "viewThirdPartyLicenses": "View open-source licenses for third-party dependencies",
+  "builtWithFlutter": "© 2026 Miru · Built with Flutter",
+  "cannotOpenFilePicker": "Cannot open file picker: {error}",
+  "@cannotOpenFilePicker": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "readFileFailed": "Failed to read file: {error}",
+  "@readFileFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "localExtensionImportSuccess": "Local extension imported successfully",
+  "importFailed": "Import failed: {error}",
+  "@importFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  }
 }

@@ -486,4 +486,96 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get gotIt => '知道了';
+
+  @override
+  String get favorite => '收藏';
+
+  @override
+  String get media => '影视';
+
+  @override
+  String get back => '返回';
+
+  @override
+  String get moreOptions => '更多选项';
+
+  @override
+  String get aspectRatio => '视频比例';
+
+  @override
+  String get aspectRatioAuto => '自动';
+
+  @override
+  String get aspectRatioCrop => '裁剪';
+
+  @override
+  String get aspectRatioStretch => '拉伸';
+
+  @override
+  String get speed => '倍速';
+
+  @override
+  String get episodesPanel => '选集面板';
+
+  @override
+  String get exitFullscreen => '退出全屏';
+
+  @override
+  String get play => '播放';
+
+  @override
+  String get pause => '暂停';
+
+  @override
+  String get nextEpisode => '下一集';
+
+  @override
+  String get lockPanel => '锁定面板';
+
+  @override
+  String get unlockPanel => '解锁面板';
+
+  @override
+  String get mainEpisode => '正片';
+
+  @override
+  String get noPlayableLink => '该剧集未提供有效的播放链接';
+
+  @override
+  String extensionNotFound(String package) {
+    return '未找到扩展 [$package]，无法解析播放地址';
+  }
+
+  @override
+  String get noValidUrlFromExtension => '扩展未返回有效的播放地址';
+
+  @override
+  String get torrentNotSupported => '当前扩展返回的是 BT 磁力资源，暂不支持播放';
+
+  @override
+  String get viewLicenseInRepo => '查看仓库中的 LICENSE';
+
+  @override
+  String get viewThirdPartyLicenses => '查看第三方依赖库的开源许可证';
+
+  @override
+  String get builtWithFlutter => '© 2026 Miru · 基于 Flutter 构建';
+
+  @override
+  String cannotOpenFilePicker(String error) {
+    return '无法打开文件选择器：$error';
+  }
+
+  @override
+  String readFileFailed(String error) {
+    return '读取文件失败：$error';
+  }
+
+  @override
+  String get localExtensionImportSuccess => '本地扩展导入成功';
+
+  @override
+  String importFailed(String error) {
+    return '导入失败：$error';
+  }
 }

@@ -64,6 +64,8 @@ class PlayerTopControls extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
     return Positioned(
       top: 0,
       left: 0,
@@ -90,7 +92,7 @@ class PlayerTopControls extends StatelessWidget {
               children: [
                 IconButton(
                   color: Colors.white,
-                  tooltip: '返回',
+                  tooltip: l10n.back,
                   icon: const Icon(Icons.arrow_back_rounded),
                   onPressed: onBack,
                 ),
@@ -111,23 +113,23 @@ class PlayerTopControls extends StatelessWidget {
                         ),
                 ),
                 PlayerMenuAnchor(
-                  tooltip: '更多选项',
+                  tooltip: l10n.moreOptions,
                   onOpen: menus.onMenuOpen,
                   onClose: menus.onMenuClose,
                   menuChildren: [
                     if (compact) ...[
                       SubmenuButton(
-                        menuChildren: menus.aspectRatioMenuItems(),
-                        child: playerMenuLabel('视频比例'),
+                        menuChildren: menus.aspectRatioMenuItems(context),
+                        child: playerMenuLabel(l10n.aspectRatio),
                       ),
                       SubmenuButton(
                         menuChildren: menus.speedMenuItems(),
-                        child: playerMenuLabel('倍速'),
+                        child: playerMenuLabel(l10n.speed),
                       ),
                     ],
                     MenuItemButton(
                       onPressed: menus.onShowVideoInfo,
-                      child: playerMenuLabel('视频详情'),
+                      child: playerMenuLabel(l10n.videoDetail),
                     ),
                   ],
                   child: const Icon(Icons.more_vert, color: Colors.white),
@@ -199,21 +201,22 @@ class PlayerBottomControls extends StatelessWidget {
     );
   }
 
-  Widget _buildWideControls() {
-    final speedText = menus.currentSpeed == 1 ? '倍速' : '${menus.currentSpeed}x';
+  Widget _buildWideControls(BuildContext context) {
+    final l10n = context.l10n;
+    final speedText = menus.currentSpeed == 1 ? l10n.speed : '${menus.currentSpeed}x';
     return Row(
       children: [
         const Spacer(),
         PlayerMenuAnchor(
-          tooltip: '倍速',
+          tooltip: l10n.speed,
           menuChildren: menus.speedMenuItems(),
           onOpen: menus.onMenuOpen,
           onClose: menus.onMenuClose,
           child: Text(speedText, style: const TextStyle(color: Colors.white)),
         ),
         PlayerMenuAnchor(
-          tooltip: '视频比例',
-          menuChildren: menus.aspectRatioMenuItems(),
+          tooltip: l10n.aspectRatio,
+          menuChildren: menus.aspectRatioMenuItems(context),
           onOpen: menus.onMenuOpen,
           onClose: menus.onMenuClose,
           child: const Icon(Icons.aspect_ratio_rounded, color: Colors.white),
@@ -221,7 +224,7 @@ class PlayerBottomControls extends StatelessWidget {
         IconButton(
           color: Colors.white,
           icon: const Icon(Icons.menu_open_rounded),
-          tooltip: '选集面板',
+          tooltip: l10n.episodesPanel,
           onPressed: onToggleSidebar,
         ),
       ],
@@ -229,9 +232,10 @@ class PlayerBottomControls extends StatelessWidget {
   }
 
   Widget _buildFullscreenButton(BuildContext context) {
+    final l10n = context.l10n;
     return IconButton(
       color: Colors.white,
-      tooltip: '退出全屏',
+      tooltip: l10n.exitFullscreen,
       icon: const Icon(Icons.fullscreen_exit_rounded),
       onPressed: () => Navigator.of(context).pop(),
     );
@@ -239,6 +243,7 @@ class PlayerBottomControls extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final placement = TimeLabelPlacement.forViewport(
       MediaQuery.sizeOf(context),
     );
@@ -251,13 +256,13 @@ class PlayerBottomControls extends StatelessWidget {
       ),
     );
     final playPause = IconButton(
-      tooltip: isPlaying ? '暂停' : '播放',
+      tooltip: isPlaying ? l10n.pause : l10n.play,
       onPressed: onTogglePlayPause,
       icon: _PlayPauseIcon(playing: isPlaying),
     );
     final nextEpisode = IconButton(
       color: Colors.white,
-      tooltip: '下一集',
+      tooltip: l10n.nextEpisode,
       icon: const Icon(Icons.skip_next_rounded),
       onPressed: onNextEpisode,
     );
@@ -304,7 +309,7 @@ class PlayerBottomControls extends StatelessWidget {
                 nextEpisode,
                 if (placement == TimeLabelPlacement.afterPlaybackButtons)
                   const Padding(padding: EdgeInsets.only(left: 10)),
-                Expanded(child: _buildWideControls()),
+                Expanded(child: _buildWideControls(context)),
                 fullscreenButton,
               ],
             ),
@@ -360,6 +365,8 @@ class PlayerRightControls extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
     return Positioned(
       right: 0,
       top: 0,
@@ -376,7 +383,7 @@ class PlayerRightControls extends StatelessWidget {
                 const Spacer(),
                 IconButton(
                   color: Colors.white,
-                  tooltip: locked ? '解锁面板' : '锁定面板',
+                  tooltip: locked ? l10n.unlockPanel : l10n.lockPanel,
                   icon: Icon(locked ? Icons.lock_outline : Icons.lock_open),
                   onPressed: onToggleLock,
                 ),

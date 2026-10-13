@@ -979,6 +979,174 @@ abstract class AppLocalizations {
   /// In zh, this message translates to:
   /// **'知道了'**
   String get gotIt;
+
+  /// No description provided for @favorite.
+  ///
+  /// In zh, this message translates to:
+  /// **'收藏'**
+  String get favorite;
+
+  /// No description provided for @media.
+  ///
+  /// In zh, this message translates to:
+  /// **'影视'**
+  String get media;
+
+  /// No description provided for @back.
+  ///
+  /// In zh, this message translates to:
+  /// **'返回'**
+  String get back;
+
+  /// No description provided for @moreOptions.
+  ///
+  /// In zh, this message translates to:
+  /// **'更多选项'**
+  String get moreOptions;
+
+  /// No description provided for @aspectRatio.
+  ///
+  /// In zh, this message translates to:
+  /// **'视频比例'**
+  String get aspectRatio;
+
+  /// No description provided for @aspectRatioAuto.
+  ///
+  /// In zh, this message translates to:
+  /// **'自动'**
+  String get aspectRatioAuto;
+
+  /// No description provided for @aspectRatioCrop.
+  ///
+  /// In zh, this message translates to:
+  /// **'裁剪'**
+  String get aspectRatioCrop;
+
+  /// No description provided for @aspectRatioStretch.
+  ///
+  /// In zh, this message translates to:
+  /// **'拉伸'**
+  String get aspectRatioStretch;
+
+  /// No description provided for @speed.
+  ///
+  /// In zh, this message translates to:
+  /// **'倍速'**
+  String get speed;
+
+  /// No description provided for @episodesPanel.
+  ///
+  /// In zh, this message translates to:
+  /// **'选集面板'**
+  String get episodesPanel;
+
+  /// No description provided for @exitFullscreen.
+  ///
+  /// In zh, this message translates to:
+  /// **'退出全屏'**
+  String get exitFullscreen;
+
+  /// No description provided for @play.
+  ///
+  /// In zh, this message translates to:
+  /// **'播放'**
+  String get play;
+
+  /// No description provided for @pause.
+  ///
+  /// In zh, this message translates to:
+  /// **'暂停'**
+  String get pause;
+
+  /// No description provided for @nextEpisode.
+  ///
+  /// In zh, this message translates to:
+  /// **'下一集'**
+  String get nextEpisode;
+
+  /// No description provided for @lockPanel.
+  ///
+  /// In zh, this message translates to:
+  /// **'锁定面板'**
+  String get lockPanel;
+
+  /// No description provided for @unlockPanel.
+  ///
+  /// In zh, this message translates to:
+  /// **'解锁面板'**
+  String get unlockPanel;
+
+  /// No description provided for @mainEpisode.
+  ///
+  /// In zh, this message translates to:
+  /// **'正片'**
+  String get mainEpisode;
+
+  /// No description provided for @noPlayableLink.
+  ///
+  /// In zh, this message translates to:
+  /// **'该剧集未提供有效的播放链接'**
+  String get noPlayableLink;
+
+  /// No description provided for @extensionNotFound.
+  ///
+  /// In zh, this message translates to:
+  /// **'未找到扩展 [{package}]，无法解析播放地址'**
+  String extensionNotFound(String package);
+
+  /// No description provided for @noValidUrlFromExtension.
+  ///
+  /// In zh, this message translates to:
+  /// **'扩展未返回有效的播放地址'**
+  String get noValidUrlFromExtension;
+
+  /// No description provided for @torrentNotSupported.
+  ///
+  /// In zh, this message translates to:
+  /// **'当前扩展返回的是 BT 磁力资源，暂不支持播放'**
+  String get torrentNotSupported;
+
+  /// No description provided for @viewLicenseInRepo.
+  ///
+  /// In zh, this message translates to:
+  /// **'查看仓库中的 LICENSE'**
+  String get viewLicenseInRepo;
+
+  /// No description provided for @viewThirdPartyLicenses.
+  ///
+  /// In zh, this message translates to:
+  /// **'查看第三方依赖库的开源许可证'**
+  String get viewThirdPartyLicenses;
+
+  /// No description provided for @builtWithFlutter.
+  ///
+  /// In zh, this message translates to:
+  /// **'© 2026 Miru · 基于 Flutter 构建'**
+  String get builtWithFlutter;
+
+  /// No description provided for @cannotOpenFilePicker.
+  ///
+  /// In zh, this message translates to:
+  /// **'无法打开文件选择器：{error}'**
+  String cannotOpenFilePicker(String error);
+
+  /// No description provided for @readFileFailed.
+  ///
+  /// In zh, this message translates to:
+  /// **'读取文件失败：{error}'**
+  String readFileFailed(String error);
+
+  /// No description provided for @localExtensionImportSuccess.
+  ///
+  /// In zh, this message translates to:
+  /// **'本地扩展导入成功'**
+  String get localExtensionImportSuccess;
+
+  /// No description provided for @importFailed.
+  ///
+  /// In zh, this message translates to:
+  /// **'导入失败：{error}'**
+  String importFailed(String error);
 }
 
 class _AppLocalizationsDelegate
