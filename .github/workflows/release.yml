@@ -106,7 +106,7 @@ jobs:
 
       - name: Build Android
         if: matrix.platform == 'android'
-        run: flutter build apk --release --split-per-abi
+        run: flutter build apk --release --split-per-abi -Pforce-version-code-ignoring-abi=true
 
       - name: Build macOS
         if: matrix.platform == 'macos'

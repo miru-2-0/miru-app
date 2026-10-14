@@ -5,26 +5,29 @@ import 'package:package_info_plus/package_info_plus.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  test('默认版本与格式校验', () {
+  test('初始化前版本字符串处理', () {
     final service = AppVersionService.instance;
-    expect(service.version, equals('1.0.3'));
-    expect(service.buildNumber, equals('1008'));
-    expect(service.shortVersion, equals('v1.0.3'));
-    expect(service.fullVersion, equals('v1.0.3+1008'));
+    expect(service.version, isEmpty);
+    expect(service.buildNumber, isEmpty);
+    expect(service.shortVersion, isEmpty);
+    expect(service.fullVersion, isEmpty);
   });
 
-  test('读取平台版本号初始化', () async {
+  test('读取平台动态版本号初始化', () async {
     PackageInfo.setMockInitialValues(
       appName: 'Miru',
       packageName: 'com.miru.app',
-      version: '1.0.3',
-      buildNumber: '1008',
+      version: '1.0.4',
+      buildNumber: '1013',
       buildSignature: '',
     );
 
     final service = AppVersionService.instance;
     await service.initialize();
 
-    expect(service.fullVersion, equals('v1.0.3+1008'));
+    expect(service.version, equals('1.0.4'));
+    expect(service.buildNumber, equals('1013'));
+    expect(service.shortVersion, equals('v1.0.4'));
+    expect(service.fullVersion, equals('v1.0.4+1013'));
   });
 }
