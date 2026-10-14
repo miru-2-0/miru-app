@@ -101,8 +101,10 @@ jobs:
           keyAlias=${KEY_ALIAS:-upload}
           storeFile=upload-keystore.jks
           EOF
+            ls -l android/app/upload-keystore.jks
+          else
+            echo "Warning: KEYSTORE_BASE64 is empty, fallback to debug signing."
           fi
-          ls -l android/app/upload-keystore.jks
 
       - name: Build Android
         if: matrix.platform == 'android'
